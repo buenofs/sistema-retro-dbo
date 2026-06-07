@@ -3,8 +3,8 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "bun --watch src/index.ts",
-    "test": "bun test"
+    "dev": "bun --watch --env-file=../../.env src/index.ts",
+    "test": "bun test --env-file=../../.env"
   },
   "dependencies": {
     "@dbos/shared": "workspace:*",
