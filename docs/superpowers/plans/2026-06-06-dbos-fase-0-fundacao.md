@@ -222,14 +222,16 @@ git commit -m "feat(shared): contrato de respostas e esquema de credenciais"
 
 - [ ] **Step 1: Create `apps/server/package.json`**
 
+> **Desvio do plano (2026-06-07):** os scripts usam `--env-file=../../.env`. No monorepo, `bun --filter '*' test` roda cada pacote a partir da pasta dele (`apps/server/`), onde não existe `.env`; sem isso, o smoke test do banco falha com `ELOGIN` (senha vazia). O flag aponta para o `.env` da raiz.
+
 ```json
 {
   "name": "@dbos/server",
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "bun --watch src/index.ts",
-    "test": "bun test"
+    "dev": "bun --watch --env-file=../../.env src/index.ts",
+    "test": "bun test --env-file=../../.env"
   },
   "dependencies": {
     "@dbos/shared": "workspace:*",
