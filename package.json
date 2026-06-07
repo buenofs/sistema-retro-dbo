@@ -1,0 +1,10 @@
+{
+  "name": "dbos",
+  "private": true,
+  "workspaces": ["apps/*", "packages/*"],
+  "scripts": {
+    "dev:server": "bun --filter @dbos/server dev",
+    "dev:web": "bun --filter @dbos/web dev",
+    "test": "bun --filter '*' test"
+  }
+}
