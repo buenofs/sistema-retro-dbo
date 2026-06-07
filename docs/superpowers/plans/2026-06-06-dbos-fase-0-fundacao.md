@@ -381,7 +381,7 @@ Run:
 ```bash
 cp .env.example .env
 ```
-Then edit `.env` and set `SQL_SENHA` to the `sa` password set during the native install (SENHA_REMOVIDA). Confirm the **SQL Server (SQLEXPRESS)** service is running (Configuration Manager → SQL Server Services, or `services.msc` → `MSSQL$SQLEXPRESS`).
+Then edit `.env` and set `SQL_SENHA` to the `sa` password definida na configuração do SQL Server (guardada no seu gerenciador de senhas — nunca versionar a senha real). Confirm the **SQL Server (SQLEXPRESS)** service is running (Configuration Manager → SQL Server Services, or `services.msc` → `MSSQL$SQLEXPRESS`).
 
 - [ ] **Step 3: Write the failing smoke test `apps/server/src/bd/conexao.test.ts`**
 
