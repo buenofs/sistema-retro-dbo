@@ -5,3 +5,6 @@ dist/
 .env.local
 bun.lockb
 .DS_Store
+
+# Configurações locais/pessoais do Claude Code
+.claude/settings.local.json
