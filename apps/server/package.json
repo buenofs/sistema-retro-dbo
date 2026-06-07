@@ -1,0 +1,14 @@
+{
+  "name": "@dbos/server",
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "bun --watch src/index.ts",
+    "test": "bun test"
+  },
+  "dependencies": {
+    "@dbos/shared": "workspace:*",
+    "fastify": "^4.28.0",
+    "mssql": "^11.0.1"
+  }
+}
