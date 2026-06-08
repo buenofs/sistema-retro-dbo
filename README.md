@@ -20,6 +20,11 @@ Acesse `http://localhost:5173`, faça login com um login do SQL Server (ex.: `sa
 A sessão vive num cookie httpOnly; o pool de conexão do login fica em memória no
 servidor (um por sessão) e é encerrado no logout ou por inatividade.
 
+Depois do login você cai no desktop Win98: atalhos no canto, menu **Iniciar**,
+barra de tarefas com relógio, e janelas arrastáveis/redimensionáveis. Os quatro
+apps (Explorador, Editor de Consultas, Grade, Propriedades) abrem como janelas
+placeholder — os apps reais chegam nas próximas fases.
+
 ## Testes
 ```bash
 bun run test                # todos os pacotes
