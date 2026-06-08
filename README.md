@@ -47,6 +47,11 @@ contexto: **Propriedades** abre uma janela com tipo, contagem de colunas/linhas,
 datas e os **índices** (lidos de `sys.*`); **Abrir na grade** abre a tabela na
 Grade de Dados.
 
+Toques de polimento: sons curtos ao abrir/fechar janelas e nos erros; clique com
+o botão direito no **fundo do desktop** (abrir qualquer app) ou num **ícone**
+("Abrir"); diálogos fecham no **Esc** e focam o OK ao abrir; o layout das janelas
+é lembrado entre sessões (localStorage).
+
 ## Testes
 ```bash
 bun run test                # todos os pacotes
