@@ -1044,16 +1044,15 @@ import { Relogio } from './Relogio';
 
 export function BarraTarefas({ login }: { login: string }) {
   const [menuAberto, setMenuAberto] = useState(false);
-  const janelas = useLoja(
-    useShallow((s) =>
-      s.janelas.map((j) => ({
-        id: j.id,
-        titulo: j.titulo,
-        icone: j.icone,
-        minimizada: j.estado === 'minimizada',
-      })),
-    ),
-  );
+  // useShallow compara só um nível: comparar um array de objetos recém-criados
+  // nunca casa (refs distintas) e cai em loop. Assinamos o array de janelas e
+  // derivamos os dados de exibição no render.
+  const janelas = useLoja(useShallow((s) => s.janelas)).map((j) => ({
+    id: j.id,
+    titulo: j.titulo,
+    icone: j.icone,
+    minimizada: j.estado === 'minimizada',
+  }));
   const idFocada = useLoja((s) => s.idFocada);
   const focar = useLoja((s) => s.focar);
   const minimizar = useLoja((s) => s.minimizar);
