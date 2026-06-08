@@ -1,8 +1,8 @@
 import { lazy } from 'react';
 import type { DefinicaoApp, TipoApp } from './tipos';
-import { AppPlaceholder } from './AppPlaceholder';
 import { ExploradorObjetos } from '../aplicativos/explorador/ExploradorObjetos';
 import { GradeDados } from '../aplicativos/grade/GradeDados';
+import { PropriedadesObjeto } from '../aplicativos/propriedades/PropriedadesObjeto';
 
 const EditorConsultas = lazy(() =>
   import('../aplicativos/consulta/EditorConsultas').then((m) => ({ default: m.EditorConsultas })),
@@ -32,8 +32,8 @@ export const registroApps: Record<TipoApp, DefinicaoApp> = {
   propriedades: {
     titulo: 'Propriedades',
     icone: 'ℹ️',
-    tamanhoInicial: { largura: 320, altura: 300 },
-    componente: AppPlaceholder,
+    tamanhoInicial: { largura: 360, altura: 380 },
+    componente: PropriedadesObjeto,
   },
 };
 
