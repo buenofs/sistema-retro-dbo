@@ -5,6 +5,7 @@
   "scripts": {
     "dev:server": "bun --filter @dbos/server dev",
     "dev:web": "bun --filter @dbos/web dev",
+    "db:setup": "bun --env-file=.env apps/server/src/scripts/configurarBanco.ts",
     "test": "bun --filter '*' test"
   }
 }
