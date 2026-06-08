@@ -1,5 +1,6 @@
 import type { DefinicaoApp, TipoApp } from './tipos';
 import { AppPlaceholder } from './AppPlaceholder';
+import { ExploradorObjetos } from '../aplicativos/explorador/ExploradorObjetos';
 
 // O WM é genérico: cada tipoApp mapeia para metadados + um componente.
 // Adicionar um app futuro = trocar AppPlaceholder pelo componente real aqui.
@@ -8,7 +9,7 @@ export const registroApps: Record<TipoApp, DefinicaoApp> = {
     titulo: 'Explorador de Objetos',
     icone: '🗂️',
     tamanhoInicial: { largura: 280, altura: 360 },
-    componente: AppPlaceholder,
+    componente: ExploradorObjetos,
   },
   consulta: {
     titulo: 'Editor de Consultas',
