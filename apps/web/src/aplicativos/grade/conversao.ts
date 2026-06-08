@@ -8,7 +8,7 @@ const TIPOS_NUMERICOS = [
 // string e o SQL Server converte implicitamente (spec: parametrizado e seguro).
 export function converterValor(coluna: ColunaBanco, texto: string): ValorCelula {
   if (texto === '') return coluna.anulavel ? null : '';
-  const base = coluna.tipoDado.split('(')[0].trim().toLowerCase();
+  const base = coluna.tipoDado.split('(')[0]!.trim().toLowerCase();
   if (base === 'bit') return texto === '1' || texto.toLowerCase() === 'true';
   if (TIPOS_NUMERICOS.includes(base)) {
     const n = Number(texto);
