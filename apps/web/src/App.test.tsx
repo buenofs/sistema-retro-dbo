@@ -1,8 +1,10 @@
-import { test, expect, vi, afterEach } from 'vitest';
+import { test, expect, vi, afterEach, beforeEach } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { App } from './App';
+import { useLoja, estadoInicial } from './areaTrabalho/loja';
 
+beforeEach(() => useLoja.setState(estadoInicial()));
 afterEach(() => vi.unstubAllGlobals());
 
 function renderizar() {
@@ -38,5 +40,5 @@ test('mostra a área de trabalho quando há sessão', async () => {
     ),
   );
   renderizar();
-  expect(await screen.findByText(/Bem-vindo, sa/)).toBeInTheDocument();
+  expect(await screen.findByRole('button', { name: 'Iniciar' })).toBeInTheDocument();
 });

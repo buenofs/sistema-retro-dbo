@@ -1,6 +1,6 @@
 import { useSessao } from './autenticacao/ganchos';
 import { TelaLogin } from './autenticacao/TelaLogin';
-import { AreaTrabalho } from './AreaTrabalho';
+import { AreaTrabalho } from './areaTrabalho/AreaTrabalho';
 
 // Decide entre login e área de trabalho conforme a sessão atual.
 export function App() {
