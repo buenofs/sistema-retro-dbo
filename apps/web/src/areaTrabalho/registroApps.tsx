@@ -9,7 +9,7 @@ const EditorConsultas = lazy(() =>
 );
 
 // O WM é genérico: cada tipoApp mapeia para metadados + um componente.
-// Adicionar um app futuro = trocar AppPlaceholder pelo componente real aqui.
+// Adicionar um app futuro = registrar o componente real aqui.
 export const registroApps: Record<TipoApp, DefinicaoApp> = {
   explorador: {
     titulo: 'Explorador de Objetos',
