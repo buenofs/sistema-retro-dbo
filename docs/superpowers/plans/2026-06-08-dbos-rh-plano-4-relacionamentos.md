@@ -260,15 +260,12 @@ function Grafo({
     const ang = (2 * Math.PI * i) / Math.max(filhos.length, 1) - Math.PI / 2;
     pos.set(n.id, { x: cx + RAIO * Math.cos(ang), y: cy + RAIO * Math.sin(ang) });
   });
-  const central = g.nos.find((n) => n.id === g.centro);
-
   return (
     <div className="rel">
       <div className="rel-barra">
         <button onClick={aoVoltar} disabled={!podeVoltar}>
           ◀ Voltar
         </button>
-        <strong>{central?.rotulo}</strong>
       </div>
       <div className="rel-canvas" style={{ width: LARGURA, height: ALTURA }}>
         <svg className="rel-linhas" width={LARGURA} height={ALTURA}>
