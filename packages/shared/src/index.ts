@@ -5,3 +5,6 @@ export * from './explorador';
 export * from './consulta';
 export * from './grade';
 export * from './propriedades';
+export * from './dominio';
+export * from './busca';
+export * from './relacionamentos';
