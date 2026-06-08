@@ -4,13 +4,22 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { App } from './App';
 import { useLoja, estadoInicial } from './areaTrabalho/loja';
 
+// O boot é testado isoladamente (TelaBoot.test); aqui concluímos na hora.
+vi.mock('./TelaBoot', async () => {
+  const { useEffect } = await import('react');
+  return {
+    TelaBoot: ({ onConcluir }: { onConcluir: () => void }) => {
+      useEffect(() => onConcluir(), [onConcluir]);
+      return null;
+    },
+  };
+});
+
 beforeEach(() => useLoja.setState(estadoInicial()));
 afterEach(() => vi.unstubAllGlobals());
 
 function renderizar() {
-  const cliente = new QueryClient({
-    defaultOptions: { queries: { retry: false } },
-  });
+  const cliente = new QueryClient({ defaultOptions: { queries: { retry: false } } });
   return render(
     <QueryClientProvider client={cliente}>
       <App />
@@ -36,7 +45,7 @@ test('mostra a área de trabalho quando há sessão', async () => {
   vi.stubGlobal(
     'fetch',
     vi.fn(async () =>
-      new Response(JSON.stringify({ ok: true, dados: { login: 'sa' } })),
+      new Response(JSON.stringify({ ok: true, dados: { login: 'sa', banco: 'DBOS_RH' } })),
     ),
   );
   renderizar();

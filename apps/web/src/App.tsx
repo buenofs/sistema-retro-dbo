@@ -1,10 +1,15 @@
+import { useState } from 'react';
 import { useSessao } from './autenticacao/ganchos';
+import { TelaBoot } from './TelaBoot';
 import { TelaLogin } from './autenticacao/TelaLogin';
 import { AreaTrabalho } from './areaTrabalho/AreaTrabalho';
 
-// Decide entre login e área de trabalho conforme a sessão atual.
+// boot (só na carga inicial) → login → desktop.
 export function App() {
+  const [bootConcluido, setBootConcluido] = useState(false);
   const sessao = useSessao();
+
+  if (!bootConcluido) return <TelaBoot onConcluir={() => setBootConcluido(true)} />;
 
   if (sessao.isLoading) {
     return (
