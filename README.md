@@ -25,6 +25,12 @@ barra de tarefas com relógio, e janelas arrastáveis/redimensionáveis. Os quat
 apps (Explorador, Editor de Consultas, Grade, Propriedades) abrem como janelas
 placeholder — os apps reais chegam nas próximas fases.
 
+O **Explorador de Objetos** já é funcional: abra-o pelo atalho ou pelo menu Iniciar
+para ver as tabelas e views do banco numa árvore; expanda um objeto para listar
+suas colunas (tipo, nulabilidade e 🔑 chave primária), via SQL cru no
+`INFORMATION_SCHEMA`. Há uma caixa de filtro no topo. Os outros três apps ainda
+são placeholders.
+
 ## Testes
 ```bash
 bun run test                # todos os pacotes
