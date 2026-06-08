@@ -6,6 +6,7 @@ import { registrarTratadorErros } from './plugins/tratadorErros';
 import { registrarRotasAutenticacao } from './rotas/autenticacao';
 import { registrarRotasExplorador } from './rotas/explorador';
 import { registrarRotasConsulta } from './rotas/consulta';
+import { registrarRotasGrade } from './rotas/grade';
 
 export interface OpcoesApp {
   // Permite injetar um gerenciador nos testes; em produção vem do ambiente.
@@ -31,6 +32,7 @@ export function construirApp(opcoes: OpcoesApp = {}): FastifyInstance {
     registrarRotasAutenticacao(instancia, gerenciador);
     registrarRotasExplorador(instancia, gerenciador);
     registrarRotasConsulta(instancia, gerenciador);
+    registrarRotasGrade(instancia, gerenciador);
   });
 
   app.get('/api/saude', async (): Promise<Resposta<{ status: string }>> => {
