@@ -11,10 +11,14 @@ SQL database management disguised as a retro Win98 desktop OS.
 ## Como rodar
 ```bash
 bun install
-cp .env.example .env        # configure SQL_SENHA com a senha do sa
+cp .env.example .env        # configure SQL_SENHA (senha do sa) e SESSAO_SEGREDO
 bun run dev:server          # API em http://localhost:3001
 bun run dev:web             # desktop em http://localhost:5173
 ```
+
+Acesse `http://localhost:5173`, faça login com um login do SQL Server (ex.: `sa`).
+A sessão vive num cookie httpOnly; o pool de conexão do login fica em memória no
+servidor (um por sessão) e é encerrado no logout ou por inatividade.
 
 ## Testes
 ```bash
