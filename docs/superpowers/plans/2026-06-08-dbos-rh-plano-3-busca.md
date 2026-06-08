@@ -283,7 +283,7 @@ export function useBusca(filtros: FiltrosBusca, habilitado: boolean) {
 
 ```tsx
 import { test, expect, vi, afterEach, beforeEach } from 'vitest';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, within } from '@testing-library/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Busca } from './Busca';
 import { useLoja, estadoInicial } from '../../areaTrabalho/loja';
@@ -334,7 +334,10 @@ test('pesquisar mostra resultados e "Abrir na grade" abre a Grade', async () => 
   stub();
   renderizar();
   fireEvent.click(screen.getByRole('button', { name: 'Pesquisar' }));
-  expect(await screen.findByText('Felipe Bueno')).toBeInTheDocument();
+  // "Felipe Bueno" também aparece como <option> no select "Relacionado a";
+  // restringimos a asserção à tabela de resultados.
+  const tabela = await screen.findByRole('table');
+  expect(within(tabela).getByText('Felipe Bueno')).toBeInTheDocument();
   fireEvent.click(screen.getByRole('button', { name: 'Abrir na grade' }));
   const janela = useLoja.getState().janelas.find((j) => j.tipoApp === 'grade');
   expect(janela).toBeDefined();
