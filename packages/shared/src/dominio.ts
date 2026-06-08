@@ -1,3 +1,5 @@
+import type { Resposta } from './respostas';
+
 export interface Departamento {
   id: number;
   nome: string;
@@ -20,3 +22,6 @@ export interface Funcionario {
   departamentoId: number;
   departamento?: string; // nome do departamento, quando a consulta faz join
 }
+
+export type RespostaDepartamentos = Resposta<Departamento[]>;
+export type RespostaProjetos = Resposta<Projeto[]>;
