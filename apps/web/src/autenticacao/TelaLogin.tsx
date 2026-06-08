@@ -1,7 +1,8 @@
 import { useState, type FormEvent } from 'react';
 import { useLogin } from './ganchos';
+import './telaLogin.css';
 
-// Tela de boot/login no estilo Win98. O login mapeia direto para um login do SQL Server.
+// Diálogo de logon estilo Win9x "Log On to DBOS", sobre o wallpaper.
 export function TelaLogin() {
   const [login, setLogin] = useState('');
   const [senha, setSenha] = useState('');
@@ -12,45 +13,58 @@ export function TelaLogin() {
     entrar.mutate({ login, senha });
   }
 
+  function cancelar() {
+    setLogin('');
+    setSenha('');
+  }
+
   return (
-    <div className="window" style={{ width: 320, margin: '15vh auto' }}>
-      <div className="title-bar">
-        <div className="title-bar-text">DBOS — Entrar</div>
-      </div>
-      <div className="window-body">
-        <p>Database Operating System</p>
-        <form onSubmit={aoEnviar}>
-          <div className="field-row-stacked">
-            <label htmlFor="login">Login</label>
-            <input
-              id="login"
-              value={login}
-              onChange={(e) => setLogin(e.target.value)}
-            />
-          </div>
-          <div className="field-row-stacked">
-            <label htmlFor="senha">Senha</label>
-            <input
-              id="senha"
-              type="password"
-              value={senha}
-              onChange={(e) => setSenha(e.target.value)}
-            />
-          </div>
-          <div
-            className="field-row"
-            style={{ justifyContent: 'flex-end', marginTop: 8 }}
-          >
-            <button type="submit" disabled={entrar.isPending}>
-              {entrar.isPending ? 'Entrando...' : 'Entrar'}
-            </button>
-          </div>
-          {entrar.isError && (
-            <p role="alert" style={{ color: 'red', marginTop: 8 }}>
-              {entrar.error.message}
+    <div className="tela-logon">
+      <div className="window logon-janela">
+        <div className="title-bar">
+          <div className="title-bar-text">Log On to DBOS</div>
+        </div>
+        <div className="window-body">
+          <div className="logon-cabecalho">
+            <span className="logon-icone" aria-hidden="true">🔑</span>
+            <p style={{ margin: 0 }}>
+              Digite seu login e senha do SQL Server para entrar no Database
+              Operating System.
             </p>
-          )}
-        </form>
+          </div>
+          <form onSubmit={aoEnviar}>
+            <div className="field-row" style={{ marginTop: 12 }}>
+              <label htmlFor="login" style={{ width: 64 }}>
+                Login
+              </label>
+              <input id="login" value={login} onChange={(e) => setLogin(e.target.value)} />
+            </div>
+            <div className="field-row" style={{ marginTop: 8 }}>
+              <label htmlFor="senha" style={{ width: 64 }}>
+                Senha
+              </label>
+              <input
+                id="senha"
+                type="password"
+                value={senha}
+                onChange={(e) => setSenha(e.target.value)}
+              />
+            </div>
+            <div className="field-row" style={{ justifyContent: 'flex-end', marginTop: 14, gap: 6 }}>
+              <button type="submit" disabled={entrar.isPending}>
+                {entrar.isPending ? 'Entrando...' : 'OK'}
+              </button>
+              <button type="button" onClick={cancelar}>
+                Cancelar
+              </button>
+            </div>
+            {entrar.isError && (
+              <p role="alert" style={{ color: 'red', marginTop: 8 }}>
+                {entrar.error.message}
+              </p>
+            )}
+          </form>
+        </div>
       </div>
     </div>
   );

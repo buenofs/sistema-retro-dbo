@@ -1,0 +1,20 @@
+.tela-logon {
+  position: fixed;
+  inset: 0;
+  background: #008080;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.logon-janela {
+  width: 360px;
+}
+.logon-cabecalho {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+.logon-icone {
+  font-size: 32px;
+  line-height: 1;
+}
