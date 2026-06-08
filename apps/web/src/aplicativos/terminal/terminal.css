@@ -1,0 +1,44 @@
+.terminal {
+  height: 100%;
+  background: #000;
+  color: #33ff66;
+  font-family: 'Consolas', 'Courier New', monospace;
+  font-size: 13px;
+  overflow: auto;
+  padding: 6px;
+}
+.terminal-saida {
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+.terminal-linha {
+  min-height: 1em;
+}
+.terminal-prompt {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+.terminal-ps {
+  color: #33ff66;
+  flex-shrink: 0;
+}
+.terminal-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #33ff66;
+  caret-color: #33ff66;
+  font-family: inherit;
+  font-size: inherit;
+}
+/* Cursor piscando (caret nativo verde + bloco de acento opcional) */
+@keyframes terminal-piscar {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+.terminal-ps::after {
+  content: '_';
+  animation: terminal-piscar 1s steps(1) infinite;
+}

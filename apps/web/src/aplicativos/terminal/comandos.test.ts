@@ -69,5 +69,5 @@ test('sql abre o Editor de Consultas', async () => {
 
 test('comando inválido avisa', async () => {
   const linhas = await executarComando('xyz', ctxFake());
-  expect(linhas[0].toLowerCase()).toContain('inv');
+  expect(linhas[0]!.toLowerCase()).toContain('inv');
 });
