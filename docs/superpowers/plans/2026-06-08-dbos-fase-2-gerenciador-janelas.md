@@ -315,7 +315,7 @@ test('minimizar lembra o estado anterior e restaurar volta para ele', () => {
 
 - [ ] **Step 2: Rodar o teste e confirmar que falha**
 
-Run: `bun --filter @dbos/web exec vitest run src/areaTrabalho/loja.test.ts`
+Run: `cd apps/web && bunx vitest run src/areaTrabalho/loja.test.ts`
 Expected: FAIL — `Cannot find module './loja'`.
 
 - [ ] **Step 3: Implementar `apps/web/src/areaTrabalho/loja.ts`**
@@ -424,7 +424,7 @@ export const useLoja = create<LojaAreaTrabalho>((set) => ({
 
 - [ ] **Step 4: Rodar o teste e confirmar que passa**
 
-Run: `bun --filter @dbos/web exec vitest run src/areaTrabalho/loja.test.ts`
+Run: `cd apps/web && bunx vitest run src/areaTrabalho/loja.test.ts`
 Expected: PASS — 7 testes passam.
 
 - [ ] **Step 5: Commit**
@@ -478,7 +478,7 @@ test('janela maior que o viewport gruda em 0 (sem coordenada negativa)', () => {
 
 - [ ] **Step 2: Rodar o teste e confirmar que falha**
 
-Run: `bun --filter @dbos/web exec vitest run src/areaTrabalho/limites.test.ts`
+Run: `cd apps/web && bunx vitest run src/areaTrabalho/limites.test.ts`
 Expected: FAIL — `Cannot find module './limites'`.
 
 - [ ] **Step 3: Implementar `apps/web/src/areaTrabalho/limites.ts`**
@@ -506,7 +506,7 @@ export function limitarRetangulo(
 
 - [ ] **Step 4: Rodar o teste e confirmar que passa**
 
-Run: `bun --filter @dbos/web exec vitest run src/areaTrabalho/limites.test.ts`
+Run: `cd apps/web && bunx vitest run src/areaTrabalho/limites.test.ts`
 Expected: PASS — 4 testes passam.
 
 - [ ] **Step 5: Commit**
@@ -649,7 +649,7 @@ test('o botão Maximize maximiza e depois vira Restore', () => {
 
 - [ ] **Step 2: Rodar o teste e confirmar que falha**
 
-Run: `bun --filter @dbos/web exec vitest run src/areaTrabalho/Janela.test.tsx`
+Run: `cd apps/web && bunx vitest run src/areaTrabalho/Janela.test.tsx`
 Expected: FAIL — `Cannot find module './Janela'`.
 
 - [ ] **Step 3: Implementar `apps/web/src/areaTrabalho/Janela.tsx`**
@@ -773,7 +773,7 @@ export const Janela = memo(function Janela({ id }: { id: IdJanela }) {
 
 - [ ] **Step 4: Rodar o teste e confirmar que passa**
 
-Run: `bun --filter @dbos/web exec vitest run src/areaTrabalho/Janela.test.tsx`
+Run: `cd apps/web && bunx vitest run src/areaTrabalho/Janela.test.tsx`
 Expected: PASS — 4 testes passam.
 
 - [ ] **Step 5: Commit**
@@ -843,7 +843,7 @@ test('mostra a hora no formato HH:MM', () => {
 
 - [ ] **Step 2: Rodar o teste e confirmar que falha**
 
-Run: `bun --filter @dbos/web exec vitest run src/areaTrabalho/Relogio.test.tsx`
+Run: `cd apps/web && bunx vitest run src/areaTrabalho/Relogio.test.tsx`
 Expected: FAIL — `Cannot find module './Relogio'`.
 
 - [ ] **Step 3: Implementar `apps/web/src/areaTrabalho/Relogio.tsx`**
@@ -874,7 +874,7 @@ export function Relogio() {
 
 - [ ] **Step 4: Rodar o teste e confirmar que passa**
 
-Run: `bun --filter @dbos/web exec vitest run src/areaTrabalho/Relogio.test.tsx`
+Run: `cd apps/web && bunx vitest run src/areaTrabalho/Relogio.test.tsx`
 Expected: PASS — 1 teste passa.
 
 - [ ] **Step 5: Commit**
@@ -933,7 +933,7 @@ test('mostra a opção de encerrar sessão com o login', () => {
 
 - [ ] **Step 2: Rodar o teste e confirmar que falha**
 
-Run: `bun --filter @dbos/web exec vitest run src/areaTrabalho/MenuIniciar.test.tsx`
+Run: `cd apps/web && bunx vitest run src/areaTrabalho/MenuIniciar.test.tsx`
 Expected: FAIL — `Cannot find module './MenuIniciar'`.
 
 - [ ] **Step 3: Implementar `apps/web/src/areaTrabalho/MenuIniciar.tsx`**
@@ -978,7 +978,7 @@ export function MenuIniciar({ login, aoFechar }: { login: string; aoFechar: () =
 
 - [ ] **Step 4: Rodar o teste e confirmar que passa**
 
-Run: `bun --filter @dbos/web exec vitest run src/areaTrabalho/MenuIniciar.test.tsx`
+Run: `cd apps/web && bunx vitest run src/areaTrabalho/MenuIniciar.test.tsx`
 Expected: PASS — 2 testes passam.
 
 - [ ] **Step 5: Escrever o teste que falha `apps/web/src/areaTrabalho/BarraTarefas.test.tsx`**
@@ -1026,7 +1026,7 @@ test('clicar no botão Iniciar abre o menu', () => {
 
 - [ ] **Step 6: Rodar o teste e confirmar que falha**
 
-Run: `bun --filter @dbos/web exec vitest run src/areaTrabalho/BarraTarefas.test.tsx`
+Run: `cd apps/web && bunx vitest run src/areaTrabalho/BarraTarefas.test.tsx`
 Expected: FAIL — `Cannot find module './BarraTarefas'`.
 
 - [ ] **Step 7: Implementar `apps/web/src/areaTrabalho/BarraTarefas.tsx`**
@@ -1096,7 +1096,7 @@ export function BarraTarefas({ login }: { login: string }) {
 
 - [ ] **Step 8: Rodar o teste e confirmar que passa**
 
-Run: `bun --filter @dbos/web exec vitest run src/areaTrabalho/BarraTarefas.test.tsx`
+Run: `cd apps/web && bunx vitest run src/areaTrabalho/BarraTarefas.test.tsx`
 Expected: PASS — 3 testes passam.
 
 - [ ] **Step 9: Commit**
@@ -1475,7 +1475,7 @@ e, **no fim do objeto** (depois de `restaurar: ...`), feche o `persist` com a co
 
 - [ ] **Step 2: Confirmar que os testes da loja seguem verdes**
 
-Run: `bun --filter @dbos/web exec vitest run src/areaTrabalho/loja.test.ts`
+Run: `cd apps/web && bunx vitest run src/areaTrabalho/loja.test.ts`
 Expected: PASS — 7 testes (o `beforeEach` com `setState(estadoInicial())` continua zerando o estado; o `persist` não interfere porque os testes nunca dependem de carga prévia).
 
 - [ ] **Step 3: Verificar no navegador**
