@@ -42,6 +42,11 @@ permite editar, inserir e excluir linhas. Edição/exclusão usam a chave primá
 (tabelas sem PK ficam somente-leitura); identificadores são citados e validados,
 e valores vão sempre parametrizados. Erros de escrita aparecem no diálogo retrô.
 
+No **Explorador**, clique com o botão direito num objeto para abrir o menu de
+contexto: **Propriedades** abre uma janela com tipo, contagem de colunas/linhas,
+datas e os **índices** (lidos de `sys.*`); **Abrir na grade** abre a tabela na
+Grade de Dados.
+
 ## Testes
 ```bash
 bun run test                # todos os pacotes
