@@ -1,4 +1,5 @@
 import sql from 'mssql';
+import type { Credenciais } from '@dbos/shared';
 
 // Monta a configuração de conexão a partir das variáveis de ambiente.
 export function configDoAmbiente(): sql.config {
@@ -25,4 +26,21 @@ export async function testarConexao(config: sql.config): Promise<number> {
   } finally {
     await pool.close();
   }
+}
+
+// Config de conexão para um login específico: servidor/porta/banco vêm do
+// ambiente; usuário e senha vêm das credenciais informadas no login.
+export function configParaLogin(credenciais: Credenciais): sql.config {
+  return {
+    ...configDoAmbiente(),
+    user: credenciais.login,
+    password: credenciais.senha,
+  };
+}
+
+// Abre e conecta um pool dedicado. Lança em caso de falha (ex.: ELOGIN).
+export async function abrirPool(config: sql.config): Promise<sql.ConnectionPool> {
+  const pool = new sql.ConnectionPool(config);
+  await pool.connect();
+  return pool;
 }
