@@ -15,12 +15,12 @@ function renderizar() {
   return render(<AreaTrabalho usuario={{ login: 'sa', banco: 'DBOS_RH' }} />);
 }
 
-test('botão direito no fundo do desktop abre menu com os 6 apps', () => {
+test('botão direito no fundo do desktop abre menu com os 7 apps', () => {
   const { container } = renderizar();
   const desktop = container.querySelector('.area-trabalho') as HTMLElement;
   fireEvent.contextMenu(desktop);
   const rotulos = useMenuContexto.getState().itens.map((i) => i.rotulo);
-  expect(rotulos).toHaveLength(6);
+  expect(rotulos).toHaveLength(7);
   expect(rotulos.some((r) => r.includes('Explorador de Objetos'))).toBe(true);
 });
 

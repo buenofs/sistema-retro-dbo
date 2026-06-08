@@ -7,7 +7,8 @@ export type TipoApp =
   | 'grade'
   | 'propriedades'
   | 'busca'
-  | 'relacionamentos';
+  | 'relacionamentos'
+  | 'terminal';
 export type EstadoVisual = 'normal' | 'minimizada' | 'maximizada';
 
 export interface Retangulo {
