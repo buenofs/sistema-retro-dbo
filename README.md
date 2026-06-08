@@ -61,6 +61,11 @@ O app **Relacionamentos** mostra um grafo navegável de um funcionário
 "◀ Voltar" desfaz. Abre pelo atalho, pelo botão "Ver relacionamentos" na Busca,
 ou (em breve) pelo Terminal.
 
+O app **Terminal** é um prompt DOS (`C:\DBOS>`): `ajuda`, `limpar`,
+`listar funcionarios`, `buscar salario > 10000`, `mostrar anomalias_folha`,
+`abrir Felipe.func` (abre os Relacionamentos) e `sql` (abre o Editor). Histórico
+com ↑/↓. `listar`/`mostrar` usam um mapa de aliases fixo (sem SQL livre).
+
 Toques de polimento: sons curtos ao abrir/fechar janelas e nos erros; clique com
 o botão direito no **fundo do desktop** (abrir qualquer app) ou num **ícone**
 ("Abrir"); diálogos fecham no **Esc** e focam o OK ao abrir; o layout das janelas
