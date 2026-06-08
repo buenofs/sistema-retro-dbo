@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 import type { EstadoJanela, IdJanela, LojaAreaTrabalho, TipoApp } from './tipos';
 import { registroApps } from './registroApps';
 
@@ -12,7 +13,9 @@ export function estadoInicial() {
   };
 }
 
-export const useLoja = create<LojaAreaTrabalho>((set) => ({
+export const useLoja = create<LojaAreaTrabalho>()(
+  persist(
+    (set) => ({
   ...estadoInicial(),
 
   abrirJanela: (tipoApp: TipoApp, dados?: unknown) =>
@@ -96,4 +99,16 @@ export const useLoja = create<LojaAreaTrabalho>((set) => ({
           : j,
       ),
     })),
-}));
+    }),
+    {
+      name: 'dbos-area-trabalho',
+      // Só geometria/estado de janelas — funções não são serializadas pelo persist.
+      partialize: (s) => ({
+        janelas: s.janelas,
+        idFocada: s.idFocada,
+        proximoZ: s.proximoZ,
+        proximoId: s.proximoId,
+      }),
+    },
+  ),
+);
