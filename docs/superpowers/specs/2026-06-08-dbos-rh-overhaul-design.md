@@ -73,7 +73,7 @@ erro de FK). Índices nas FKs.
   view"): junta Funcionario + Departamento + último/most-recent `salarioLiquido`,
   ex. colunas `funcionario, cargo, departamento, salario, ultimaCompetencia, ultimoLiquido`.
 - **`vw_AnomaliasFolha`** — linhas de folha onde
-  `salarioLiquido <> salarioBase + bonus - descontos` (alimenta `show payroll_anomalies`).
+  `salarioLiquido <> salarioBase + bonus - descontos` (alimenta `mostrar anomalias_folha`).
 
 ### 2.3 Seed
 
@@ -156,19 +156,20 @@ histórico (↑/↓), scrollback. **Parser no cliente**:
 
 | Comando | Ação |
 |---------|------|
-| `help` | lista comandos |
-| `cls` | limpa a tela |
-| `dir <tabela>` | lista linhas (alias `employees`→Funcionarios) via `/api/consulta` (`SELECT` whitelisted) |
-| `find <campo> <op> <valor>` | ex. `find salary > 10000` → `/api/busca` |
-| `show <view>` | ex. `show payroll_anomalies` → `vw_AnomaliasFolha` via `/api/consulta` |
-| `open <nome>.emp` | resolve funcionário por nome → `abrirJanela('relacionamentos', …)` |
+| `ajuda` | lista comandos |
+| `limpar` | limpa a tela |
+| `listar <tabela>` | ex. `listar funcionarios` → `/api/consulta` (`SELECT` whitelisted) |
+| `buscar <campo> <op> <valor>` | ex. `buscar salario > 10000` → `/api/busca` |
+| `mostrar <view>` | ex. `mostrar anomalias_folha` → `vw_AnomaliasFolha` via `/api/consulta` |
+| `abrir <nome>.func` | resolve funcionário por nome → `abrirJanela('relacionamentos', …)` |
 | `sql` | `abrirJanela('consulta')` (reusa o Editor de Consultas) |
 
-**Mapa de aliases** (inglês retrô → schema pt-BR), whitelisted para evitar
-injeção: `employees→Funcionarios`, `departments→Departamentos`,
-`projects→Projetos`, `payroll→FolhaPagamento`, `salary→salario`,
-`payroll_anomalies→vw_AnomaliasFolha`. Comandos desconhecidos → mensagem de erro
-estilo DOS ("Comando ou nome de arquivo inválido").
+**Mapa de aliases** (pt-BR → schema), whitelisted para evitar injeção:
+`funcionarios→Funcionarios`, `departamentos→Departamentos`, `projetos→Projetos`,
+`folha→FolhaPagamento`, `salario→salario`, `anomalias_folha→vw_AnomaliasFolha`.
+Extensão de "arquivo" de funcionário: `.func` (ex.: `Felipe.func`). `sql` mantém-se
+(termo de protocolo). Comandos desconhecidos → erro estilo DOS
+("Comando ou nome inválido").
 
 ## 6. Boot + Logon
 
@@ -208,7 +209,7 @@ estilo DOS ("Comando ou nome de arquivo inválido").
 
 - **Servidor (integração, SQL real):** com o `DBOS_RH` semeado, asserções
   **determinísticas** — relacionamentos exatos do Felipe, hits exatos da busca
-  (`find salary > X`), conteúdo da `vw_AnomaliasFolha`, resumo da `vw_FolhaResumo`.
+  (`buscar salario > X`), conteúdo da `vw_AnomaliasFolha`, resumo da `vw_FolhaResumo`.
   Pré-requisito da suíte: `bun run db:setup` (o banco deve existir e estar
   semeado).
 - **Web (Vitest + RTL, fetch stub):** Busca (resultados renderizam, ações
