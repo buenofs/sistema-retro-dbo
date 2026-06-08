@@ -4,6 +4,7 @@ import { useLoja } from './loja';
 import { CamadaJanelas } from './CamadaJanelas';
 import { BarraTarefas } from './BarraTarefas';
 import { GerenciadorDialogos } from './GerenciadorDialogos';
+import { MenuContexto } from './MenuContexto';
 import './areaTrabalho.css';
 
 // O desktop: wallpaper, atalhos de duplo-clique, janelas e barra de tarefas.
@@ -29,6 +30,7 @@ export function AreaTrabalho({ usuario }: { usuario: UsuarioSessao }) {
       <CamadaJanelas />
       <BarraTarefas login={usuario.login} />
       <GerenciadorDialogos />
+      <MenuContexto />
     </div>
   );
 }

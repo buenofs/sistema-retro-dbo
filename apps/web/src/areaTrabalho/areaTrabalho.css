@@ -183,3 +183,28 @@
   white-space: pre-wrap;
   font-size: 11px;
 }
+
+/* Menu de contexto (botão direito) — acima das janelas, abaixo dos diálogos */
+.menu-contexto {
+  position: fixed;
+  z-index: 15000;
+  min-width: 160px;
+  display: flex;
+  flex-direction: column;
+  padding: 2px;
+  background: #c0c0c0;
+  box-shadow: inset -1px -1px #0a0a0a, inset 1px 1px #fff, inset -2px -2px grey, inset 2px 2px #dfdfdf;
+}
+.menu-contexto button {
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  padding: 4px 8px;
+}
+.menu-contexto button:hover {
+  background: #000080;
+  color: #fff;
+}
