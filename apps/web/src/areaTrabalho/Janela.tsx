@@ -1,4 +1,4 @@
-import { memo, useCallback, useRef, type CSSProperties } from 'react';
+import { memo, Suspense, useCallback, useRef, type CSSProperties } from 'react';
 import type { IdJanela, Retangulo } from './tipos';
 import { useLoja } from './loja';
 import { registroApps } from './registroApps';
@@ -106,7 +106,9 @@ export const Janela = memo(function Janela({ id }: { id: IdJanela }) {
         style={{ height: 'calc(100% - 2.2rem)', margin: 0, overflow: 'auto' }}
       >
         <LimiteErroJanela titulo={janela.titulo}>
-          <Componente janela={janela} />
+          <Suspense fallback={<p style={{ padding: 8 }}>Carregando…</p>}>
+            <Componente janela={janela} />
+          </Suspense>
         </LimiteErroJanela>
       </div>
       {!maximizada && (

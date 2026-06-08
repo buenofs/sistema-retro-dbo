@@ -1,0 +1,55 @@
+.editor-consultas {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+.editor-barra {
+  padding: 4px;
+  border-bottom: 1px solid grey;
+}
+.editor-codigo {
+  border-bottom: 1px solid grey;
+}
+.editor-codigo .cm-editor {
+  height: 160px;
+}
+.editor-resultado {
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+.grade-resultado {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+.grade-cabecalho {
+  display: grid;
+  font-weight: bold;
+  background: #c0c0c0;
+  border-bottom: 1px solid grey;
+}
+.grade-corpo {
+  flex: 1;
+  overflow: auto;
+  background: #fff;
+}
+.grade-celula {
+  padding: 2px 6px;
+  border-right: 1px solid #dfdfdf;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 12px;
+}
+.grade-th {
+  border-bottom: 1px solid grey;
+}
+.grade-aviso {
+  margin: 0;
+  padding: 4px 6px;
+  background: #ffffe1;
+  border-top: 1px solid grey;
+  font-size: 11px;
+}

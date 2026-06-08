@@ -1,6 +1,11 @@
+import { lazy } from 'react';
 import type { DefinicaoApp, TipoApp } from './tipos';
 import { AppPlaceholder } from './AppPlaceholder';
 import { ExploradorObjetos } from '../aplicativos/explorador/ExploradorObjetos';
+
+const EditorConsultas = lazy(() =>
+  import('../aplicativos/consulta/EditorConsultas').then((m) => ({ default: m.EditorConsultas })),
+);
 
 // O WM é genérico: cada tipoApp mapeia para metadados + um componente.
 // Adicionar um app futuro = trocar AppPlaceholder pelo componente real aqui.
@@ -14,8 +19,8 @@ export const registroApps: Record<TipoApp, DefinicaoApp> = {
   consulta: {
     titulo: 'Editor de Consultas',
     icone: '📝',
-    tamanhoInicial: { largura: 480, altura: 320 },
-    componente: AppPlaceholder,
+    tamanhoInicial: { largura: 560, altura: 420 },
+    componente: EditorConsultas,
   },
   grade: {
     titulo: 'Grade de Dados',

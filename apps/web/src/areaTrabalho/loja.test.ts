@@ -12,7 +12,7 @@ test('abrirJanela adiciona, foca e usa metadados do registro', () => {
   expect(janelas).toHaveLength(1);
   expect(janelas[0]!.tipoApp).toBe('consulta');
   expect(janelas[0]!.titulo).toBe('Editor de Consultas');
-  expect(janelas[0]!.retangulo.largura).toBe(480);
+  expect(janelas[0]!.retangulo.largura).toBe(560);
   expect(janelas[0]!.estado).toBe('normal');
   expect(idFocada).toBe(janelas[0]!.id);
 });
