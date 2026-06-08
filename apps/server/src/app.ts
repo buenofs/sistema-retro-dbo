@@ -4,6 +4,7 @@ import { criarGerenciadorPools, type GerenciadorPools } from './bd/gerenciadorPo
 import { registrarSessao } from './plugins/sessao';
 import { registrarTratadorErros } from './plugins/tratadorErros';
 import { registrarRotasAutenticacao } from './rotas/autenticacao';
+import { registrarRotasExplorador } from './rotas/explorador';
 
 export interface OpcoesApp {
   // Permite injetar um gerenciador nos testes; em produção vem do ambiente.
@@ -27,6 +28,7 @@ export function construirApp(opcoes: OpcoesApp = {}): FastifyInstance {
   app.register(async (instancia) => {
     await registrarSessao(instancia);
     registrarRotasAutenticacao(instancia, gerenciador);
+    registrarRotasExplorador(instancia, gerenciador);
   });
 
   app.get('/api/saude', async (): Promise<Resposta<{ status: string }>> => {
