@@ -39,15 +39,15 @@ function SeletorTabela({ aoEscolher }: { aoEscolher: (r: RefTabela) => void }) {
   const consulta = useObjetos();
   if (consulta.isPending) return <p style={{ padding: 8 }}>Carregando tabelas…</p>;
   if (consulta.isError) return <p style={{ padding: 8, color: 'red' }}>{consulta.error.message}</p>;
-  const tabelas = (consulta.data ?? []).filter((o) => o.tipo === 'tabela');
+  const objetos = consulta.data ?? [];
   return (
     <div style={{ padding: 8 }}>
-      <p>Escolha uma tabela:</p>
+      <p>Escolha uma tabela ou view:</p>
       <ul className="tree-view">
-        {tabelas.map((o) => (
+        {objetos.map((o) => (
           <li key={`${o.esquema}.${o.nome}`}>
             <button onClick={() => aoEscolher({ esquema: o.esquema, tabela: o.nome })}>
-              ▦ {o.esquema}.{o.nome}
+              {o.tipo === 'view' ? '🔎' : '▦'} {o.esquema}.{o.nome}
             </button>
           </li>
         ))}

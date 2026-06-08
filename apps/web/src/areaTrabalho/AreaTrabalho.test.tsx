@@ -12,7 +12,7 @@ beforeEach(() => {
 });
 
 function renderizar() {
-  return render(<AreaTrabalho usuario={{ login: 'sa' }} />);
+  return render(<AreaTrabalho usuario={{ login: 'sa', banco: 'DBOS_RH' }} />);
 }
 
 test('botão direito no fundo do desktop abre menu com os 4 apps', () => {
@@ -29,4 +29,10 @@ test('botão direito num ícone abre menu "Abrir"', () => {
   const botaoIcone = getAllByText('Explorador de Objetos')[0]!.closest('button') as HTMLElement;
   fireEvent.contextMenu(botaoIcone);
   expect(useMenuContexto.getState().itens.map((i) => i.rotulo)).toEqual(['Abrir']);
+});
+
+test('mostra o nome do banco conectado e o atalho de Relatório', () => {
+  const { getByText } = renderizar();
+  expect(getByText('DBOS_RH')).toBeInTheDocument();
+  expect(getByText('Relatório (Folha)')).toBeInTheDocument();
 });

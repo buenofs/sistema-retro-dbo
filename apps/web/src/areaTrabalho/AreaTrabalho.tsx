@@ -9,7 +9,8 @@ import { GerenciadorDialogos } from './GerenciadorDialogos';
 import { MenuContexto } from './MenuContexto';
 import './areaTrabalho.css';
 
-// O desktop: wallpaper, atalhos, janelas, barra de tarefas, diálogos e menus.
+const RELATORIO = { esquema: 'dbo', tabela: 'vw_FolhaResumo' };
+
 export function AreaTrabalho({ usuario }: { usuario: UsuarioSessao }) {
   usarSonsJanelas();
   const abrirJanela = useLoja((s) => s.abrirJanela);
@@ -19,7 +20,6 @@ export function AreaTrabalho({ usuario }: { usuario: UsuarioSessao }) {
     <div
       className="area-trabalho"
       onContextMenu={(e) => {
-        // Só o fundo do desktop — janelas e ícones tratam o próprio menu.
         if (e.target !== e.currentTarget) return;
         e.preventDefault();
         const itens: ItemMenu[] = ORDEM_APPS.map((tipo) => ({
@@ -49,8 +49,25 @@ export function AreaTrabalho({ usuario }: { usuario: UsuarioSessao }) {
             <span className="icone-atalho-rotulo">{registroApps[tipo].titulo}</span>
           </button>
         ))}
+        <button
+          className="icone-atalho"
+          onDoubleClick={() => abrirJanela('grade', RELATORIO)}
+          onContextMenu={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            abrirMenu(e.clientX, e.clientY, [
+              { rotulo: 'Abrir', aoClicar: () => abrirJanela('grade', RELATORIO) },
+            ]);
+          }}
+        >
+          <span className="icone-atalho-glifo" aria-hidden="true">📄</span>
+          <span className="icone-atalho-rotulo">Relatório (Folha)</span>
+        </button>
       </div>
       <CamadaJanelas />
+      <div className="rotulo-banco" aria-hidden="true">
+        {usuario.banco}
+      </div>
       <BarraTarefas login={usuario.login} />
       <GerenciadorDialogos />
       <MenuContexto />

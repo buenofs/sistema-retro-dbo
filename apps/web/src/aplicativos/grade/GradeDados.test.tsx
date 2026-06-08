@@ -24,12 +24,19 @@ test('sem tabela pré-selecionada, mostra o seletor com as tabelas', async () =>
     'fetch',
     vi.fn(async () =>
       new Response(
-        JSON.stringify({ ok: true, dados: [{ esquema: 'dbo', nome: 'Clientes', tipo: 'tabela' }] }),
+        JSON.stringify({
+          ok: true,
+          dados: [
+            { esquema: 'dbo', nome: 'Clientes', tipo: 'tabela' },
+            { esquema: 'dbo', nome: 'vw_FolhaResumo', tipo: 'view' },
+          ],
+        }),
       ),
     ),
   );
   renderizar(janelaFake(null));
   expect(await screen.findByText(/dbo\.Clientes/)).toBeInTheDocument();
+  expect(await screen.findByText(/vw_FolhaResumo/)).toBeInTheDocument();
 });
 
 test('com tabela em dados, abre a grade direto', async () => {
