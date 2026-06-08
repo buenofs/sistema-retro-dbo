@@ -22,7 +22,7 @@ test('clicar num app abre a janela e fecha o menu', () => {
   });
   fireEvent.click(screen.getByRole('menuitem', { name: /Editor de Consultas/ }));
   expect(useLoja.getState().janelas).toHaveLength(1);
-  expect(useLoja.getState().janelas[0].tipoApp).toBe('consulta');
+  expect(useLoja.getState().janelas[0]!.tipoApp).toBe('consulta');
   expect(fechou).toBe(true);
 });
 

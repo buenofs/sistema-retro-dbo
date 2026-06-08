@@ -7,7 +7,7 @@ beforeEach(() => useLoja.setState(estadoInicial()));
 
 function abrirERenderizar() {
   useLoja.getState().abrirJanela('consulta');
-  const id = useLoja.getState().janelas[0].id;
+  const id = useLoja.getState().janelas[0]!.id;
   render(<Janela id={id} />);
   return id;
 }
