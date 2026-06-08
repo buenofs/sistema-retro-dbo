@@ -465,6 +465,8 @@ git commit -m "feat(server): conexão SQL Server nativo + smoke test Bun/Tedious
 
 - [ ] **Step 1: Create `apps/web/package.json`**
 
+> **Desvio do plano (2026-06-07):** adicionados três devDependencies que faltavam: `@types/react` e `@types/react-dom` (o pacote `react` 18 não traz os próprios tipos — sem eles, JSX vira `any` → `ts(7026)`); e `@testing-library/dom` (peer dependency obrigatória do `@testing-library/react` v16 — sem ela, `ts(2307)` no teste). Também criado `apps/web/src/vite-env.d.ts` com `/// <reference types="vite/client" />` para declarar imports de CSS (ex.: `98.css`) e evitar `ts(2882)`.
+
 ```json
 {
   "name": "@dbos/web",
@@ -482,8 +484,11 @@ git commit -m "feat(server): conexão SQL Server nativo + smoke test Bun/Tedious
     "react-dom": "^18.3.1"
   },
   "devDependencies": {
+    "@testing-library/dom": "^10.4.0",
     "@testing-library/react": "^16.0.1",
     "@testing-library/jest-dom": "^6.5.0",
+    "@types/react": "^18.3.5",
+    "@types/react-dom": "^18.3.0",
     "@vitejs/plugin-react": "^4.3.1",
     "jsdom": "^25.0.0",
     "typescript": "^5.5.4",
