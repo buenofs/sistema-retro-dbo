@@ -1,4 +1,4 @@
-import { useRef, useState, type KeyboardEvent } from 'react';
+import { useEffect, useRef, useState, type KeyboardEvent } from 'react';
 import type { FiltrosBusca, Funcionario, ResultadoConsulta } from '@dbos/shared';
 import { useLoja } from '../../areaTrabalho/loja';
 import { requisitar } from '../../api/cliente';
@@ -18,6 +18,19 @@ export function Terminal() {
   const [historico, setHistorico] = useState<string[]>([]);
   const [indice, setIndice] = useState(-1);
   const fimRef = useRef<HTMLDivElement>(null);
+  const entradaRef = useRef<HTMLInputElement>(null);
+
+  // Foca o input ao abrir o terminal.
+  useEffect(() => {
+    entradaRef.current?.focus();
+  }, []);
+
+  // Clicar em qualquer lugar do terminal foca o input (a não ser que haja
+  // texto selecionado — para permitir copiar a saída).
+  function focarEntrada() {
+    if (window.getSelection()?.toString()) return;
+    entradaRef.current?.focus();
+  }
 
   const ctx: ContextoTerminal = {
     consultar: async (sql) => {
@@ -81,7 +94,7 @@ export function Terminal() {
   }
 
   return (
-    <div className="terminal">
+    <div className="terminal" onClick={focarEntrada}>
       <div className="terminal-saida">
         {linhas.map((l, i) => (
           <div key={i} className="terminal-linha">
@@ -91,6 +104,7 @@ export function Terminal() {
         <div className="terminal-prompt">
           <span className="terminal-ps">{PROMPT}</span>
           <input
+            ref={entradaRef}
             className="terminal-input"
             aria-label="Comando"
             value={entrada}
