@@ -52,6 +52,10 @@ contexto: **Propriedades** abre uma janela com tipo, contagem de colunas/linhas,
 datas e os **índices** (lidos de `sys.*`); **Abrir na grade** abre a tabela na
 Grade de Dados.
 
+O app **Buscar** (estilo Search Companion) pesquisa funcionários por nome,
+departamento, salário, projeto e por relacionamento (colegas de depto/projeto);
+cada resultado tem **Abrir na grade**.
+
 Toques de polimento: sons curtos ao abrir/fechar janelas e nos erros; clique com
 o botão direito no **fundo do desktop** (abrir qualquer app) ou num **ícone**
 ("Abrir"); diálogos fecham no **Esc** e focam o OK ao abrir; o layout das janelas
