@@ -57,6 +57,11 @@ o botão direito no **fundo do desktop** (abrir qualquer app) ou num **ícone**
 ("Abrir"); diálogos fecham no **Esc** e focam o OK ao abrir; o layout das janelas
 é lembrado entre sessões (localStorage).
 
+Ao abrir, o sistema mostra uma **tela de boot** e depois o diálogo **"Log On to
+DBOS"**. O desktop exibe o nome do banco conectado e um atalho **Relatório (Folha)**
+que abre a view `vw_FolhaResumo`. A Grade lista tabelas e views (views em modo
+somente-leitura).
+
 ## Testes
 ```bash
 bun run test                # todos os pacotes
