@@ -155,3 +155,31 @@
   border-top: 1px solid grey;
   border-bottom: 1px solid #fff;
 }
+
+/* Diálogos modais (spec §6.4) — acima de tudo, inclusive a barra de tarefas */
+.camada-dialogos {
+  position: fixed;
+  inset: 0;
+  z-index: 20000;
+}
+.dialogo-fundo {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.dialogo-janela {
+  min-width: 300px;
+  max-width: 460px;
+}
+.dialogo-janela pre {
+  margin: 4px 0 0;
+  max-height: 160px;
+  overflow: auto;
+  background: #fff;
+  border: 1px solid grey;
+  padding: 4px;
+  white-space: pre-wrap;
+  font-size: 11px;
+}

@@ -3,6 +3,7 @@ import { ORDEM_APPS, registroApps } from './registroApps';
 import { useLoja } from './loja';
 import { CamadaJanelas } from './CamadaJanelas';
 import { BarraTarefas } from './BarraTarefas';
+import { GerenciadorDialogos } from './GerenciadorDialogos';
 import './areaTrabalho.css';
 
 // O desktop: wallpaper, atalhos de duplo-clique, janelas e barra de tarefas.
@@ -27,6 +28,7 @@ export function AreaTrabalho({ usuario }: { usuario: UsuarioSessao }) {
       </div>
       <CamadaJanelas />
       <BarraTarefas login={usuario.login} />
+      <GerenciadorDialogos />
     </div>
   );
 }
