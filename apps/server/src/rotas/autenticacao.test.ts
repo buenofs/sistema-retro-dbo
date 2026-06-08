@@ -31,7 +31,10 @@ test('login com credenciais válidas devolve cookie e usuário', async () => {
     const r = await postar(base, '/api/autenticacao/login', SA);
     expect(r.status).toBe(200);
     expect(r.headers.get('set-cookie')).toContain('dbos_sid');
-    expect(await r.json()).toEqual({ ok: true, dados: { login: 'sa' } });
+    expect(await r.json()).toEqual({
+      ok: true,
+      dados: { login: 'sa', banco: process.env.SQL_BANCO },
+    });
   });
 });
 

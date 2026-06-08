@@ -58,7 +58,10 @@ export function registrarRotasAutenticacao(
 
     // A senha sai de escopo aqui — nunca é armazenada nem devolvida (spec §5.2).
     definirCookieSessao(reply, idSessao);
-    const resposta: RespostaSessao = { ok: true, dados: { login: credenciais.login } };
+    const resposta: RespostaSessao = {
+      ok: true,
+      dados: { login: credenciais.login, banco: process.env.SQL_BANCO ?? '' },
+    };
     return resposta;
   });
 
@@ -67,7 +70,7 @@ export function registrarRotasAutenticacao(
     '/api/autenticacao/sessao',
     { preHandler: autenticar },
     async (req): Promise<RespostaSessao> => {
-      return { ok: true, dados: { login: req.sessao!.login } };
+      return { ok: true, dados: { login: req.sessao!.login, banco: process.env.SQL_BANCO ?? '' } };
     },
   );
 
