@@ -31,6 +31,12 @@ suas colunas (tipo, nulabilidade e 🔑 chave primária), via SQL cru no
 `INFORMATION_SCHEMA`. Há uma caixa de filtro no topo. Os outros três apps ainda
 são placeholders.
 
+O **Editor de Consultas** roda SQL livre contra o login da sessão: digite no
+editor (CodeMirror) e execute com o botão ou F5. O resultado aparece numa grade
+virtualizada; comandos sem retorno mostram as linhas afetadas. Há teto de linhas
+e timeout de statement (`SQL_MAX_LINHAS`/`SQL_TIMEOUT_MS`), e erros do SQL Server
+abrem um diálogo retrô com a mensagem e os detalhes (código do erro).
+
 ## Testes
 ```bash
 bun run test                # todos os pacotes
