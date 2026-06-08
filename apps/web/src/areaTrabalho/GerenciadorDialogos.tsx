@@ -1,7 +1,7 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import { type Dialogo, useDialogos } from './useDialogos';
-import { tocarBipe } from './tocarBipe';
+import { tocarSom } from './sons';
 
 const ICONE: Record<Dialogo['tipo'], string> = {
   erro: '❌',
@@ -13,6 +13,20 @@ const ICONE: Record<Dialogo['tipo'], string> = {
 export function GerenciadorDialogos() {
   const dialogos = useDialogos(useShallow((s) => s.dialogos));
   const fechar = useDialogos((s) => s.fechar);
+
+  // a11y: Esc fecha o diálogo do topo.
+  useEffect(() => {
+    if (dialogos.length === 0) return;
+    function aoTecla(e: KeyboardEvent) {
+      if (e.key === 'Escape') {
+        const topo = dialogos[dialogos.length - 1];
+        if (topo) fechar(topo.id);
+      }
+    }
+    window.addEventListener('keydown', aoTecla);
+    return () => window.removeEventListener('keydown', aoTecla);
+  }, [dialogos, fechar]);
+
   if (dialogos.length === 0) return null;
   return (
     <div className="camada-dialogos">
@@ -24,9 +38,12 @@ export function GerenciadorDialogos() {
 }
 
 function CaixaDialogo({ dialogo, aoFechar }: { dialogo: Dialogo; aoFechar: () => void }) {
-  // Bipe ao abrir (spec §6.4).
+  const okRef = useRef<HTMLButtonElement>(null);
+
+  // Bipe ao abrir (spec §6.4) + foco no OK (a11y).
   useEffect(() => {
-    tocarBipe();
+    tocarSom('erro');
+    okRef.current?.focus();
   }, []);
 
   return (
@@ -52,7 +69,9 @@ function CaixaDialogo({ dialogo, aoFechar }: { dialogo: Dialogo; aoFechar: () =>
             </details>
           )}
           <div className="field-row" style={{ justifyContent: 'flex-end', marginTop: 12 }}>
-            <button onClick={aoFechar}>OK</button>
+            <button ref={okRef} onClick={aoFechar}>
+              OK
+            </button>
           </div>
         </div>
       </div>

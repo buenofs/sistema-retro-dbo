@@ -28,3 +28,16 @@ test('OK fecha o diálogo', () => {
   fireEvent.click(screen.getByRole('button', { name: 'OK' }));
   expect(useDialogos.getState().dialogos).toHaveLength(0);
 });
+
+test('Esc fecha o diálogo do topo', () => {
+  useDialogos.getState().abrir({ tipo: 'erro', titulo: 'Erro', mensagem: 'x' });
+  render(<GerenciadorDialogos />);
+  fireEvent.keyDown(window, { key: 'Escape' });
+  expect(useDialogos.getState().dialogos).toHaveLength(0);
+});
+
+test('o botão OK recebe foco ao abrir', () => {
+  useDialogos.getState().abrir({ tipo: 'erro', titulo: 'Erro', mensagem: 'x' });
+  render(<GerenciadorDialogos />);
+  expect(screen.getByRole('button', { name: 'OK' })).toHaveFocus();
+});
