@@ -623,7 +623,11 @@ function abrirERenderizar() {
 
 test('mostra título e ícone do app', () => {
   abrirERenderizar();
-  expect(screen.getByText(/Editor de Consultas/)).toBeInTheDocument();
+  // O título/ícone vivem na barra de título (o AppPlaceholder também ecoa o
+  // título no corpo, então restringimos a busca ao chrome da janela).
+  expect(
+    screen.getByText(/📝 Editor de Consultas/, { selector: '.title-bar-text' }),
+  ).toBeInTheDocument();
 });
 
 test('o botão Close fecha a janela na loja', () => {
