@@ -56,6 +56,11 @@ O app **Buscar** (estilo Search Companion) pesquisa funcionários por nome,
 departamento, salário, projeto e por relacionamento (colegas de depto/projeto);
 cada resultado tem **Abrir na grade**.
 
+O app **Relacionamentos** mostra um grafo navegável de um funcionário
+(departamento, projetos, folha); clicar num nó re-centraliza o grafo nele e
+"◀ Voltar" desfaz. Abre pelo atalho, pelo botão "Ver relacionamentos" na Busca,
+ou (em breve) pelo Terminal.
+
 Toques de polimento: sons curtos ao abrir/fechar janelas e nos erros; clique com
 o botão direito no **fundo do desktop** (abrir qualquer app) ou num **ícone**
 ("Abrir"); diálogos fecham no **Esc** e focam o OK ao abrir; o layout das janelas
