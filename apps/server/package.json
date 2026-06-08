@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "@dbos/shared": "workspace:*",
+    "@fastify/cookie": "^9.4.0",
     "fastify": "^4.28.0",
     "mssql": "^11.0.1"
   }
