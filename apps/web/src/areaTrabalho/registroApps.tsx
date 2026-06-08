@@ -2,6 +2,7 @@ import { lazy } from 'react';
 import type { DefinicaoApp, TipoApp } from './tipos';
 import { AppPlaceholder } from './AppPlaceholder';
 import { ExploradorObjetos } from '../aplicativos/explorador/ExploradorObjetos';
+import { GradeDados } from '../aplicativos/grade/GradeDados';
 
 const EditorConsultas = lazy(() =>
   import('../aplicativos/consulta/EditorConsultas').then((m) => ({ default: m.EditorConsultas })),
@@ -25,8 +26,8 @@ export const registroApps: Record<TipoApp, DefinicaoApp> = {
   grade: {
     titulo: 'Grade de Dados',
     icone: '▦',
-    tamanhoInicial: { largura: 520, altura: 360 },
-    componente: AppPlaceholder,
+    tamanhoInicial: { largura: 640, altura: 440 },
+    componente: GradeDados,
   },
   propriedades: {
     titulo: 'Propriedades',
