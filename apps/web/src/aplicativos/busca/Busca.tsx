@@ -123,6 +123,11 @@ export function Busca() {
                   <td>{f.departamento}</td>
                   <td>{f.salario}</td>
                   <td>
+                    <button
+                      onClick={() => abrirJanela('relacionamentos', { tipo: 'funcionario', id: f.id })}
+                    >
+                      Ver relacionamentos
+                    </button>{' '}
                     <button onClick={() => abrirJanela('grade', { esquema: 'dbo', tabela: 'Funcionarios' })}>
                       Abrir na grade
                     </button>

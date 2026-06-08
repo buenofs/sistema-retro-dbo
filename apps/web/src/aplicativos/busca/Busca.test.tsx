@@ -57,3 +57,14 @@ test('pesquisar mostra resultados e "Abrir na grade" abre a Grade', async () => 
   expect(janela).toBeDefined();
   expect(janela!.dados).toEqual({ esquema: 'dbo', tabela: 'Funcionarios' });
 });
+
+test('"Ver relacionamentos" abre o app de Relacionamentos do funcionário', async () => {
+  stub();
+  renderizar();
+  fireEvent.click(screen.getByRole('button', { name: 'Pesquisar' }));
+  await screen.findByRole('table');
+  fireEvent.click(screen.getByRole('button', { name: 'Ver relacionamentos' }));
+  const janela = useLoja.getState().janelas.find((j) => j.tipoApp === 'relacionamentos');
+  expect(janela).toBeDefined();
+  expect(janela!.dados).toEqual({ tipo: 'funcionario', id: 1 });
+});
