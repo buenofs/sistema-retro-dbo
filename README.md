@@ -12,9 +12,14 @@ SQL database management disguised as a retro Win98 desktop OS.
 ```bash
 bun install
 cp .env.example .env        # configure SQL_SENHA (senha do sa) e SESSAO_SEGREDO
+bun run db:setup            # cria e semeia o banco DBOS_RH no SQL Server
 bun run dev:server          # API em http://localhost:3001
 bun run dev:web             # desktop em http://localhost:5173
 ```
+
+O sistema agora opera sobre o banco **DBOS_RH** (RH/folha): tabelas `Departamentos`,
+`Funcionarios`, `Projetos` e `FolhaPagamento`, mais as views `vw_FolhaResumo` e
+`vw_AnomaliasFolha`. Configure `SQL_BANCO=DBOS_RH` no `.env`.
 
 Acesse `http://localhost:5173`, faça login com um login do SQL Server (ex.: `sa`).
 A sessão vive num cookie httpOnly; o pool de conexão do login fica em memória no
