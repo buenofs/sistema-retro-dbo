@@ -3,6 +3,7 @@ import type { DefinicaoApp, TipoApp } from './tipos';
 import { ExploradorObjetos } from '../aplicativos/explorador/ExploradorObjetos';
 import { GradeDados } from '../aplicativos/grade/GradeDados';
 import { PropriedadesObjeto } from '../aplicativos/propriedades/PropriedadesObjeto';
+import { Busca } from '../aplicativos/busca/Busca';
 
 const EditorConsultas = lazy(() =>
   import('../aplicativos/consulta/EditorConsultas').then((m) => ({ default: m.EditorConsultas })),
@@ -35,7 +36,13 @@ export const registroApps: Record<TipoApp, DefinicaoApp> = {
     tamanhoInicial: { largura: 360, altura: 380 },
     componente: PropriedadesObjeto,
   },
+  busca: {
+    titulo: 'Buscar',
+    icone: '🔎',
+    tamanhoInicial: { largura: 600, altura: 440 },
+    componente: Busca,
+  },
 };
 
 // Ordem fixa em que os apps aparecem nos atalhos e no menu Iniciar.
-export const ORDEM_APPS: TipoApp[] = ['explorador', 'consulta', 'grade', 'propriedades'];
+export const ORDEM_APPS: TipoApp[] = ['explorador', 'busca', 'consulta', 'grade', 'propriedades'];

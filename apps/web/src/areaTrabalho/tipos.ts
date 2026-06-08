@@ -1,7 +1,7 @@
 import type { ComponentType } from 'react';
 
 export type IdJanela = string;
-export type TipoApp = 'consulta' | 'explorador' | 'grade' | 'propriedades';
+export type TipoApp = 'consulta' | 'explorador' | 'grade' | 'propriedades' | 'busca';
 export type EstadoVisual = 'normal' | 'minimizada' | 'maximizada';
 
 export interface Retangulo {
