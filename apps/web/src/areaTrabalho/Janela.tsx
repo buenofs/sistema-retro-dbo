@@ -2,6 +2,7 @@ import { memo, useCallback, useRef, type CSSProperties } from 'react';
 import type { IdJanela, Retangulo } from './tipos';
 import { useLoja } from './loja';
 import { registroApps } from './registroApps';
+import { LimiteErroJanela } from './LimiteErroJanela';
 import { usarArrasto } from './usarArrasto';
 import { ALTURA_BARRA, limitarRetangulo } from './limites';
 
@@ -104,7 +105,9 @@ export const Janela = memo(function Janela({ id }: { id: IdJanela }) {
         className="window-body"
         style={{ height: 'calc(100% - 2.2rem)', margin: 0, overflow: 'auto' }}
       >
-        <Componente janela={janela} />
+        <LimiteErroJanela titulo={janela.titulo}>
+          <Componente janela={janela} />
+        </LimiteErroJanela>
       </div>
       {!maximizada && (
         <div className="alca-redimensionar" aria-hidden="true" onPointerDown={arrastarAlca} />
