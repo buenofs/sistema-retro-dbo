@@ -1,0 +1,37 @@
+.rel {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+.rel-barra {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px;
+  border-bottom: 1px solid grey;
+}
+.rel-canvas {
+  position: relative;
+  flex: 1;
+  overflow: auto;
+  background: #fff;
+}
+.rel-linhas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+}
+.rel-no {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  max-width: 140px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 12px;
+}
+.rel-centro {
+  font-weight: bold;
+  box-shadow: inset -1px -1px #fff, inset 1px 1px grey, inset -2px -2px #dfdfdf, inset 2px 2px #0a0a0a;
+}
