@@ -37,6 +37,11 @@ virtualizada; comandos sem retorno mostram as linhas afetadas. Há teto de linha
 e timeout de statement (`SQL_MAX_LINHAS`/`SQL_TIMEOUT_MS`), e erros do SQL Server
 abrem um diálogo retrô com a mensagem e os detalhes (código do erro).
 
+A **Grade de Dados** lê uma tabela paginada (escolha-a no seletor do app) e
+permite editar, inserir e excluir linhas. Edição/exclusão usam a chave primária
+(tabelas sem PK ficam somente-leitura); identificadores são citados e validados,
+e valores vão sempre parametrizados. Erros de escrita aparecem no diálogo retrô.
+
 ## Testes
 ```bash
 bun run test                # todos os pacotes
