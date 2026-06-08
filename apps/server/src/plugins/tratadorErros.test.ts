@@ -23,3 +23,9 @@ test('mapeia erro desconhecido para tipo interno', () => {
   expect(api.tipo).toBe('interno');
   expect(api.detalhe).toBe('boom');
 });
+
+test('mapeia timeout do driver (ETIMEOUT) para tempoEsgotado', () => {
+  const erro = new sql.RequestError('Timeout: Request failed to complete', 'ETIMEOUT');
+  const api = mapearErroSql(erro);
+  expect(api.tipo).toBe('tempoEsgotado');
+});

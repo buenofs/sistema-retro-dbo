@@ -5,6 +5,13 @@ import type { ErroApi } from '@dbos/shared';
 // Converte um erro do driver mssql/Tedious (ou qualquer erro) no formato padronizado.
 export function mapearErroSql(erro: unknown): ErroApi {
   if (erro instanceof sql.RequestError) {
+    if ((erro as { code?: string }).code === 'ETIMEOUT') {
+      return {
+        tipo: 'tempoEsgotado',
+        mensagem: 'A consulta excedeu o tempo limite e foi cancelada.',
+        detalhe: erro.message,
+      };
+    }
     return {
       tipo: 'sql',
       mensagem: 'O banco de dados recusou o comando.',
@@ -32,7 +39,13 @@ export function registrarTratadorErros(app: FastifyInstance): void {
   app.setErrorHandler((erro, _req, reply) => {
     const apiErro = mapearErroSql(erro);
     const status =
-      apiErro.tipo === 'sql' ? 400 : apiErro.tipo === 'rede' ? 503 : 500;
+      apiErro.tipo === 'sql'
+        ? 400
+        : apiErro.tipo === 'tempoEsgotado'
+          ? 504
+          : apiErro.tipo === 'rede'
+            ? 503
+            : 500;
     void reply.status(status).send({ ok: false, erro: apiErro });
   });
 }

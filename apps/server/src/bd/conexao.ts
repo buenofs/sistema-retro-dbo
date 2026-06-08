@@ -9,6 +9,7 @@ export function configDoAmbiente(): sql.config {
     user: process.env.SQL_USUARIO ?? 'sa',
     password: process.env.SQL_SENHA ?? '',
     database: process.env.SQL_BANCO ?? 'master',
+    requestTimeout: Number(process.env.SQL_TIMEOUT_MS ?? 30_000),
     options: {
       // Em ambiente local o certificado é autoassinado.
       encrypt: true,
