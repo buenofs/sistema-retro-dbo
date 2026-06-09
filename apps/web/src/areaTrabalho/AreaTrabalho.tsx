@@ -34,6 +34,11 @@ export function AreaTrabalho({ usuario }: { usuario: UsuarioSessao }) {
         abrirMenu(e.clientX, e.clientY, itens);
       }}
     >
+      <div className="camada-bolhas" aria-hidden="true">
+        {Array.from({ length: 6 }, (_, i) => (
+          <span key={i} className={`bolha bolha-${i + 1}`} />
+        ))}
+      </div>
       <div className="icones-area">
         {ORDEM_APPS.map((tipo) => (
           <button
