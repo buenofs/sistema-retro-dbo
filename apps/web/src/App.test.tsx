@@ -2,6 +2,7 @@ import { test, expect, vi, afterEach, beforeEach } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { App } from './App';
+import { ProvedorTema } from './tema/ProvedorTema';
 import { useLoja, estadoInicial } from './areaTrabalho/loja';
 import { useBoot } from './boot';
 
@@ -25,9 +26,11 @@ afterEach(() => vi.unstubAllGlobals());
 function renderizar() {
   const cliente = new QueryClient({ defaultOptions: { queries: { retry: false } } });
   return render(
-    <QueryClientProvider client={cliente}>
-      <App />
-    </QueryClientProvider>,
+    <ProvedorTema>
+      <QueryClientProvider client={cliente}>
+        <App />
+      </QueryClientProvider>
+    </ProvedorTema>,
   );
 }
 
