@@ -15,6 +15,16 @@ const PERFIS: Record<TipoSom, PerfilSom> = {
 
 let contexto: AudioContext | null = null;
 
+let habilitado = true;
+
+export function definirSomHabilitado(valor: boolean): void {
+  habilitado = valor;
+}
+
+export function somHabilitado(): boolean {
+  return habilitado;
+}
+
 // AudioContext compartilhado e lazy. null onde não há Web Audio (ex.: jsdom).
 function obterContexto(): AudioContext | null {
   try {
@@ -31,6 +41,7 @@ function obterContexto(): AudioContext | null {
 
 // Toca um som curto sintetizado. Silencioso (sem lançar) onde não há áudio.
 export function tocarSom(tipo: TipoSom): void {
+  if (!habilitado) return;
   const ctx = obterContexto();
   if (!ctx) return;
   try {

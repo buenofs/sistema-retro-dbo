@@ -1,5 +1,5 @@
 import { test, expect } from 'vitest';
-import { tocarSom } from './sons';
+import { tocarSom, definirSomHabilitado, somHabilitado } from './sons';
 
 // No jsdom não há AudioContext: tocarSom deve sair graciosamente, sem lançar.
 test('tocarSom é seguro sem áudio (jsdom) para todos os tipos', () => {
@@ -9,4 +9,17 @@ test('tocarSom é seguro sem áudio (jsdom) para todos os tipos', () => {
     tocarSom('erro');
     tocarSom('iniciar');
   }).not.toThrow();
+});
+
+test('definirSomHabilitado alterna o flag consultável', () => {
+  definirSomHabilitado(false);
+  expect(somHabilitado()).toBe(false);
+  definirSomHabilitado(true);
+  expect(somHabilitado()).toBe(true);
+});
+
+test('tocarSom é seguro com o som desligado', () => {
+  definirSomHabilitado(false);
+  expect(() => tocarSom('abrir')).not.toThrow();
+  definirSomHabilitado(true);
 });
