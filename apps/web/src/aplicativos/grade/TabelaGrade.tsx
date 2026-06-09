@@ -2,7 +2,8 @@ import { useState } from 'react';
 import type { ValorCelula } from '@dbos/shared';
 import { useDialogos } from '../../areaTrabalho/useDialogos';
 import { ErroApiError } from '../consulta/ganchos';
-import { converterValor } from './conversao';
+import { Icone } from '../../tema/icones/Icone';
+import { converterValor, ehTipoNumerico, ehTipoMoeda, formatarMoeda } from './conversao';
 import { useAtualizarLinha, useInserirLinha, useLinhas, useRemoverLinha } from './ganchos';
 
 const TAMANHO_PAGINA = 100;
@@ -102,7 +103,9 @@ export function TabelaGrade({ esquema, tabela }: { esquema: string; tabela: stri
     <div className="grade-dados">
       <div className="grade-barra">
         {editavel && (
-          <button onClick={() => setInserindo((v) => !v)}>＋ Nova linha</button>
+          <button onClick={() => setInserindo((v) => !v)}>
+            <Icone nome="insert" tamanho={14} alt="" style={{ marginRight: 4 }} /> Nova linha
+          </button>
         )}
         <span className="grade-paginacao">
           <button disabled={pagina === 0} onClick={() => setPagina((p) => p - 1)} aria-label="Anterior">
@@ -117,7 +120,12 @@ export function TabelaGrade({ esquema, tabela }: { esquema: string; tabela: stri
             ▶
           </button>
         </span>
-        {!editavel && <span className="grade-aviso-pk">Sem chave primária — somente leitura.</span>}
+        {!editavel && (
+          <span className="grade-aviso-pk">
+            <Icone nome="stop" tamanho={12} alt="" style={{ marginRight: 3 }} />
+            Sem chave primária — somente leitura.
+          </span>
+        )}
       </div>
       <div className="grade-rolagem">
         <table className="grade-tabela">
@@ -125,8 +133,15 @@ export function TabelaGrade({ esquema, tabela }: { esquema: string; tabela: stri
             <tr>
               {editavel && <th>Ações</th>}
               {dados.colunas.map((c) => (
-                <th key={c.nome}>
-                  {(c.ehChavePrimaria ? '🔑 ' : '') + c.nome}
+                <th key={c.nome} className={ehTipoNumerico(c.tipoDado) ? 'num' : undefined}>
+                  {c.ehChavePrimaria ? (
+                    <span className="grade-th-pk">
+                      <Icone nome="key" tamanho={12} alt="chave primária" />
+                      {c.nome}
+                    </span>
+                  ) : (
+                    c.nome
+                  )}
                 </th>
               ))}
             </tr>
@@ -183,7 +198,7 @@ export function TabelaGrade({ esquema, tabela }: { esquema: string; tabela: stri
                     </td>
                   )}
                   {dados.colunas.map((c) => (
-                    <td key={c.nome}>
+                    <td key={c.nome} className={ehTipoNumerico(c.tipoDado) ? 'num' : undefined}>
                       {emEdicao && !c.ehChavePrimaria ? (
                         <input
                           aria-label={`editar ${c.nome}`}
@@ -192,6 +207,8 @@ export function TabelaGrade({ esquema, tabela }: { esquema: string; tabela: stri
                             setRascunho((r) => ({ ...r, [c.nome]: e.target.value }))
                           }
                         />
+                      ) : ehTipoMoeda(c.tipoDado) ? (
+                        formatarMoeda(linha[c.nome])
                       ) : (
                         formatar(linha[c.nome])
                       )}
