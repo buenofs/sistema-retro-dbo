@@ -2,7 +2,7 @@
   position: fixed;
   inset: 0;
   overflow: hidden;
-  background: #008080; /* teal clássico do Win9x */
+  background: var(--wallpaper-bg);
 }
 
 /* Atalhos no canto superior esquerdo */
@@ -73,8 +73,8 @@
   align-items: center;
   gap: 4px;
   padding: 2px 4px;
-  background: #c0c0c0;
-  border-top: 2px solid #fff;
+  background: var(--barra-bg);
+  border-top: 2px solid var(--barra-borda-topo);
   z-index: 10000;
 }
 .botao-iniciar {
@@ -116,14 +116,14 @@
   width: 210px;
   display: flex;
   padding: 3px;
-  background: #c0c0c0;
+  background: var(--face);
   z-index: 10001;
   box-shadow: inset -1px -1px #0a0a0a, inset 1px 1px #fff, inset -2px -2px grey, inset 2px 2px #dfdfdf;
 }
 .menu-iniciar-faixa {
   width: 24px;
   padding: 6px 2px;
-  background: linear-gradient(0deg, #808080, #000080);
+  background: linear-gradient(0deg, var(--sh), var(--accent));
   color: #fff;
   font-weight: bold;
   writing-mode: vertical-rl;
@@ -146,8 +146,8 @@
   box-shadow: none;
 }
 .menu-iniciar-itens > li > button:hover:not(:disabled) {
-  background: #000080;
-  color: #fff;
+  background: var(--accent);
+  color: var(--accent-ink);
 }
 .menu-iniciar-separador {
   height: 2px;
@@ -192,7 +192,7 @@
   display: flex;
   flex-direction: column;
   padding: 2px;
-  background: #c0c0c0;
+  background: var(--face);
   box-shadow: inset -1px -1px #0a0a0a, inset 1px 1px #fff, inset -2px -2px grey, inset 2px 2px #dfdfdf;
 }
 .menu-contexto button {
@@ -205,8 +205,8 @@
   padding: 4px 8px;
 }
 .menu-contexto button:hover {
-  background: #000080;
-  color: #fff;
+  background: var(--accent);
+  color: var(--accent-ink);
 }
 
 /* Marca d'água com o banco conectado, acima da barra de tarefas */

@@ -1,8 +1,8 @@
 .tela-boot {
   position: fixed;
   inset: 0;
-  background: #000;
-  color: #fff;
+  background: var(--boot-bg);
+  color: var(--titulo-ink, #fff);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -14,26 +14,26 @@
   font-size: 64px;
   font-weight: bold;
   letter-spacing: 4px;
-  color: #00a4a4;
-  text-shadow: 2px 2px #004f4f;
+  color: var(--boot-marca);
+  text-shadow: 2px 2px var(--boot-marca-sombra);
 }
 .boot-sub {
   font-size: 13px;
-  color: #c0c0c0;
+  color: var(--boot-sub);
 }
 .boot-barra {
   width: 280px;
   height: 18px;
   margin-top: 12px;
-  border: 2px solid #808080;
-  background: #1a1a1a;
+  border: 2px solid var(--boot-barra-borda);
+  background: var(--boot-barra-bg);
   box-shadow: inset 1px 1px #000;
   overflow: hidden;
 }
 .boot-progresso {
   height: 100%;
   width: 0;
-  background: repeating-linear-gradient(90deg, #00a4a4 0 10px, #007a7a 10px 14px);
+  background: repeating-linear-gradient(90deg, var(--boot-progresso-1) 0 10px, var(--boot-progresso-2) 10px 14px);
   animation: boot-encher 1.8s linear forwards;
 }
 @keyframes boot-encher {
@@ -42,5 +42,5 @@
 }
 .boot-msg {
   font-size: 11px;
-  color: #9a9a9a;
+  color: var(--boot-msg);
 }

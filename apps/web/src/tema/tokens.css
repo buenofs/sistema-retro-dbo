@@ -46,4 +46,24 @@
 
   /* multiplicador de animação (Tweaks na Fase 2) */
   --motion: 1;
+
+  /* === Fase 3: tokens abstratos de pele (defaults = 98) === */
+  --wallpaper-bg: #008080;        /* fundo da área de trabalho / logon */
+  --barra-bg: var(--face);        /* fundo da barra de tarefas */
+  --barra-borda-topo: var(--hi);
+  --glass-blur: 0px;              /* só a pele Aero usa > 0 */
+  --crt: 0;                       /* opacidade das scanlines (pele 98) */
+  --accent-h: 210;               /* matiz do acento — só a pele Aero usa */
+  --accent-d: var(--accent);      /* acento escuro (Aero redefine via oklch) */
+
+  /* boot (defaults atuais; as peles sobrescrevem) */
+  --boot-bg: #000000;
+  --boot-marca: #00a4a4;
+  --boot-marca-sombra: #004f4f;
+  --boot-sub: #c0c0c0;
+  --boot-barra-borda: #808080;
+  --boot-barra-bg: #1a1a1a;
+  --boot-progresso-1: #00a4a4;
+  --boot-progresso-2: #007a7a;
+  --boot-msg: #9a9a9a;
 }

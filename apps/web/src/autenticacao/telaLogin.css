@@ -1,7 +1,7 @@
 .tela-logon {
   position: fixed;
   inset: 0;
-  background: #008080;
+  background: var(--wallpaper-bg);
   display: flex;
   align-items: center;
   justify-content: center;
