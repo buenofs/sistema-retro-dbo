@@ -3,8 +3,9 @@ import { render, fireEvent } from '@testing-library/react';
 import { AreaTrabalho } from './AreaTrabalho';
 import { useLoja, estadoInicial } from './loja';
 import { useMenuContexto, estadoInicialMenuContexto } from './useMenuContexto';
+import { ProvedorTema } from '../tema/ProvedorTema';
 
-vi.mock('./sons', () => ({ tocarSom: vi.fn() }));
+vi.mock('./sons', () => ({ tocarSom: vi.fn(), definirSomHabilitado: vi.fn(), somHabilitado: () => true }));
 
 beforeEach(() => {
   useLoja.setState(estadoInicial());
@@ -12,7 +13,11 @@ beforeEach(() => {
 });
 
 function renderizar() {
-  return render(<AreaTrabalho usuario={{ login: 'sa', banco: 'DBOS_RH' }} />);
+  return render(
+    <ProvedorTema>
+      <AreaTrabalho usuario={{ login: 'sa', banco: 'DBOS_RH' }} />
+    </ProvedorTema>,
+  );
 }
 
 test('botão direito no fundo do desktop abre menu com os 7 apps', () => {
@@ -20,8 +25,9 @@ test('botão direito no fundo do desktop abre menu com os 7 apps', () => {
   const desktop = container.querySelector('.area-trabalho') as HTMLElement;
   fireEvent.contextMenu(desktop);
   const rotulos = useMenuContexto.getState().itens.map((i) => i.rotulo);
-  expect(rotulos).toHaveLength(7);
+  expect(rotulos.filter((r) => r.startsWith('Abrir '))).toHaveLength(7);
   expect(rotulos.some((r) => r.includes('Explorador de Objetos'))).toBe(true);
+  expect(rotulos).toContain('Propriedades');
 });
 
 test('botão direito num ícone abre menu "Abrir"', () => {

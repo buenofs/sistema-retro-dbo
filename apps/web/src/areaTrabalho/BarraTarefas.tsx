@@ -4,6 +4,7 @@ import { useLoja } from './loja';
 import { MenuIniciar } from './MenuIniciar';
 import { Relogio } from './Relogio';
 import { Icone } from '../tema/icones/Icone';
+import { usePainelTweaks } from '../tema/painel';
 
 export function BarraTarefas({ login }: { login: string }) {
   const [menuAberto, setMenuAberto] = useState(false);
@@ -20,6 +21,7 @@ export function BarraTarefas({ login }: { login: string }) {
   const focar = useLoja((s) => s.focar);
   const minimizar = useLoja((s) => s.minimizar);
   const restaurar = useLoja((s) => s.restaurar);
+  const alternarPainel = usePainelTweaks((s) => s.alternar);
 
   function aoClicarJanela(id: string, minimizada: boolean) {
     if (minimizada) {
@@ -54,7 +56,15 @@ export function BarraTarefas({ login }: { login: string }) {
           </button>
         ))}
       </div>
-      <span className="bandeja-icones" aria-hidden="true">
+      <span className="bandeja-icones">
+        <button
+          type="button"
+          className="bandeja-engrenagem"
+          aria-label="Configurações"
+          onClick={alternarPainel}
+        >
+          <Icone nome="props" tamanho={16} alt="" />
+        </button>
         <Icone nome="database" tamanho={16} alt="" />
         <Icone nome="wifi" tamanho={16} alt="" />
         <Icone nome="speaker" tamanho={16} alt="" />

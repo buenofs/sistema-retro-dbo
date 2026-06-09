@@ -8,6 +8,8 @@ import { BarraTarefas } from './BarraTarefas';
 import { GerenciadorDialogos } from './GerenciadorDialogos';
 import { MenuContexto } from './MenuContexto';
 import { Icone } from '../tema/icones/Icone';
+import { PainelTweaks } from '../tema/PainelTweaks';
+import { usePainelTweaks } from '../tema/painel';
 import './areaTrabalho.css';
 
 const RELATORIO = { esquema: 'dbo', tabela: 'vw_FolhaResumo' };
@@ -16,6 +18,7 @@ export function AreaTrabalho({ usuario }: { usuario: UsuarioSessao }) {
   usarSonsJanelas();
   const abrirJanela = useLoja((s) => s.abrirJanela);
   const abrirMenu = useMenuContexto((s) => s.abrir);
+  const abrirPainel = usePainelTweaks((s) => s.abrir);
 
   return (
     <div
@@ -27,6 +30,7 @@ export function AreaTrabalho({ usuario }: { usuario: UsuarioSessao }) {
           rotulo: `Abrir ${registroApps[tipo].titulo}`,
           aoClicar: () => abrirJanela(tipo),
         }));
+        itens.push({ rotulo: 'Propriedades', aoClicar: () => abrirPainel() });
         abrirMenu(e.clientX, e.clientY, itens);
       }}
     >
@@ -74,6 +78,7 @@ export function AreaTrabalho({ usuario }: { usuario: UsuarioSessao }) {
       <BarraTarefas login={usuario.login} />
       <GerenciadorDialogos />
       <MenuContexto />
+      <PainelTweaks />
     </div>
   );
 }
