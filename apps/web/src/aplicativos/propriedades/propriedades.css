@@ -1,0 +1,33 @@
+.prop-cabecalho {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+.prop-titulo {
+  font-weight: 700;
+  font-size: 14px;
+}
+.prop-subtitulo {
+  color: var(--ink-suave);
+  font-size: 11px;
+}
+.prop-kv {
+  box-shadow: var(--relevo-out-fino);
+  background: var(--face);
+  padding: 8px 10px;
+  margin-bottom: 10px;
+}
+.prop-linha {
+  display: flex;
+  padding: 2px 0;
+}
+.prop-chave {
+  width: 130px;
+  color: var(--ink-suave);
+}
+.prop-indice {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}

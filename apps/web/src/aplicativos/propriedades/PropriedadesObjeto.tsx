@@ -1,5 +1,7 @@
 import type { EstadoJanela, PropsApp } from '../../areaTrabalho/tipos';
+import { Icone } from '../../tema/icones/Icone';
 import { usePropriedades } from './ganchos';
+import './propriedades.css';
 
 interface RefObj {
   esquema: string;
@@ -40,32 +42,36 @@ function DetalhePropriedades({ esquema, tabela }: RefObj) {
 
   return (
     <div style={{ padding: 8 }}>
+      <div className="prop-cabecalho">
+        <Icone nome={p.tipo === 'view' ? 'view' : 'table'} tamanho={32} alt="" />
+        <div>
+          <div className="prop-titulo">{p.nome}</div>
+          <div className="prop-subtitulo">
+            {p.tipo === 'view' ? 'View' : 'Tabela'} · {p.esquema}
+          </div>
+        </div>
+      </div>
+
+      <div className="prop-kv">
+        <div className="prop-linha"><span className="prop-chave">Colunas</span><strong>{p.totalColunas}</strong></div>
+        <div className="prop-linha"><span className="prop-chave">Linhas (aprox.)</span><strong>{p.totalLinhas}</strong></div>
+        <div className="prop-linha"><span className="prop-chave">Criado em</span><strong>{formatarData(p.criadoEm)}</strong></div>
+        <div className="prop-linha"><span className="prop-chave">Modificado em</span><strong>{formatarData(p.modificadoEm)}</strong></div>
+      </div>
+
       <fieldset>
-        <legend>Geral</legend>
-        <p style={{ margin: '2px 0' }}>Tipo: <strong>{p.tipo === 'view' ? 'View' : 'Tabela'}</strong></p>
-        <p style={{ margin: '2px 0' }}>Esquema: {p.esquema}</p>
-        <p style={{ margin: '2px 0' }}>Nome: {p.nome}</p>
-        <p style={{ margin: '2px 0' }}>Colunas: {p.totalColunas}</p>
-        <p style={{ margin: '2px 0' }}>Linhas (aprox.): {p.totalLinhas}</p>
-        <p style={{ margin: '2px 0' }}>Criado em: {formatarData(p.criadoEm)}</p>
-        <p style={{ margin: '2px 0' }}>Modificado em: {formatarData(p.modificadoEm)}</p>
-      </fieldset>
-      <fieldset style={{ marginTop: 8 }}>
         <legend>Índices ({p.indices.length})</legend>
         {p.indices.length === 0 ? (
           <p style={{ margin: '2px 0' }}>Nenhum índice.</p>
         ) : (
           <ul className="tree-view">
             {p.indices.map((i) => (
-              <li key={i.nome}>
-                {(i.chavePrimaria ? '🔑 ' : '') +
-                  i.nome +
-                  ' — ' +
-                  i.tipo +
-                  (i.unico ? ', único' : '') +
-                  ' (' +
-                  i.colunas.join(', ') +
-                  ')'}
+              <li key={i.nome} className="prop-indice">
+                {i.chavePrimaria && <Icone nome="key" tamanho={12} alt="chave primária" />}
+                <span>
+                  {i.nome} — {i.tipo}
+                  {i.unico ? ', único' : ''} ({i.colunas.join(', ')})
+                </span>
               </li>
             ))}
           </ul>
