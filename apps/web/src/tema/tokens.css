@@ -66,4 +66,21 @@
   --boot-progresso-1: #00a4a4;
   --boot-progresso-2: #007a7a;
   --boot-msg: #9a9a9a;
+
+  /* === Fase 4: tokens de app (defaults = 98) === */
+  --borda-painel: var(--sh);          /* divisórias 1px "grey" */
+  --borda-celula: #c0c0c0;            /* bordas de célula de tabela */
+  --cabecalho-tabela-bg: var(--face); /* fundo do cabeçalho de tabela */
+  --zebra: transparent;              /* linhas zebra (Aero liga) */
+  --aviso-bg: #ffffe1;               /* fundo de aviso (truncado) */
+  --erro-ink: #a00000;               /* texto de erro/alerta */
+  --term-bg: #000000;                /* terminal: fundo */
+  --term-fg: #33ff66;                /* terminal: fósforo */
+  --term-prompt: #33ff66;            /* terminal: prompt */
+  --no-funcionario: var(--accent);    /* grafo: cor por tipo */
+  --no-departamento: #f6c945;
+  --no-projeto: #2bc28d;
+  --no-folha: var(--sh);
+  --grafo-bg: var(--janela-conteudo); /* grafo: fundo do canvas */
+  --aresta: #808080;                 /* grafo: cor de aresta */
 }

@@ -16,3 +16,26 @@ export function converterValor(coluna: ColunaBanco, texto: string): ValorCelula 
   }
   return texto;
 }
+
+const TIPOS_MOEDA = ['money', 'smallmoney'];
+
+function baseTipo(tipoDado: string): string {
+  return tipoDado.split('(')[0]!.trim().toLowerCase();
+}
+
+export function ehTipoNumerico(tipoDado: string): boolean {
+  return TIPOS_NUMERICOS.includes(baseTipo(tipoDado));
+}
+
+export function ehTipoMoeda(tipoDado: string): boolean {
+  return TIPOS_MOEDA.includes(baseTipo(tipoDado));
+}
+
+const FMT_MOEDA = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' });
+
+export function formatarMoeda(valor: unknown): string {
+  if (valor === null || valor === undefined || valor === '') return '';
+  const n = typeof valor === 'number' ? valor : Number(valor);
+  if (Number.isNaN(n)) return String(valor);
+  return FMT_MOEDA.format(n);
+}
