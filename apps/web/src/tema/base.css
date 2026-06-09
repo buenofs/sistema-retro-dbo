@@ -1,0 +1,212 @@
+/* ============================================================
+   DBOS // tema — base.css
+   Reproduz, em tokens, o subconjunto do 98.css que o app usa:
+   classes window/title-bar/tree-view + elementos de formulário +
+   glifos dos controles de janela. Fiel ao Windows 98 (pele padrão).
+   ============================================================ */
+
+/* ---- fonte vendorizada (substitui a do pacote 98.css) ---- */
+@font-face {
+  font-family: "Pixelated MS Sans Serif";
+  font-style: normal;
+  font-weight: 400;
+  src: url("./fontes/ms_sans_serif.woff2") format("woff2"),
+       url("./fontes/ms_sans_serif.woff") format("woff");
+}
+@font-face {
+  font-family: "Pixelated MS Sans Serif";
+  font-style: normal;
+  font-weight: 700;
+  src: url("./fontes/ms_sans_serif_bold.woff2") format("woff2"),
+       url("./fontes/ms_sans_serif_bold.woff") format("woff");
+}
+
+* { box-sizing: border-box; }
+
+body {
+  color: var(--ink);
+  font-family: var(--ui);
+  font-size: 11px;
+  -webkit-font-smoothing: none;
+}
+
+/* o 98.css fixa font em vários seletores; replicamos para fidelidade */
+.title-bar, .window, button, input, label, legend, option, select,
+table, textarea, ul.tree-view {
+  -webkit-font-smoothing: none;
+  font-family: var(--ui);
+  font-size: 11px;
+}
+
+/* ============================================================
+   JANELA
+   ============================================================ */
+.window {
+  background: var(--face);
+  padding: 3px;
+  box-shadow: var(--relevo-out);
+  border-radius: var(--round);
+}
+
+.title-bar {
+  background: linear-gradient(90deg, var(--titulo-1), var(--titulo-2));
+  padding: 3px 2px 3px 3px;
+  display: flex;
+  align-items: center;
+}
+.title-bar-text {
+  color: var(--titulo-ink);
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 0;
+  margin-right: 24px;
+  flex: 1 1 auto;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.title-bar-controls {
+  display: flex;
+  gap: 0;
+}
+.title-bar-controls button {
+  display: grid;
+  place-items: center;
+  min-width: 16px;
+  min-height: 14px;
+  width: 16px;
+  height: 14px;
+  margin-left: 2px;
+  padding: 0;
+  position: relative;
+}
+/* glifos (pseudo-elementos) por aria-label — botões têm conteúdo vazio */
+.title-bar-controls button[aria-label="Minimize"]::before {
+  content: ""; width: 6px; height: 2px; background: #000;
+  position: absolute; bottom: 3px; left: 4px;
+}
+.title-bar-controls button[aria-label="Maximize"]::before {
+  content: ""; width: 9px; height: 8px; border: 1px solid #000; border-top-width: 2px;
+}
+.title-bar-controls button[aria-label="Restore"]::before {
+  content: ""; width: 6px; height: 5px; border: 1px solid #000; border-top-width: 2px;
+  position: absolute; left: 6px; top: 5px;
+}
+.title-bar-controls button[aria-label="Restore"]::after {
+  content: ""; width: 6px; height: 5px; border: 1px solid #000; border-top-width: 2px;
+  background: var(--face); position: absolute; left: 4px; top: 3px;
+}
+.title-bar-controls button[aria-label="Close"]::before,
+.title-bar-controls button[aria-label="Close"]::after {
+  content: ""; position: absolute; left: 50%; top: 50%;
+  width: 9px; height: 2px; background: #000;
+}
+.title-bar-controls button[aria-label="Close"]::before { transform: translate(-50%, -50%) rotate(45deg); }
+.title-bar-controls button[aria-label="Close"]::after  { transform: translate(-50%, -50%) rotate(-45deg); }
+
+.window-body {
+  margin: 3px 0 0;
+}
+
+/* ============================================================
+   BOTÕES + CAMPOS
+   ============================================================ */
+button,
+input[type="reset"],
+input[type="submit"] {
+  background: var(--face);
+  border: none;
+  border-radius: var(--round-btn);
+  box-shadow: var(--relevo-out);
+  color: var(--ink);
+  min-height: 23px;
+  min-width: 75px;
+  padding: 0 12px;
+}
+button:not(:disabled):active,
+input[type="reset"]:not(:disabled):active,
+input[type="submit"]:not(:disabled):active {
+  box-shadow: var(--relevo-in);
+  padding: 1px 11px 0 13px;
+}
+button:focus-visible,
+input[type="reset"]:focus-visible,
+input[type="submit"]:focus-visible {
+  outline: 1px dotted #000;
+  outline-offset: -4px;
+}
+button:disabled { color: var(--sh); text-shadow: 1px 1px 0 var(--hi); }
+
+input[type="text"], input[type="password"], input[type="number"],
+input:not([type]), textarea, select {
+  background: var(--janela-conteudo);
+  border: none;
+  border-radius: 0;
+  box-shadow: var(--relevo-in-fino);
+  color: var(--ink);
+  padding: 3px 4px;
+  outline: none;
+}
+input:focus, textarea:focus, select:focus {
+  outline: 1px dotted #000;
+  outline-offset: -3px;
+}
+
+/* ============================================================
+   FIELDSET / LEGEND
+   ============================================================ */
+fieldset {
+  border: none;
+  box-shadow: var(--relevo-in-fino);
+  padding: 10px;
+  margin: 0;
+}
+legend {
+  background: var(--face);
+  padding: 0 3px;
+}
+
+/* layouts de formulário (utilitários do 98.css) */
+.field-row { display: flex; align-items: center; gap: 8px; }
+.field-row > * + * { margin-left: 0; }
+.field-row-stacked { display: flex; flex-direction: column; gap: 4px; }
+.field-row-stacked + .field-row-stacked { margin-top: 6px; }
+
+/* ============================================================
+   TABELA
+   ============================================================ */
+table {
+  border-collapse: collapse;
+  background: var(--janela-conteudo);
+}
+th, td {
+  padding: 2px 6px;
+  text-align: left;
+}
+
+/* ============================================================
+   TREE-VIEW (ul.tree-view, usa <details>/<summary>)
+   ============================================================ */
+ul.tree-view {
+  background: var(--janela-conteudo);
+  box-shadow: var(--relevo-in);
+  display: block;
+  margin: 0;
+  padding: 6px;
+  list-style: none;
+}
+ul.tree-view li { line-height: 1.5; }
+ul.tree-view ul {
+  margin: 0 0 0 16px;
+  padding: 0;
+  list-style: none;
+}
+ul.tree-view ul > li { position: relative; }
+ul.tree-view details > summary { list-style: none; cursor: default; }
+ul.tree-view details > summary::-webkit-details-marker { display: none; }
+ul.tree-view details > summary::before {
+  content: "+"; display: inline-block; width: 12px;
+  text-align: center; margin-right: 2px;
+}
+ul.tree-view details[open] > summary::before { content: "−"; }

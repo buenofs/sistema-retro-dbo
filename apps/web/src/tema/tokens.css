@@ -1,0 +1,49 @@
+/* ============================================================
+   DBOS // tema — tokens de design.
+   Fase 0: os valores padrão reproduzem o Windows 98 (pele "98").
+   As peles (Fases 3+) sobrescrevem estes tokens via [data-skin].
+   ============================================================ */
+:root {
+  /* superfícies */
+  --face: #c0c0c0;
+  --face-alta: #dfdfdf;
+  --face-baixa: #808080;
+  --janela-conteudo: #ffffff;
+
+  /* níveis de relevo (paleta clássica 98) */
+  --hi: #ffffff;     /* realce */
+  --light: #dfdfdf;  /* realce interno */
+  --sh: #808080;     /* sombra */
+  --dsh: #0a0a0a;    /* sombra escura */
+
+  /* tinta */
+  --ink: #222222;
+  --ink-suave: #3a3a3a;
+
+  /* acento / barra de título (gradiente azul clássico) */
+  --titulo-1: #000080;
+  --titulo-2: #1084d0;
+  --titulo-ink: #ffffff;
+  --accent: #000080;
+  --accent-ink: #ffffff;
+
+  /* relevos compostos (box-shadow) */
+  --relevo-out: inset -1px -1px var(--dsh), inset 1px 1px var(--hi),
+    inset -2px -2px var(--sh), inset 2px 2px var(--light);
+  --relevo-in: inset 1px 1px var(--dsh), inset -1px -1px var(--hi),
+    inset 2px 2px var(--sh), inset -2px -2px var(--light);
+  --relevo-out-fino: inset -1px -1px var(--sh), inset 1px 1px var(--hi);
+  --relevo-in-fino: inset 1px 1px var(--sh), inset -1px -1px var(--hi);
+
+  /* geometria (0 no 98; Aero usa px) */
+  --round: 0px;
+  --round-sm: 0px;
+  --round-btn: 0px;
+
+  /* fontes */
+  --ui: "Pixelated MS Sans Serif", Arial, sans-serif;
+  --mono: "JetBrains Mono", "Cascadia Code", Consolas, monospace;
+
+  /* multiplicador de animação (Tweaks na Fase 2) */
+  --motion: 1;
+}
