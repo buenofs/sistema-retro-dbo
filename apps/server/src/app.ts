@@ -10,6 +10,7 @@ import { registrarRotasGrade } from './rotas/grade';
 import { registrarRotasPropriedades } from './rotas/propriedades';
 import { registrarRotasBusca } from './rotas/busca';
 import { registrarRotasRelacionamentos } from './rotas/relacionamentos';
+import { registrarRotasFolha } from './rotas/folha';
 import { registrarRotasDominio } from './rotas/dominio';
 
 export interface OpcoesApp {
@@ -40,6 +41,7 @@ export function construirApp(opcoes: OpcoesApp = {}): FastifyInstance {
     registrarRotasPropriedades(instancia, gerenciador);
     registrarRotasBusca(instancia, gerenciador);
     registrarRotasRelacionamentos(instancia, gerenciador);
+    registrarRotasFolha(instancia, gerenciador);
     registrarRotasDominio(instancia, gerenciador);
   });
 
