@@ -8,3 +8,4 @@ bun.lockb
 
 # Configurações locais/pessoais do Claude Code
 .claude/settings.local.json
+.superpowers/
