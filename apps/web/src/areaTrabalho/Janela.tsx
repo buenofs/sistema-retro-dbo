@@ -5,6 +5,7 @@ import { registroApps } from './registroApps';
 import { LimiteErroJanela } from './LimiteErroJanela';
 import { usarArrasto } from './usarArrasto';
 import { ALTURA_BARRA, limitarRetangulo } from './limites';
+import { Icone } from '../tema/icones/Icone';
 
 const LARGURA_MIN = 200;
 const ALTURA_MIN = 120;
@@ -90,7 +91,8 @@ export const Janela = memo(function Janela({ id }: { id: IdJanela }) {
         onDoubleClick={() => (maximizada ? restaurar(janela.id) : maximizar(janela.id))}
       >
         <div className="title-bar-text">
-          {janela.icone} {janela.titulo}
+          <Icone nome={janela.icone} tamanho={16} alt="" style={{ marginRight: 4 }} />
+          {janela.titulo}
         </div>
         <div className="title-bar-controls">
           <button aria-label="Minimize" onClick={() => minimizar(janela.id)} />

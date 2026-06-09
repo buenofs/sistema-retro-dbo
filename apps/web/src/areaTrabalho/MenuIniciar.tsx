@@ -1,6 +1,7 @@
 import { ORDEM_APPS, registroApps } from './registroApps';
 import { useLoja } from './loja';
 import { useLogout } from '../autenticacao/ganchos';
+import { Icone } from '../tema/icones/Icone';
 
 export function MenuIniciar({ login, aoFechar }: { login: string; aoFechar: () => void }) {
   const abrirJanela = useLoja((s) => s.abrirJanela);
@@ -19,14 +20,14 @@ export function MenuIniciar({ login, aoFechar }: { login: string; aoFechar: () =
                 aoFechar();
               }}
             >
-              <span aria-hidden="true">{registroApps[tipo].icone}</span> {registroApps[tipo].titulo}
+              <Icone nome={registroApps[tipo].icone} tamanho={16} alt="" style={{ marginRight: 6 }} /> {registroApps[tipo].titulo}
             </button>
           </li>
         ))}
         <li className="menu-iniciar-separador" aria-hidden="true" />
         <li>
           <button role="menuitem" disabled={sair.isPending} onClick={() => sair.mutate()}>
-            🔌 Encerrar sessão ({login})
+            <Icone nome="logoff" tamanho={16} alt="" style={{ marginRight: 6 }} /> Encerrar sessão ({login})
           </button>
         </li>
       </ul>

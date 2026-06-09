@@ -16,9 +16,9 @@ test('mostra título e ícone do app', () => {
   abrirERenderizar();
   // O título/ícone vivem na barra de título; restringimos a busca ao chrome
   // da janela para não casar com algum eco do título no corpo do app.
-  expect(
-    screen.getByText(/📝 Editor de Consultas/, { selector: '.title-bar-text' }),
-  ).toBeInTheDocument();
+  const tb = screen.getByText('Editor de Consultas', { selector: '.title-bar-text' });
+  expect(tb).toBeInTheDocument();
+  expect(tb.querySelector('img')).toBeInTheDocument();
 });
 
 test('o botão Close fecha a janela na loja', () => {

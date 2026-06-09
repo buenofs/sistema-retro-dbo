@@ -7,6 +7,7 @@ import { CamadaJanelas } from './CamadaJanelas';
 import { BarraTarefas } from './BarraTarefas';
 import { GerenciadorDialogos } from './GerenciadorDialogos';
 import { MenuContexto } from './MenuContexto';
+import { Icone } from '../tema/icones/Icone';
 import './areaTrabalho.css';
 
 const RELATORIO = { esquema: 'dbo', tabela: 'vw_FolhaResumo' };
@@ -44,7 +45,7 @@ export function AreaTrabalho({ usuario }: { usuario: UsuarioSessao }) {
             }}
           >
             <span className="icone-atalho-glifo" aria-hidden="true">
-              {registroApps[tipo].icone}
+              <Icone nome={registroApps[tipo].icone} tamanho={32} alt="" />
             </span>
             <span className="icone-atalho-rotulo">{registroApps[tipo].titulo}</span>
           </button>
@@ -60,7 +61,9 @@ export function AreaTrabalho({ usuario }: { usuario: UsuarioSessao }) {
             ]);
           }}
         >
-          <span className="icone-atalho-glifo" aria-hidden="true">📄</span>
+          <span className="icone-atalho-glifo" aria-hidden="true">
+            <Icone nome="report" tamanho={32} alt="" />
+          </span>
           <span className="icone-atalho-rotulo">Relatório (Folha)</span>
         </button>
       </div>

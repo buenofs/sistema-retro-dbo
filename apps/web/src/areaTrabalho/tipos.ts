@@ -1,4 +1,5 @@
 import type { ComponentType } from 'react';
+import type { NomeIcone } from '../tema/icones/motor';
 
 export type IdJanela = string;
 export type TipoApp =
@@ -22,7 +23,7 @@ export interface EstadoJanela {
   id: IdJanela;
   tipoApp: TipoApp;
   titulo: string;
-  icone: string;
+  icone: NomeIcone;
   retangulo: Retangulo;
   zIndex: number;
   estado: EstadoVisual;
@@ -39,7 +40,7 @@ export interface PropsApp {
 // Entrada do registro: metadados + o componente React do app.
 export interface DefinicaoApp {
   titulo: string;
-  icone: string;
+  icone: NomeIcone;
   tamanhoInicial: { largura: number; altura: number };
   componente: ComponentType<PropsApp>;
 }

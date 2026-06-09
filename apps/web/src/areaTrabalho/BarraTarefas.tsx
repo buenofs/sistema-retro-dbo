@@ -3,6 +3,7 @@ import { useShallow } from 'zustand/react/shallow';
 import { useLoja } from './loja';
 import { MenuIniciar } from './MenuIniciar';
 import { Relogio } from './Relogio';
+import { Icone } from '../tema/icones/Icone';
 
 export function BarraTarefas({ login }: { login: string }) {
   const [menuAberto, setMenuAberto] = useState(false);
@@ -49,7 +50,7 @@ export function BarraTarefas({ login }: { login: string }) {
             className={`botao-janela ${idFocada === j.id && !j.minimizada ? 'ativo' : ''}`}
             onClick={() => aoClicarJanela(j.id, j.minimizada)}
           >
-            <span aria-hidden="true">{j.icone}</span> {j.titulo}
+            <Icone nome={j.icone} tamanho={16} alt="" style={{ marginRight: 4 }} /> {j.titulo}
           </button>
         ))}
       </div>
