@@ -1,5 +1,5 @@
 import { test, expect, vi, afterEach, beforeEach } from 'vitest';
-import { render, screen, fireEvent, within } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Busca } from './Busca';
 import { useLoja, estadoInicial } from '../../areaTrabalho/loja';
@@ -46,24 +46,23 @@ test('popula o select de departamentos', async () => {
   expect(await screen.findByText('Engenharia')).toBeInTheDocument();
 });
 
-test('pesquisar mostra resultados e "Abrir na grade" abre a Grade', async () => {
+test('pesquisar mostra resultados e "Grade" abre a Grade', async () => {
   stub();
   renderizar();
   fireEvent.click(screen.getByRole('button', { name: 'Pesquisar' }));
-  const tabela = await screen.findByRole('table');
-  expect(within(tabela).getByText('Felipe Bueno')).toBeInTheDocument();
-  fireEvent.click(screen.getByRole('button', { name: 'Abrir na grade' }));
+  expect(await screen.findByText('Felipe Bueno', { selector: '.busca-card-nome' })).toBeInTheDocument();
+  fireEvent.click(screen.getByRole('button', { name: /Grade/ }));
   const janela = useLoja.getState().janelas.find((j) => j.tipoApp === 'grade');
   expect(janela).toBeDefined();
   expect(janela!.dados).toEqual({ esquema: 'dbo', tabela: 'Funcionarios' });
 });
 
-test('"Ver relacionamentos" abre o app de Relacionamentos do funcionário', async () => {
+test('"Relações" abre o app de Relacionamentos do funcionário', async () => {
   stub();
   renderizar();
   fireEvent.click(screen.getByRole('button', { name: 'Pesquisar' }));
-  await screen.findByRole('table');
-  fireEvent.click(screen.getByRole('button', { name: 'Ver relacionamentos' }));
+  await screen.findByText('Felipe Bueno', { selector: '.busca-card-nome' });
+  fireEvent.click(screen.getByRole('button', { name: /Relações/ }));
   const janela = useLoja.getState().janelas.find((j) => j.tipoApp === 'relacionamentos');
   expect(janela).toBeDefined();
   expect(janela!.dados).toEqual({ tipo: 'funcionario', id: 1 });

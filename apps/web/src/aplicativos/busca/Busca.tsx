@@ -2,6 +2,8 @@ import { useState, type FormEvent } from 'react';
 import type { FiltrosBusca } from '@dbos/shared';
 import { useLoja } from '../../areaTrabalho/loja';
 import { useBusca, useDepartamentos, useFuncionarios, useProjetos } from './ganchos';
+import { Icone } from '../../tema/icones/Icone';
+import { formatarMoeda } from '../grade/conversao';
 import './busca.css';
 
 export function Busca() {
@@ -105,37 +107,39 @@ export function Busca() {
         ) : (consulta.data ?? []).length === 0 ? (
           <p style={{ padding: 8 }}>Nenhum funcionário encontrado.</p>
         ) : (
-          <table className="busca-tabela">
-            <thead>
-              <tr>
-                <th>Nome</th>
-                <th>Cargo</th>
-                <th>Departamento</th>
-                <th>Salário</th>
-                <th>Ações</th>
-              </tr>
-            </thead>
-            <tbody>
+          <>
+            <p style={{ margin: 0, padding: '4px 8px' }}>
+              Resultados
+              <span className="busca-contagem">{(consulta.data ?? []).length}</span>
+            </p>
+            <div className="busca-cards">
               {(consulta.data ?? []).map((f) => (
-                <tr key={f.id}>
-                  <td>{f.nome}</td>
-                  <td>{f.cargo}</td>
-                  <td>{f.departamento}</td>
-                  <td>{f.salario}</td>
-                  <td>
+                <div key={f.id} className="busca-card">
+                  <Icone nome="user" tamanho={28} alt="" />
+                  <div className="busca-card-corpo">
+                    <div className="busca-card-nome">{f.nome}</div>
+                    <div className="busca-card-sub">
+                      {f.cargo} · {f.departamento} · {formatarMoeda(f.salario)}
+                    </div>
+                  </div>
+                  <div className="busca-card-acoes">
                     <button
+                      className="busca-botao-icone"
+                      onClick={() => abrirJanela('grade', { esquema: 'dbo', tabela: 'Funcionarios' })}
+                    >
+                      <Icone nome="grid" tamanho={16} alt="" /> Grade
+                    </button>
+                    <button
+                      className="busca-botao-icone"
                       onClick={() => abrirJanela('relacionamentos', { tipo: 'funcionario', id: f.id })}
                     >
-                      Ver relacionamentos
-                    </button>{' '}
-                    <button onClick={() => abrirJanela('grade', { esquema: 'dbo', tabela: 'Funcionarios' })}>
-                      Abrir na grade
+                      <Icone nome="network" tamanho={16} alt="" /> Relações
                     </button>
-                  </td>
-                </tr>
+                  </div>
+                </div>
               ))}
-            </tbody>
-          </table>
+            </div>
+          </>
         )}
       </div>
     </div>

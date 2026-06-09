@@ -7,7 +7,7 @@
   flex-shrink: 0;
   padding: 8px;
   overflow: auto;
-  border-right: 1px solid grey;
+  border-right: 1px solid var(--borda-painel);
 }
 .busca-criterios select,
 .busca-criterios input {
@@ -17,7 +17,7 @@
 .busca-resultados {
   flex: 1;
   overflow: auto;
-  background: #fff;
+  background: var(--janela-conteudo);
 }
 .busca-tabela {
   border-collapse: collapse;
@@ -26,7 +26,7 @@
 }
 .busca-tabela th,
 .busca-tabela td {
-  border: 1px solid #c0c0c0;
+  border: 1px solid var(--borda-celula);
   padding: 2px 6px;
   text-align: left;
   white-space: nowrap;
@@ -34,5 +34,46 @@
 .busca-tabela thead th {
   position: sticky;
   top: 0;
-  background: #c0c0c0;
+  background: var(--cabecalho-tabela-bg);
+}
+.busca-contagem {
+  display: inline-block;
+  margin-left: 6px;
+  padding: 0 6px;
+  background: var(--accent);
+  color: var(--accent-ink);
+  border-radius: 8px;
+  font-size: 10px;
+}
+.busca-cards {
+  display: flex;
+  flex-direction: column;
+}
+.busca-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--borda-celula);
+}
+.busca-card-corpo {
+  flex: 1;
+  min-width: 0;
+}
+.busca-card-nome {
+  font-weight: 700;
+}
+.busca-card-sub {
+  color: var(--ink-suave);
+  font-size: 11px;
+}
+.busca-card-acoes {
+  display: flex;
+  gap: 4px;
+}
+.busca-botao-icone {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
 }
