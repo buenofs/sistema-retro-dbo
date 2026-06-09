@@ -32,8 +32,12 @@ test('mostra as colunas com tipo, marca de PK e nulabilidade', async () => {
     ),
   );
   renderizar();
-  expect(await screen.findByText(/id : int/)).toBeInTheDocument();
-  expect(screen.getByText(/nome : nvarchar\(50\) \(nulo\)/)).toBeInTheDocument();
+  // nome e metadados (tipo · nulabilidade) agora vivem em spans separados
+  expect(await screen.findByText('id')).toBeInTheDocument();
+  expect(screen.getByText('int')).toBeInTheDocument();
+  expect(screen.getByText('nome')).toBeInTheDocument();
+  expect(screen.getByText('nvarchar(50)')).toBeInTheDocument();
+  expect(screen.getByText('· nulo')).toBeInTheDocument();
 });
 
 test('mostra a mensagem de erro quando a consulta falha', async () => {

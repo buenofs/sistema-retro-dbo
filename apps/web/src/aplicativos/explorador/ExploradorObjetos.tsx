@@ -3,6 +3,7 @@ import { useObjetos } from './ganchos';
 import { usarValorDebounced } from './usarValorDebounced';
 import { NoTabela } from './NoTabela';
 import { Icone } from '../../tema/icones/Icone';
+import './explorador.css';
 
 export function ExploradorObjetos() {
   const consulta = useObjetos();

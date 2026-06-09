@@ -1,0 +1,21 @@
+/* metadados de coluna à direita (tipo · nulabilidade) */
+.col-linha {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.col-nome {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.col-meta {
+  color: var(--ink-suave);
+  font-size: 10px;
+  white-space: nowrap;
+}
+.col-meta .nulo {
+  opacity: 0.7;
+  font-style: italic;
+}

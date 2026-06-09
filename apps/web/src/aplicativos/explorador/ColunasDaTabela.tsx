@@ -32,13 +32,17 @@ export function ColunasDaTabela({ esquema, tabela }: { esquema: string; tabela: 
   return (
     <ul>
       {colunas.map((c) => (
-        <li key={c.nome}>
+        <li key={c.nome} className="col-linha">
           {c.ehChavePrimaria ? (
-            <Icone nome="key" tamanho={14} alt="chave primária" style={{ marginRight: 3 }} />
+            <Icone nome="key" tamanho={14} alt="chave primária" />
           ) : (
-            <Icone nome="column" tamanho={14} alt="" style={{ marginRight: 3 }} />
+            <Icone nome="column" tamanho={14} alt="" />
           )}
-          {c.nome + ' : ' + c.tipoDado + (c.anulavel ? ' (nulo)' : '')}
+          <span className="col-nome">{c.nome}</span>
+          <span className="col-meta">
+            {c.tipoDado}
+            {c.anulavel && <span className="nulo"> · nulo</span>}
+          </span>
         </li>
       ))}
     </ul>
