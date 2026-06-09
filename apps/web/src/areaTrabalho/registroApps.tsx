@@ -11,6 +11,10 @@ const EditorConsultas = lazy(() =>
   import('../aplicativos/consulta/EditorConsultas').then((m) => ({ default: m.EditorConsultas })),
 );
 
+const RelatorioFolha = lazy(() =>
+  import('../aplicativos/folha/RelatorioFolha').then((m) => ({ default: m.RelatorioFolha })),
+);
+
 // O WM é genérico: cada tipoApp mapeia para metadados + um componente.
 // Adicionar um app futuro = registrar o componente real aqui.
 export const registroApps: Record<TipoApp, DefinicaoApp> = {
@@ -56,6 +60,12 @@ export const registroApps: Record<TipoApp, DefinicaoApp> = {
     tamanhoInicial: { largura: 600, altura: 380 },
     componente: Terminal,
   },
+  relatorio: {
+    titulo: 'Relatório (Folha)',
+    icone: 'report',
+    tamanhoInicial: { largura: 600, altura: 480 },
+    componente: RelatorioFolha,
+  },
 };
 
 // Ordem fixa em que os apps aparecem nos atalhos e no menu Iniciar.
@@ -67,4 +77,5 @@ export const ORDEM_APPS: TipoApp[] = [
   'propriedades',
   'relacionamentos',
   'terminal',
+  'relatorio',
 ];

@@ -9,7 +9,8 @@ export type TipoApp =
   | 'propriedades'
   | 'busca'
   | 'relacionamentos'
-  | 'terminal';
+  | 'terminal'
+  | 'relatorio';
 export type EstadoVisual = 'normal' | 'minimizada' | 'maximizada';
 
 export interface Retangulo {

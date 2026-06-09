@@ -12,8 +12,6 @@ import { PainelTweaks } from '../tema/PainelTweaks';
 import { usePainelTweaks } from '../tema/painel';
 import './areaTrabalho.css';
 
-const RELATORIO = { esquema: 'dbo', tabela: 'vw_FolhaResumo' };
-
 export function AreaTrabalho({ usuario }: { usuario: UsuarioSessao }) {
   usarSonsJanelas();
   const abrirJanela = useLoja((s) => s.abrirJanela);
@@ -59,22 +57,6 @@ export function AreaTrabalho({ usuario }: { usuario: UsuarioSessao }) {
             <span className="icone-atalho-rotulo">{registroApps[tipo].titulo}</span>
           </button>
         ))}
-        <button
-          className="icone-atalho"
-          onDoubleClick={() => abrirJanela('grade', RELATORIO)}
-          onContextMenu={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            abrirMenu(e.clientX, e.clientY, [
-              { rotulo: 'Abrir', aoClicar: () => abrirJanela('grade', RELATORIO) },
-            ]);
-          }}
-        >
-          <span className="icone-atalho-glifo" aria-hidden="true">
-            <Icone nome="report" tamanho={32} alt="" />
-          </span>
-          <span className="icone-atalho-rotulo">Relatório (Folha)</span>
-        </button>
       </div>
       <CamadaJanelas />
       <div className="rotulo-banco" aria-hidden="true">

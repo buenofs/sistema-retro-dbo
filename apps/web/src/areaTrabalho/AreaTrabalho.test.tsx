@@ -20,12 +20,12 @@ function renderizar() {
   );
 }
 
-test('botão direito no fundo do desktop abre menu com os 7 apps', () => {
+test('botão direito no fundo do desktop abre menu com os 8 apps', () => {
   const { container } = renderizar();
   const desktop = container.querySelector('.area-trabalho') as HTMLElement;
   fireEvent.contextMenu(desktop);
   const rotulos = useMenuContexto.getState().itens.map((i) => i.rotulo);
-  expect(rotulos.filter((r) => r.startsWith('Abrir '))).toHaveLength(7);
+  expect(rotulos.filter((r) => r.startsWith('Abrir '))).toHaveLength(8);
   expect(rotulos.some((r) => r.includes('Explorador de Objetos'))).toBe(true);
   expect(rotulos).toContain('Propriedades');
 });
