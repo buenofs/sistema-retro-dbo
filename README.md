@@ -30,6 +30,11 @@ barra de tarefas com relógio, e janelas arrastáveis/redimensionáveis. Os quat
 apps (Explorador, Editor de Consultas, Grade, Propriedades) abrem como janelas
 placeholder — os apps reais chegam nas próximas fases.
 
+O estilo do desktop vem do módulo próprio `apps/web/src/tema/` (tokens +
+`base.css`, fonte MS Sans Serif vendorizada). A dependência `98.css` foi
+removida. A pele é trocável por `body[data-skin]` (`98` | `aero`); por ora só
+a pele `98` está implementada (revamp visual — Fase 0/costura).
+
 O **Explorador de Objetos** já é funcional: abra-o pelo atalho ou pelo menu Iniciar
 para ver as tabelas e views do banco numa árvore; expanda um objeto para listar
 suas colunas (tipo, nulabilidade e 🔑 chave primária), via SQL cru no
