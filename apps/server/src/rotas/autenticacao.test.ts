@@ -70,7 +70,7 @@ test('sessão sem cookie devolve 401', async () => {
 test('fluxo completo: login → sessão → logout → 401', async () => {
   await comServidor(async (base) => {
     const login = await postar(base, '/api/autenticacao/login', SA);
-    const cookie = login.headers.get('set-cookie')!.split(';')[0];
+    const cookie = login.headers.get('set-cookie')!.split(';')[0]!;
 
     const sessao = await fetch(`${base}/api/autenticacao/sessao`, {
       headers: { cookie },

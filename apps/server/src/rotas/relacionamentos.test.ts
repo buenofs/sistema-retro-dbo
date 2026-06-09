@@ -20,7 +20,7 @@ async function entrar(base: string): Promise<string> {
     headers: { 'content-type': 'application/json' },
     body: JSON.stringify(SA),
   });
-  return r.headers.get('set-cookie')!.split(';')[0];
+  return r.headers.get('set-cookie')!.split(';')[0]!;
 }
 
 test('sem cookie devolve 401', async () => {
