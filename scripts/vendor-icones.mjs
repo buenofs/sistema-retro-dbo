@@ -56,6 +56,39 @@ const KW_AERO = {
 };
 const NOMES = Object.keys(KW_98);
 
+// Overrides manuais (pinam o BASE/STEM exato, ignorando o matcher) — definidos
+// após revisão visual da folha de contato. Garantem fonte boa e do mesmo
+// pacote para cada nome onde o matcher falhou (FALTA) ou ficou fraco (REVISAR).
+//
+// OVR_98: BASE name exato do react95 (antes de _WxH_D). O tier ausente cai no
+// fallback existente (16<->32).
+const OVR_98 = {
+  terminal: 'BatExec',  // janela de programa/console (não há MS-DOS no pacote)
+  filter: 'OrderAs',    // ordenar A->Z (sem funil no pacote; sort = substituto)
+  sql: 'Data16',        // documento de dados/tabela (sem ícone "sql")
+  database: 'Drvspace1',// pilha de cilindros = banco de dados
+  view: 'Quikview1',    // lupa sobre página (Quick View = visualizar)
+  logoff: 'Lock',       // cadeado de sessão (distinto do ícone "key")
+};
+// OVR_AERO: caminho COMPLETO relativo ao master, incluindo o tamanho:
+// '<WxH>/<subpasta>/<stem>' (sem .png). Permite usar tamanhos != 128x128,
+// já que muitos stems necessários só existem em 48x48.
+const OVR_AERO = {
+  column: '48x48/mimetypes/x-office-spreadsheet',     // planilha (colunas)
+  trash: '48x48/places/user-trash',                   // lixeira
+  refresh: '48x48/apps/view-refresh',                 // atualizar
+  filter: '128x128/places/folder-saved-search',       // busca salva = filtro (sem funil no pacote)
+  newdoc: '48x48/mimetypes/x-office-document',         // documento novo
+  logoff: '48x48/apps/system-log-out',                 // sair da sessão
+  grid: '48x48/mimetypes/x-office-spreadsheet',        // grade de células
+  props: '128x128/apps/cs-details',                    // propriedades/detalhes
+  report: '128x128/apps/libreoffice-writer',           // documento/relatório
+  table: '128x128/apps/libreoffice-calc',              // planilha/tabela
+  view: '128x128/apps/edit-find',                      // lupa sobre documento (visualizar)
+  save: '128x128/devices/media-floppy',                // disquete (salvar)
+  power: '48x48/apps/system-shutdown',                 // botão liga/desliga
+};
+
 const txt = async (u) => (await fetch(u)).text();
 const json = async (u) => JSON.parse(await txt(u));
 const PNG_MAGIC = [0x89,0x50,0x4e,0x47];
@@ -107,6 +140,18 @@ async function vendor98(cobertura) {
   const bases = Object.keys(idx);
   await mkdir(join(DEST, '98'), { recursive: true });
   for (const nome of NOMES) {
+    if (OVR_98[nome]) {
+      const base = OVR_98[nome];
+      for (const tier of ['16', '32']) {
+        const alvo = idx[base]?.[tier] || idx[base]?.['32'] || idx[base]?.['16'];
+        if (alvo) {
+          const buf = await baixarPng(REACT95 + alvo.arquivo);
+          if (buf) await writeFile(join(DEST, '98', `${nome}-${tier}.png`), buf);
+        }
+      }
+      cobertura.push({ pele: '98', nome, status: 'OVERRIDE', via: base });
+      continue;
+    }
     const esc = escolher(bases, KW_98[nome]);
     if (!esc) { cobertura.push({ pele:'98', nome, status:'FALTA', via:null }); continue; }
     const base = esc.stem;
@@ -126,6 +171,14 @@ async function vendorAero(cobertura) {
   const stems = paths.map((p) => p.replace(/^128x128\//, '').replace(/\.png$/i, '')); // ex.: apps/system-search
   await mkdir(join(DEST, 'aero'), { recursive: true });
   for (const nome of NOMES) {
+    if (OVR_AERO[nome]) {
+      // Valor já inclui o tamanho: '<WxH>/<subpasta>/<stem>' relativo ao master.
+      const caminho = OVR_AERO[nome];
+      const buf = await baixarPng(`${XP_RAW}/${caminho}.png`);
+      if (buf) await writeFile(join(DEST, 'aero', `${nome}.png`), buf);
+      cobertura.push({ pele: 'aero', nome, status: 'OVERRIDE', via: caminho });
+      continue;
+    }
     const esc = escolher(stems, KW_AERO[nome]);
     if (!esc) { cobertura.push({ pele:'aero', nome, status:'FALTA', via:null }); continue; }
     const buf = await baixarPng(`${XP_RAW}/128x128/${esc.stem}.png`);
