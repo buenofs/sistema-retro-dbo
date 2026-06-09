@@ -3,6 +3,7 @@ import { render, screen } from '@testing-library/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { App } from './App';
 import { useLoja, estadoInicial } from './areaTrabalho/loja';
+import { useBoot } from './boot';
 
 // O boot é testado isoladamente (TelaBoot.test); aqui concluímos na hora.
 vi.mock('./TelaBoot', async () => {
@@ -15,7 +16,10 @@ vi.mock('./TelaBoot', async () => {
   };
 });
 
-beforeEach(() => useLoja.setState(estadoInicial()));
+beforeEach(() => {
+  useLoja.setState(estadoInicial());
+  useBoot.setState({ concluido: false });
+});
 afterEach(() => vi.unstubAllGlobals());
 
 function renderizar() {

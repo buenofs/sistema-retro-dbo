@@ -32,6 +32,7 @@ export function Alternador({
       <button
         type="button"
         role="switch"
+        aria-label={rotulo}
         aria-checked={valor}
         className={`tw-toggle ${valor ? 'on' : ''}`}
         onClick={() => aoMudar(!valor)}
