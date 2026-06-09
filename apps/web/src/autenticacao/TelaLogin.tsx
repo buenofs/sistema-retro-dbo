@@ -1,5 +1,6 @@
 import { useState, type FormEvent } from 'react';
 import { useLogin } from './ganchos';
+import { Icone } from '../tema/icones/Icone';
 import './telaLogin.css';
 
 // Diálogo de logon estilo Win9x "Log On to DBOS", sobre o wallpaper.
@@ -26,7 +27,9 @@ export function TelaLogin() {
         </div>
         <div className="window-body">
           <div className="logon-cabecalho">
-            <span className="logon-icone" aria-hidden="true">🔑</span>
+            <span className="logon-icone" aria-hidden="true">
+              <Icone nome="key" tamanho={24} alt="" />
+            </span>
             <p style={{ margin: 0 }}>
               Digite seu login e senha do SQL Server para entrar no Database
               Operating System.

@@ -32,7 +32,7 @@ test('mostra as colunas com tipo, marca de PK e nulabilidade', async () => {
     ),
   );
   renderizar();
-  expect(await screen.findByText(/🔑 id : int/)).toBeInTheDocument();
+  expect(await screen.findByText(/id : int/)).toBeInTheDocument();
   expect(screen.getByText(/nome : nvarchar\(50\) \(nulo\)/)).toBeInTheDocument();
 });
 

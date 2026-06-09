@@ -1,4 +1,5 @@
 import { Component, type ErrorInfo, type ReactNode } from 'react';
+import { Icone } from '../tema/icones/Icone';
 
 interface Props {
   titulo: string;
@@ -24,7 +25,10 @@ export class LimiteErroJanela extends Component<Props, Estado> {
     if (this.state.erro) {
       return (
         <div style={{ padding: 12 }}>
-          <p>⚠️ Este programa executou uma operação ilegal e será encerrado.</p>
+          <p>
+            <Icone nome="stop" tamanho={16} alt="" style={{ marginRight: 4 }} />
+            Este programa executou uma operação ilegal e será encerrado.
+          </p>
           <p style={{ fontSize: 11, color: '#555' }}>{this.state.erro.message}</p>
         </div>
       );

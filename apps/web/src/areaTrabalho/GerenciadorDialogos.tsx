@@ -2,11 +2,13 @@ import { useEffect, useRef } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import { type Dialogo, useDialogos } from './useDialogos';
 import { tocarSom } from './sons';
+import { Icone } from '../tema/icones/Icone';
+import type { NomeIcone } from '../tema/icones/motor';
 
-const ICONE: Record<Dialogo['tipo'], string> = {
-  erro: '❌',
-  aviso: '⚠️',
-  info: 'ℹ️',
+const ICONE: Record<Dialogo['tipo'], NomeIcone> = {
+  erro: 'stop',
+  aviso: 'help',
+  info: 'props',
 };
 
 // Portal único de diálogos modais 98.css (spec §6.4). Montado uma vez no desktop.
@@ -57,8 +59,8 @@ function CaixaDialogo({ dialogo, aoFechar }: { dialogo: Dialogo; aoFechar: () =>
         </div>
         <div className="window-body">
           <div style={{ display: 'flex', gap: 8, alignItems: 'flex-start' }}>
-            <span style={{ fontSize: 24, lineHeight: 1 }} aria-hidden="true">
-              {ICONE[dialogo.tipo]}
+            <span aria-hidden="true" style={{ flex: '0 0 auto' }}>
+              <Icone nome={ICONE[dialogo.tipo]} tamanho={32} alt="" />
             </span>
             <p style={{ margin: 0 }}>{dialogo.mensagem}</p>
           </div>

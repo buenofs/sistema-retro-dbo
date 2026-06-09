@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useObjetos } from './ganchos';
 import { usarValorDebounced } from './usarValorDebounced';
 import { NoTabela } from './NoTabela';
+import { Icone } from '../../tema/icones/Icone';
 
 export function ExploradorObjetos() {
   const consulta = useObjetos();
@@ -32,7 +33,10 @@ export function ExploradorObjetos() {
       <ul className="tree-view">
         <li>
           <details open>
-            <summary>📁 Tabelas ({tabelas.length})</summary>
+            <summary>
+              <Icone nome="folder" tamanho={16} alt="" style={{ marginRight: 4 }} />
+              Tabelas ({tabelas.length})
+            </summary>
             <ul>
               {tabelas.map((o) => (
                 <NoTabela key={`${o.esquema}.${o.nome}`} objeto={o} />
@@ -42,7 +46,10 @@ export function ExploradorObjetos() {
         </li>
         <li>
           <details open>
-            <summary>📁 Views ({views.length})</summary>
+            <summary>
+              <Icone nome="folder" tamanho={16} alt="" style={{ marginRight: 4 }} />
+              Views ({views.length})
+            </summary>
             <ul>
               {views.map((o) => (
                 <NoTabela key={`${o.esquema}.${o.nome}`} objeto={o} />

@@ -3,14 +3,16 @@ import type { GrafoRelacionamentos, RefRelacionamento, TipoNo } from '@dbos/shar
 import type { EstadoJanela, PropsApp } from '../../areaTrabalho/tipos';
 import { useFuncionarios } from '../busca/ganchos';
 import { useGrafo } from './ganchos';
+import { Icone } from '../../tema/icones/Icone';
+import type { NomeIcone } from '../../tema/icones/motor';
 import './relacionamentos.css';
 
 const NAVEGAVEIS: TipoNo[] = ['funcionario', 'departamento', 'projeto'];
-const ICONE: Record<TipoNo, string> = {
-  funcionario: '👤',
-  departamento: '🏢',
-  projeto: '📁',
-  folha: '🧾',
+const ICONE: Record<TipoNo, NomeIcone> = {
+  funcionario: 'user',
+  departamento: 'folder',
+  projeto: 'report',
+  folha: 'props',
 };
 
 function refInicial(janela: EstadoJanela): RefRelacionamento | null {
@@ -55,7 +57,10 @@ function Seletor({ aoEscolher }: { aoEscolher: (r: RefRelacionamento) => void })
       <ul className="tree-view">
         {(consulta.data ?? []).map((f) => (
           <li key={f.id}>
-            <button onClick={() => aoEscolher({ tipo: 'funcionario', id: f.id })}>👤 {f.nome}</button>
+            <button onClick={() => aoEscolher({ tipo: 'funcionario', id: f.id })}>
+              <Icone nome="user" tamanho={16} alt="" style={{ marginRight: 4 }} />
+              {f.nome}
+            </button>
           </li>
         ))}
       </ul>
@@ -124,7 +129,7 @@ function Grafo({
                 aoNavegar({ tipo: n.tipo as RefRelacionamento['tipo'], id: Number(idStr) });
               }}
             >
-              <span aria-hidden="true">{ICONE[n.tipo]}</span> {n.rotulo}
+              <Icone nome={ICONE[n.tipo]} tamanho={20} alt="" style={{ marginRight: 4 }} /> {n.rotulo}
             </button>
           );
         })}

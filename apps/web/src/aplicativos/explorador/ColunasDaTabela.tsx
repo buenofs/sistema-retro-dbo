@@ -1,5 +1,6 @@
 import type { ColunaBanco } from '@dbos/shared';
 import { useColunas } from './ganchos';
+import { Icone } from '../../tema/icones/Icone';
 
 export function ColunasDaTabela({ esquema, tabela }: { esquema: string; tabela: string }) {
   const consulta = useColunas(esquema, tabela);
@@ -32,11 +33,12 @@ export function ColunasDaTabela({ esquema, tabela }: { esquema: string; tabela: 
     <ul>
       {colunas.map((c) => (
         <li key={c.nome}>
-          {(c.ehChavePrimaria ? '🔑 ' : '') +
-            c.nome +
-            ' : ' +
-            c.tipoDado +
-            (c.anulavel ? ' (nulo)' : '')}
+          {c.ehChavePrimaria ? (
+            <Icone nome="key" tamanho={14} alt="chave primária" style={{ marginRight: 3 }} />
+          ) : (
+            <Icone nome="column" tamanho={14} alt="" style={{ marginRight: 3 }} />
+          )}
+          {c.nome + ' : ' + c.tipoDado + (c.anulavel ? ' (nulo)' : '')}
         </li>
       ))}
     </ul>
