@@ -2,9 +2,11 @@ import { test, expect, vi, afterEach, beforeEach } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { EditorConsultas } from './EditorConsultas';
+import { ProvedorTema } from '../../tema/ProvedorTema';
 import { useDialogos, estadoInicialDialogos } from '../../areaTrabalho/useDialogos';
 
-vi.mock('@uiw/react-codemirror', () => ({
+vi.mock('@uiw/react-codemirror', async (importarReal) => ({
+  ...(await importarReal<typeof import('@uiw/react-codemirror')>()),
   default: ({ value, onChange }: { value: string; onChange: (v: string) => void }) => (
     <textarea aria-label="SQL" value={value} onChange={(e) => onChange(e.target.value)} />
   ),
@@ -17,7 +19,9 @@ function renderizar() {
   const cliente = new QueryClient({ defaultOptions: { queries: { retry: false }, mutations: { retry: false } } });
   return render(
     <QueryClientProvider client={cliente}>
-      <EditorConsultas />
+      <ProvedorTema>
+        <EditorConsultas />
+      </ProvedorTema>
     </QueryClientProvider>,
   );
 }

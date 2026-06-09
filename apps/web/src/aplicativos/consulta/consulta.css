@@ -5,10 +5,10 @@
 }
 .editor-barra {
   padding: 4px;
-  border-bottom: 1px solid grey;
+  border-bottom: 1px solid var(--borda-painel);
 }
 .editor-codigo {
-  border-bottom: 1px solid grey;
+  border-bottom: 1px solid var(--borda-painel);
 }
 .editor-codigo .cm-editor {
   height: 160px;
@@ -27,29 +27,45 @@
 .grade-cabecalho {
   display: grid;
   font-weight: bold;
-  background: #c0c0c0;
-  border-bottom: 1px solid grey;
+  background: var(--cabecalho-tabela-bg);
+  border-bottom: 1px solid var(--borda-painel);
 }
 .grade-corpo {
   flex: 1;
   overflow: auto;
-  background: #fff;
+  background: var(--janela-conteudo);
 }
 .grade-celula {
   padding: 2px 6px;
-  border-right: 1px solid #dfdfdf;
+  border-right: 1px solid var(--borda-celula);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
   font-size: 12px;
 }
 .grade-th {
-  border-bottom: 1px solid grey;
+  border-bottom: 1px solid var(--borda-painel);
 }
 .grade-aviso {
   margin: 0;
   padding: 4px 6px;
-  background: #ffffe1;
-  border-top: 1px solid grey;
+  background: var(--aviso-bg);
+  border-top: 1px solid var(--borda-painel);
   font-size: 11px;
+}
+.editor-statusbar {
+  display: flex;
+  gap: 12px;
+  padding: 3px 8px;
+  font-size: 11px;
+  border-top: 1px solid var(--borda-painel);
+  background: var(--face);
+}
+.editor-estado {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.editor-estado.erro {
+  color: var(--erro-ink);
 }
