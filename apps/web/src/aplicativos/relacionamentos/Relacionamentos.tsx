@@ -111,7 +111,7 @@ function Grafo({
             const de = pos.get(a.de);
             const para = pos.get(a.para);
             if (!de || !para) return null;
-            return <line key={i} x1={de.x} y1={de.y} x2={para.x} y2={para.y} stroke="#808080" />;
+            return <line key={i} x1={de.x} y1={de.y} x2={para.x} y2={para.y} stroke="var(--aresta)" />;
           })}
         </svg>
         {g.nos.map((n) => {
@@ -120,7 +120,7 @@ function Grafo({
           return (
             <button
               key={n.id}
-              className={`rel-no ${n.id === g.centro ? 'rel-centro' : ''}`}
+              className={`rel-no tipo-${n.tipo} ${n.id === g.centro ? 'rel-centro' : ''}`}
               style={{ left: p.x, top: p.y }}
               disabled={!navegavel}
               onClick={() => {

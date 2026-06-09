@@ -8,13 +8,13 @@
   align-items: center;
   gap: 8px;
   padding: 4px;
-  border-bottom: 1px solid grey;
+  border-bottom: 1px solid var(--borda-painel);
 }
 .rel-canvas {
   position: relative;
   flex: 1;
   overflow: auto;
-  background: #fff;
+  background: var(--grafo-bg);
 }
 .rel-linhas {
   position: absolute;
@@ -33,5 +33,19 @@
 }
 .rel-centro {
   font-weight: bold;
-  box-shadow: inset -1px -1px #fff, inset 1px 1px grey, inset -2px -2px #dfdfdf, inset 2px 2px #0a0a0a;
+  box-shadow: var(--relevo-out);
+}
+.rel-no {
+  background: var(--face);
+  box-shadow: var(--relevo-out-fino);
+  border-left: 4px solid var(--cor-no, var(--sh));
+}
+.rel-no.tipo-funcionario { --cor-no: var(--no-funcionario); }
+.rel-no.tipo-departamento { --cor-no: var(--no-departamento); }
+.rel-no.tipo-projeto { --cor-no: var(--no-projeto); }
+.rel-no.tipo-folha { --cor-no: var(--no-folha); }
+
+/* --- Pele Aero: canvas com leve gradiente aqua --- */
+body[data-skin="aero"] .rel-canvas {
+  background: radial-gradient(120% 120% at 50% 30%, #eef7ff, #d7e8f6);
 }
