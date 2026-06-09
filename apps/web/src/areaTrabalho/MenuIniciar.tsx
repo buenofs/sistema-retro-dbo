@@ -10,6 +10,10 @@ export function MenuIniciar({ login, aoFechar }: { login: string; aoFechar: () =
   return (
     <div className="menu-iniciar" role="menu">
       <div className="menu-iniciar-faixa">DBOS</div>
+      <div className="menu-iniciar-cabecalho">
+        <Icone nome="user" tamanho={24} alt="" style={{ marginRight: 6 }} />
+        {login}
+      </div>
       <ul className="menu-iniciar-itens">
         {ORDEM_APPS.map((tipo) => (
           <li key={tipo}>

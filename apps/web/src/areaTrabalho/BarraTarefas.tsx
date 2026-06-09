@@ -54,6 +54,11 @@ export function BarraTarefas({ login }: { login: string }) {
           </button>
         ))}
       </div>
+      <span className="bandeja-icones" aria-hidden="true">
+        <Icone nome="database" tamanho={16} alt="" />
+        <Icone nome="wifi" tamanho={16} alt="" />
+        <Icone nome="speaker" tamanho={16} alt="" />
+      </span>
       <Relogio />
     </div>
   );
