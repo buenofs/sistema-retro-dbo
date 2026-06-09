@@ -5,8 +5,6 @@ import { obterIcone, type NomeIcone } from './motor';
 export interface PropsIcone {
   nome: NomeIcone;
   tamanho?: number;
-  /** Força o brilho; por padrão segue a pele (Aero = com brilho). */
-  gloss?: boolean;
   alt?: string;
   className?: string;
   style?: CSSProperties;
@@ -15,22 +13,22 @@ export interface PropsIcone {
 export const Icone = memo(function Icone({
   nome,
   tamanho = 16,
-  gloss,
   alt,
   className,
   style,
 }: PropsIcone) {
   const ctx = useContext(ContextoTema);
-  const comGloss = gloss ?? ctx?.tema.pele === 'aero';
+  const pele = ctx?.tema.pele ?? '98';
+  const renderizacao: CSSProperties['imageRendering'] = pele === 'aero' ? 'auto' : 'pixelated';
   return (
     <img
-      src={obterIcone(nome, tamanho, comGloss)}
+      src={obterIcone(nome, pele, tamanho)}
       width={tamanho}
       height={tamanho}
       alt={alt ?? ''}
       className={className}
       draggable={false}
-      style={{ imageRendering: 'pixelated', verticalAlign: 'middle', ...style }}
+      style={{ imageRendering: renderizacao, verticalAlign: 'middle', ...style }}
     />
   );
 });
