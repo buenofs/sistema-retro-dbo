@@ -21,7 +21,7 @@ export const Icone = memo(function Icone({
   style,
 }: PropsIcone) {
   const ctx = useContext(ContextoTema);
-  const comGloss = gloss ?? ctx?.pele === 'aero';
+  const comGloss = gloss ?? ctx?.tema.pele === 'aero';
   return (
     <img
       src={obterIcone(nome, tamanho, comGloss)}

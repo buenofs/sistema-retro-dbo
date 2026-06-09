@@ -1,34 +1,52 @@
 import { test, expect, beforeEach } from 'vitest';
 import { render, screen, act } from '@testing-library/react';
 import { ProvedorTema } from './ProvedorTema';
-import { useTema } from './ganchos';
-import { CHAVE_TEMA } from './tipos';
+import { useTema, useTweaks } from './ganchos';
+import { CHAVE_TEMA, TEMA_PADRAO } from './tipos';
 
 function Sonda() {
   const { pele, definirPele } = useTema();
-  return <button onClick={() => definirPele('aero')}>pele:{pele}</button>;
+  const { definir98, definirSound } = useTweaks();
+  return (
+    <>
+      <button onClick={() => definirPele('aero')}>pele:{pele}</button>
+      <button onClick={() => definir98({ accent: '#b0228c' })}>acento98</button>
+      <button onClick={() => definirSound(false)}>mudo</button>
+    </>
+  );
 }
 
 beforeEach(() => {
   localStorage.clear();
   delete document.body.dataset.skin;
+  document.documentElement.removeAttribute('style');
 });
 
 test('aplica a pele padrão "98" no body em máquina nova', () => {
   render(<ProvedorTema><Sonda /></ProvedorTema>);
   expect(document.body.dataset.skin).toBe('98');
-  expect(screen.getByRole('button')).toHaveTextContent('pele:98');
+  expect(screen.getByText(/pele:/)).toHaveTextContent('pele:98');
 });
 
-test('definirPele troca a pele, atualiza o body e persiste', () => {
+test('definirPele troca a pele, atualiza o body e persiste o estado completo', () => {
   render(<ProvedorTema><Sonda /></ProvedorTema>);
-  act(() => { screen.getByRole('button').click(); });
+  act(() => { screen.getByText(/pele:/).click(); });
   expect(document.body.dataset.skin).toBe('aero');
-  expect(JSON.parse(localStorage.getItem(CHAVE_TEMA)!)).toEqual({ pele: 'aero' });
+  const persistido = JSON.parse(localStorage.getItem(CHAVE_TEMA)!);
+  expect(persistido.pele).toBe('aero');
+  expect(persistido.aero).toEqual(TEMA_PADRAO.aero);
 });
 
-test('restaura a pele persistida ao montar', () => {
-  localStorage.setItem(CHAVE_TEMA, JSON.stringify({ pele: 'aero' }));
+test('definir98 atualiza a var de acento e persiste', () => {
+  render(<ProvedorTema><Sonda /></ProvedorTema>);
+  // pele padrão é 98, então --accent é aplicado
+  act(() => { screen.getByText('acento98').click(); });
+  expect(document.documentElement.style.getPropertyValue('--accent')).toBe('#b0228c');
+  expect(JSON.parse(localStorage.getItem(CHAVE_TEMA)!).n98.accent).toBe('#b0228c');
+});
+
+test('restaura o estado persistido ao montar', () => {
+  localStorage.setItem(CHAVE_TEMA, JSON.stringify({ ...TEMA_PADRAO, pele: 'aero' }));
   render(<ProvedorTema><Sonda /></ProvedorTema>);
   expect(document.body.dataset.skin).toBe('aero');
 });

@@ -3,45 +3,60 @@ import {
   useCallback,
   useEffect,
   useMemo,
+  useRef,
   useState,
   type ReactNode,
 } from 'react';
-import { CHAVE_TEMA, TEMA_PADRAO, type Pele } from './tipos';
+import type { EstadoTema, Pele, TweaksAero, Tweaks98 } from './tipos';
+import { aplicarTema, lerEstadoInicial, persistirTema } from './tweaks';
 
 export interface ContextoTemaValor {
-  pele: Pele;
+  tema: EstadoTema;
   definirPele: (pele: Pele) => void;
+  definirAero: (parcial: Partial<TweaksAero>) => void;
+  definir98: (parcial: Partial<Tweaks98>) => void;
+  definirMotion: (valor: boolean) => void;
+  definirSound: (valor: boolean) => void;
 }
 
 export const ContextoTema = createContext<ContextoTemaValor | null>(null);
 
-function lerPeleInicial(): Pele {
-  try {
-    const cru = localStorage.getItem(CHAVE_TEMA);
-    if (cru) {
-      const obj = JSON.parse(cru) as { pele?: unknown };
-      if (obj.pele === 'aero' || obj.pele === '98') return obj.pele;
-    }
-  } catch {
-    /* localStorage indisponível ou JSON inválido → padrão */
-  }
-  return TEMA_PADRAO.pele;
-}
-
 export function ProvedorTema({ children }: { children: ReactNode }) {
-  const [pele, setPele] = useState<Pele>(lerPeleInicial);
+  const [tema, setTema] = useState<EstadoTema>(lerEstadoInicial);
 
+  // Aplica + persiste a cada mudança.
   useEffect(() => {
-    document.body.dataset.skin = pele;
-    try {
-      localStorage.setItem(CHAVE_TEMA, JSON.stringify({ pele }));
-    } catch {
-      /* ignora — persistência é best-effort */
-    }
-  }, [pele]);
+    aplicarTema(tema);
+    persistirTema(tema);
+  }, [tema]);
 
-  const definirPele = useCallback((p: Pele) => setPele(p), []);
-  const valor = useMemo<ContextoTemaValor>(() => ({ pele, definirPele }), [pele, definirPele]);
+  // Re-aplica quando prefers-reduced-motion muda (sem perder o estado atual).
+  const temaRef = useRef(tema);
+  temaRef.current = tema;
+  useEffect(() => {
+    if (typeof window === 'undefined' || !window.matchMedia) return;
+    const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const aoMudar = () => aplicarTema(temaRef.current);
+    mq.addEventListener('change', aoMudar);
+    return () => mq.removeEventListener('change', aoMudar);
+  }, []);
+
+  const definirPele = useCallback((pele: Pele) => setTema((t) => ({ ...t, pele })), []);
+  const definirAero = useCallback(
+    (p: Partial<TweaksAero>) => setTema((t) => ({ ...t, aero: { ...t.aero, ...p } })),
+    [],
+  );
+  const definir98 = useCallback(
+    (p: Partial<Tweaks98>) => setTema((t) => ({ ...t, n98: { ...t.n98, ...p } })),
+    [],
+  );
+  const definirMotion = useCallback((valor: boolean) => setTema((t) => ({ ...t, motion: valor })), []);
+  const definirSound = useCallback((valor: boolean) => setTema((t) => ({ ...t, sound: valor })), []);
+
+  const valor = useMemo<ContextoTemaValor>(
+    () => ({ tema, definirPele, definirAero, definir98, definirMotion, definirSound }),
+    [tema, definirPele, definirAero, definir98, definirMotion, definirSound],
+  );
 
   return <ContextoTema.Provider value={valor}>{children}</ContextoTema.Provider>;
 }
