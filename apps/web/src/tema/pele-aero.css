@@ -253,3 +253,33 @@ body[data-skin="aero"] .menu-contexto button:hover {
   color: #fff;
   border-radius: var(--round-sm);
 }
+
+/* BOOT — Aero (fundo navy, marca com brilho aqua) */
+body[data-skin="aero"] .tela-boot {
+  background: #06121c;
+  color: #cfeaff;
+}
+body[data-skin="aero"] .boot-marca {
+  color: #ffffff;
+  text-shadow: 0 0 18px oklch(0.75 0.18 var(--accent-h, 200) / 0.55), 0 3px 0 var(--accent-d);
+}
+body[data-skin="aero"] .boot-sub {
+  color: #8fb6d4;
+}
+body[data-skin="aero"] .boot-barra {
+  border: 1px solid #2a4a63;
+  border-radius: 4px;
+  background: #0a1c2a;
+}
+body[data-skin="aero"] .boot-progresso {
+  background: linear-gradient(90deg, var(--accent-d), var(--accent), #7ec94a);
+  box-shadow: 0 0 10px oklch(0.75 0.18 var(--accent-h, 200) / 0.55);
+}
+body[data-skin="aero"] .boot-msg {
+  color: #5e89a6;
+}
+
+/* LOGIN — Aero (véu aqua radial) */
+body[data-skin="aero"] .tela-logon {
+  background: radial-gradient(120% 90% at 50% 0%, #2f7fc7, #0d2740);
+}

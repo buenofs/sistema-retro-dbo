@@ -29,10 +29,10 @@ export interface EstadoTema {
 
 export const CHAVE_TEMA = 'dbos_tema';
 
-// Fase 2: padrão "98" (reproduz o visual atual). A Fase 3 muda para "aero"
-// em máquina nova, quando a folha pele-aero existir.
+// Fase 3: padrão "aero" em máquina nova (decisão travada). A última pele
+// escolhida é restaurada do localStorage; só cai aqui sem persistência.
 export const TEMA_PADRAO: EstadoTema = {
-  pele: '98',
+  pele: 'aero',
   aero: { accentHue: 200, glass: true, corners: 'aero', wallpaper: 'aqua' },
   n98: { accent: '#1084d0', pattern: 'dither', density: 'normal', crt: false },
   motion: true,

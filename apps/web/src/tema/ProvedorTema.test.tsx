@@ -22,10 +22,10 @@ beforeEach(() => {
   document.documentElement.removeAttribute('style');
 });
 
-test('aplica a pele padrão "98" no body em máquina nova', () => {
+test('aplica a pele padrão "aero" no body em máquina nova', () => {
   render(<ProvedorTema><Sonda /></ProvedorTema>);
-  expect(document.body.dataset.skin).toBe('98');
-  expect(screen.getByText(/pele:/)).toHaveTextContent('pele:98');
+  expect(document.body.dataset.skin).toBe('aero');
+  expect(screen.getByText(/pele:/)).toHaveTextContent('pele:aero');
 });
 
 test('definirPele troca a pele, atualiza o body e persiste o estado completo', () => {
@@ -37,9 +37,9 @@ test('definirPele troca a pele, atualiza o body e persiste o estado completo', (
   expect(persistido.aero).toEqual(TEMA_PADRAO.aero);
 });
 
-test('definir98 atualiza a var de acento e persiste', () => {
+test('definir98 atualiza a var de acento e persiste (na pele 98)', () => {
+  localStorage.setItem(CHAVE_TEMA, JSON.stringify({ ...TEMA_PADRAO, pele: '98' }));
   render(<ProvedorTema><Sonda /></ProvedorTema>);
-  // pele padrão é 98, então --accent é aplicado
   act(() => { screen.getByText('acento98').click(); });
   expect(document.documentElement.style.getPropertyValue('--accent')).toBe('#b0228c');
   expect(JSON.parse(localStorage.getItem(CHAVE_TEMA)!).n98.accent).toBe('#b0228c');
@@ -54,5 +54,5 @@ test('restaura o estado persistido ao montar', () => {
 test('cai no padrão quando o localStorage tem lixo', () => {
   localStorage.setItem(CHAVE_TEMA, '{nao-e-json');
   render(<ProvedorTema><Sonda /></ProvedorTema>);
-  expect(document.body.dataset.skin).toBe('98');
+  expect(document.body.dataset.skin).toBe('aero');
 });

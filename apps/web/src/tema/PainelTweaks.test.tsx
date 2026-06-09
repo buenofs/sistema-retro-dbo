@@ -4,9 +4,11 @@ import { ProvedorTema } from './ProvedorTema';
 import { PainelTweaks } from './PainelTweaks';
 import { usePainelTweaks } from './painel';
 import { useBoot } from '../boot';
+import { TEMA_PADRAO, CHAVE_TEMA } from './tipos';
 
 beforeEach(() => {
   localStorage.clear();
+  localStorage.setItem(CHAVE_TEMA, JSON.stringify({ ...TEMA_PADRAO, pele: '98' }));
   delete document.body.dataset.skin;
   document.documentElement.removeAttribute('style');
   usePainelTweaks.setState({ aberto: true });
