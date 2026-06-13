@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import { useLoja } from './loja';
 import { MenuIniciar } from './MenuIniciar';
@@ -8,6 +8,20 @@ import { usePainelTweaks } from '../tema/painel';
 
 export function BarraTarefas({ login }: { login: string }) {
   const [menuAberto, setMenuAberto] = useState(false);
+  const refMenu = useRef<HTMLDivElement>(null);
+  const refBotao = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    if (!menuAberto) return;
+    function aoClicarFora(e: MouseEvent) {
+      const alvo = e.target as Node;
+      if (refMenu.current?.contains(alvo)) return;
+      if (refBotao.current?.contains(alvo)) return;
+      setMenuAberto(false);
+    }
+    document.addEventListener('mousedown', aoClicarFora);
+    return () => document.removeEventListener('mousedown', aoClicarFora);
+  }, [menuAberto]);
   // useShallow compara só um nível: comparar um array de objetos recém-criados
   // nunca casa (refs distintas) e cai em loop. Assinamos o array de janelas e
   // derivamos os dados de exibição no render.
@@ -37,6 +51,7 @@ export function BarraTarefas({ login }: { login: string }) {
   return (
     <div className="barra-tarefas">
       <button
+        ref={refBotao}
         className="botao-iniciar"
         aria-haspopup="menu"
         aria-expanded={menuAberto}
@@ -44,7 +59,11 @@ export function BarraTarefas({ login }: { login: string }) {
       >
         Iniciar
       </button>
-      {menuAberto && <MenuIniciar login={login} aoFechar={() => setMenuAberto(false)} />}
+      {menuAberto && (
+        <div ref={refMenu}>
+          <MenuIniciar login={login} aoFechar={() => setMenuAberto(false)} />
+        </div>
+      )}
       <div className="barra-tarefas-janelas">
         {janelas.map((j) => (
           <button

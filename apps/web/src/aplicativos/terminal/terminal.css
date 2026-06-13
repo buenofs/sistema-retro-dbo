@@ -24,10 +24,11 @@
   color: var(--term-prompt);
   flex-shrink: 0;
 }
-.terminal-input {
+.terminal .terminal-input {
   flex: 1;
-  background: transparent;
-  border: none;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
   outline: none;
   color: var(--term-fg);
   caret-color: var(--term-fg);

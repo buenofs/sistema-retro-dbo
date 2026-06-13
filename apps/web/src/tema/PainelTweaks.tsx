@@ -54,7 +54,7 @@ export function PainelTweaks() {
         onPointerUp={aoSoltar}
       >
         <span>Tweaks</span>
-        <button type="button" className="painel-tweaks-fechar" aria-label="Fechar" onClick={fechar}>
+        <button type="button" className="painel-tweaks-fechar" aria-label="Fechar" onPointerDown={(e) => e.stopPropagation()} onClick={fechar}>
           ×
         </button>
       </div>

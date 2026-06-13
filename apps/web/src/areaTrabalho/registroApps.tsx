@@ -33,7 +33,7 @@ export const registroApps: Record<TipoApp, DefinicaoApp> = {
   },
   grade: {
     titulo: 'Grade de Dados',
-    icone: 'grid',
+    icone: 'database',
     tamanhoInicial: { largura: 640, altura: 440 },
     componente: GradeDados,
   },
@@ -50,8 +50,8 @@ export const registroApps: Record<TipoApp, DefinicaoApp> = {
     componente: Terminal,
   },
   monitor: {
-    titulo: 'Monitor SQL',
-    icone: 'report',
+    titulo: 'Histórico de SQL',
+    icone: 'clock',
     tamanhoInicial: { largura: 620, altura: 420 },
     componente: MonitorSQL,
   },
