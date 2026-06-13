@@ -1,0 +1,8 @@
+.exp { display: flex; flex-direction: column; height: 100%; font-size: 12px; }
+.exp-barra { display: flex; gap: 4px; align-items: center; padding: 4px; border-bottom: 1px solid var(--borda, #888); flex-wrap: wrap; }
+.exp-endereco { flex: 1; min-width: 120px; padding: 2px 4px; background: var(--campo, #fff); border: 1px solid var(--borda, #888); }
+.exp-lista { flex: 1; overflow: auto; }
+.exp-item { display: flex; gap: 6px; align-items: center; padding: 3px 6px; cursor: default; user-select: none; }
+.exp-item:hover { background: var(--selecao-fraca, #e8eef6); }
+.exp-item.sel { background: var(--selecao, #1084d0); color: #fff; }
+.exp-item.alvo { outline: 1px dashed var(--primary, #1084d0); }

@@ -6,6 +6,7 @@ import { PropriedadesObjeto } from '../aplicativos/propriedades/PropriedadesObje
 import { Busca } from '../aplicativos/busca/Busca';
 import { Relacionamentos } from '../aplicativos/relacionamentos/Relacionamentos';
 import { Terminal } from '../aplicativos/terminal/Terminal';
+import { ExploradorArquivos } from '../aplicativos/arquivos/ExploradorArquivos';
 
 const EditorConsultas = lazy(() =>
   import('../aplicativos/consulta/EditorConsultas').then((m) => ({ default: m.EditorConsultas })),
@@ -18,9 +19,6 @@ const RelatorioFolha = lazy(() =>
 const BlocoNotas = lazy(() =>
   import('../aplicativos/bloco/BlocoNotas').then((m) => ({ default: m.BlocoNotas })),
 );
-
-// Placeholder para apps sem componente real ainda.
-function AppEmConstrucao() { return <div style={{ padding: 8 }}>Em construção…</div>; }
 
 // O WM é genérico: cada tipoApp mapeia para metadados + um componente.
 // Adicionar um app futuro = registrar o componente real aqui.
@@ -76,8 +74,8 @@ export const registroApps: Record<TipoApp, DefinicaoApp> = {
   arquivos: {
     titulo: 'Explorador de Arquivos',
     icone: 'folder',
-    tamanhoInicial: { largura: 640, altura: 480 },
-    componente: AppEmConstrucao,
+    tamanhoInicial: { largura: 640, altura: 420 },
+    componente: ExploradorArquivos,
   },
   bloco: {
     titulo: 'Bloco de Notas',
@@ -89,6 +87,7 @@ export const registroApps: Record<TipoApp, DefinicaoApp> = {
 
 // Ordem fixa em que os apps aparecem nos atalhos e no menu Iniciar.
 export const ORDEM_APPS: TipoApp[] = [
+  'arquivos',
   'explorador',
   'busca',
   'consulta',
