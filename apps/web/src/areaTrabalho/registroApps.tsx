@@ -15,6 +15,13 @@ const RelatorioFolha = lazy(() =>
   import('../aplicativos/folha/RelatorioFolha').then((m) => ({ default: m.RelatorioFolha })),
 );
 
+const BlocoNotas = lazy(() =>
+  import('../aplicativos/bloco/BlocoNotas').then((m) => ({ default: m.BlocoNotas })),
+);
+
+// Placeholder para apps sem componente real ainda.
+function AppEmConstrucao() { return <div style={{ padding: 8 }}>Em construção…</div>; }
+
 // O WM é genérico: cada tipoApp mapeia para metadados + um componente.
 // Adicionar um app futuro = registrar o componente real aqui.
 export const registroApps: Record<TipoApp, DefinicaoApp> = {
@@ -65,6 +72,18 @@ export const registroApps: Record<TipoApp, DefinicaoApp> = {
     icone: 'report',
     tamanhoInicial: { largura: 600, altura: 480 },
     componente: RelatorioFolha,
+  },
+  arquivos: {
+    titulo: 'Explorador de Arquivos',
+    icone: 'folder',
+    tamanhoInicial: { largura: 640, altura: 480 },
+    componente: AppEmConstrucao,
+  },
+  bloco: {
+    titulo: 'Bloco de Notas',
+    icone: 'newdoc',
+    tamanhoInicial: { largura: 500, altura: 380 },
+    componente: BlocoNotas,
   },
 };
 

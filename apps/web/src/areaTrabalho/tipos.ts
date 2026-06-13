@@ -10,7 +10,9 @@ export type TipoApp =
   | 'busca'
   | 'relacionamentos'
   | 'terminal'
-  | 'relatorio';
+  | 'relatorio'
+  | 'arquivos'
+  | 'bloco';
 export type EstadoVisual = 'normal' | 'minimizada' | 'maximizada';
 
 export interface Retangulo {
