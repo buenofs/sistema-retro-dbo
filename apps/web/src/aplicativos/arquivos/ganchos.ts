@@ -62,6 +62,7 @@ export function useItem(id: number) {
   return useQuery({
     queryKey: ['arquivos', 'item', id],
     queryFn: () => pegar<{ id: number; nome: string; conteudo: string }>(`/api/arquivos/${id}`).then((e) => e.dados),
+    enabled: id > 0,
   });
 }
 

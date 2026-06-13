@@ -20,6 +20,9 @@ export function BlocoNotas({ janela }: PropsApp) {
     }
   }, [consulta.data, carregado]);
 
+  // Se a janela passar a apontar para outro arquivo, recarrega.
+  useEffect(() => { setCarregado(false); }, [id]);
+
   if (!dados) return <div style={{ padding: 8 }}>Nenhum arquivo aberto.</div>;
 
   return (

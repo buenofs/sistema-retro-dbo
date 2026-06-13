@@ -100,6 +100,7 @@ export function ExploradorArquivos(_props: PropsApp) {
               const arrastado = Number(e.dataTransfer.getData('text/id'));
               if (item.tipo === 'pasta' && arrastado && arrastado !== item.id) {
                 mover.mutate({ id: arrastado, paiId: item.id });
+                setSel(null);
               }
             }}
           >
