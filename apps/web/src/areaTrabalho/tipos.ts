@@ -10,6 +10,7 @@ export type TipoApp =
   | 'busca'
   | 'relacionamentos'
   | 'terminal'
+  | 'monitor'
   | 'relatorio'
   | 'arquivos'
   | 'bloco'

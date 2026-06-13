@@ -6,6 +6,7 @@ import { PropriedadesObjeto } from '../aplicativos/propriedades/PropriedadesObje
 import { Busca } from '../aplicativos/busca/Busca';
 import { Relacionamentos } from '../aplicativos/relacionamentos/Relacionamentos';
 import { Terminal } from '../aplicativos/terminal/Terminal';
+import { MonitorSQL } from '../aplicativos/monitor/MonitorSQL';
 import { ExploradorArquivos } from '../aplicativos/arquivos/ExploradorArquivos';
 import { Lixeira } from '../aplicativos/lixeira/Lixeira';
 
@@ -66,6 +67,12 @@ export const registroApps: Record<TipoApp, DefinicaoApp> = {
     tamanhoInicial: { largura: 600, altura: 380 },
     componente: Terminal,
   },
+  monitor: {
+    titulo: 'Monitor SQL',
+    icone: 'report',
+    tamanhoInicial: { largura: 620, altura: 420 },
+    componente: MonitorSQL,
+  },
   relatorio: {
     titulo: 'Relatório (Folha)',
     icone: 'report',
@@ -102,6 +109,7 @@ export const ORDEM_APPS: TipoApp[] = [
   'propriedades',
   'relacionamentos',
   'terminal',
+  'monitor',
   'relatorio',
   'lixeira',
 ];
