@@ -9,3 +9,4 @@ export * from './dominio';
 export * from './busca';
 export * from './relacionamentos';
 export * from './folha';
+export * from './arquivos';
