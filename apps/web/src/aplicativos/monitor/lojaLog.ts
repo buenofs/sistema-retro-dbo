@@ -5,6 +5,7 @@ const MAX = 200;
 
 interface LojaLogSQL {
   comandos: ComandoSQL[];
+  ultimoLote: ComandoSQL[];
   pausado: boolean;
   registrar: (cmds: ComandoSQL[]) => void;
   limpar: () => void;
@@ -13,9 +14,14 @@ interface LojaLogSQL {
 
 export const useLojaLogSQL = create<LojaLogSQL>((set) => ({
   comandos: [],
+  ultimoLote: [],
   pausado: false,
   registrar: (cmds) =>
-    set((s) => (s.pausado || cmds.length === 0 ? s : { comandos: [...s.comandos, ...cmds].slice(-MAX) })),
+    set((s) => {
+      if (cmds.length === 0) return s;
+      if (s.pausado) return { ...s, ultimoLote: cmds };
+      return { comandos: [...s.comandos, ...cmds].slice(-MAX), ultimoLote: cmds };
+    }),
   limpar: () => set({ comandos: [] }),
   alternarPausa: () => set((s) => ({ pausado: !s.pausado })),
 }));

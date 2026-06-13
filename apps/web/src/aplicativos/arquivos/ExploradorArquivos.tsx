@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import type { Item } from '@dbos/shared';
+import type { ComandoSQL, Item } from '@dbos/shared';
 import type { PropsApp } from '../../areaTrabalho/tipos';
 import { useLoja } from '../../areaTrabalho/loja';
 import { Icone } from '../../tema/icones/Icone';
@@ -8,6 +8,8 @@ import {
   useDrives, useConteudo, useCriarPasta, useCriarArquivo, useRenomear,
   useApagar, useMover, useCopiar,
 } from './ganchos';
+import { useLojaLogSQL } from '../monitor/lojaLog';
+import { resolverSQL } from '../monitor/resolver';
 import './arquivos.css';
 
 interface Nivel { id: number | null; nome: string }
@@ -16,6 +18,9 @@ export function ExploradorArquivos(_props: PropsApp) {
   const driveId = useContextoArquivos((s) => s.driveId);
   const definirDrive = useContextoArquivos((s) => s.definirDrive);
   const abrirJanela = useLoja((s) => s.abrirJanela);
+  const ultimoLote = useLojaLogSQL((s) => s.ultimoLote);
+
+  const [sqlAcao, setSqlAcao] = useState<ComandoSQL[] | null>(null);
 
   // Pilha de navegação: o topo é a pasta atual (id null = raiz do drive).
   const [pilha, setPilha] = useState<Nivel[]>([{ id: null, nome: '' }]);
@@ -37,40 +42,44 @@ export function ExploradorArquivos(_props: PropsApp) {
   const caminho = `${letra}:\\` + pilha.slice(1).map((n) => n.nome).join('\\');
 
   function entrar(item: Item) {
+    setSqlAcao(null);
     if (item.tipo === 'pasta') setPilha((p) => [...p, { id: item.id, nome: item.nome }]);
     else abrirJanela('bloco', { id: item.id, nome: item.nome });
   }
   function subir() {
+    setSqlAcao(null);
     setPilha((p) => (p.length > 1 ? p.slice(0, -1) : p));
     setSel(null);
   }
 
   function novaPasta() {
     const nome = window.prompt('Nome da nova pasta:');
-    if (nome) criarPasta.mutate({ nome, paiId: atual.id, driveId });
+    if (nome) criarPasta.mutate({ nome, paiId: atual.id, driveId }, { onSuccess: (env) => setSqlAcao(env.sql) });
   }
   function novoArquivo() {
     const nome = window.prompt('Nome do novo arquivo:');
-    if (nome) criarArquivo.mutate({ nome, paiId: atual.id, driveId, conteudo: '' });
+    if (nome) criarArquivo.mutate({ nome, paiId: atual.id, driveId, conteudo: '' }, { onSuccess: (env) => setSqlAcao(env.sql) });
   }
   function renomearSel() {
     if (sel === null) return;
     const item = conteudo.data?.find((i) => i.id === sel);
     const nome = window.prompt('Novo nome:', item?.nome);
-    if (nome) renomear.mutate({ id: sel, nome });
+    if (nome) renomear.mutate({ id: sel, nome }, { onSuccess: (env) => setSqlAcao(env.sql) });
   }
   function apagarSel() {
-    if (sel !== null) apagar.mutate(sel);
+    if (sel !== null) apagar.mutate(sel, { onSuccess: (env) => setSqlAcao(env.sql) });
     setSel(null);
   }
   function colar() {
-    if (copiado !== null) copiar.mutate({ id: copiado, paiId: atual.id });
+    if (copiado !== null) copiar.mutate({ id: copiado, paiId: atual.id }, { onSuccess: (env) => setSqlAcao(env.sql) });
   }
+
+  const sqlMostrado = sqlAcao ?? ultimoLote;
 
   return (
     <div className="exp">
       <div className="exp-barra">
-        <select aria-label="Drive" value={driveId} onChange={(e) => { definirDrive(Number(e.target.value)); setPilha([{ id: null, nome: '' }]); }}>
+        <select aria-label="Drive" value={driveId} onChange={(e) => { definirDrive(Number(e.target.value)); setPilha([{ id: null, nome: '' }]); setSqlAcao(null); }}>
           {drives.data?.map((d) => <option key={d.id} value={d.id}>{d.letra}: {d.rotulo}</option>)}
         </select>
         <button onClick={subir} disabled={pilha.length === 1}>Acima</button>
@@ -99,7 +108,7 @@ export function ExploradorArquivos(_props: PropsApp) {
               setAlvo(null);
               const arrastado = Number(e.dataTransfer.getData('text/id'));
               if (item.tipo === 'pasta' && arrastado && arrastado !== item.id) {
-                mover.mutate({ id: arrastado, paiId: item.id });
+                mover.mutate({ id: arrastado, paiId: item.id }, { onSuccess: (env) => setSqlAcao(env.sql) });
                 setSel(null);
               }
             }}
@@ -109,6 +118,24 @@ export function ExploradorArquivos(_props: PropsApp) {
           </div>
         ))}
         {conteudo.data?.length === 0 && <div style={{ padding: 8, opacity: 0.7 }}>(pasta vazia)</div>}
+      </div>
+      <div className="exp-sql">
+        <div className="exp-sql-cab">
+          <span className="exp-sql-titulo">SQL desta ação</span>
+          <button onClick={() => abrirJanela('monitor')}>Histórico completo</button>
+        </div>
+        <div className="exp-sql-corpo">
+          {sqlMostrado.length === 0 ? (
+            <div className="exp-sql-vazia">(nenhuma ação ainda — navegue ou crie algo)</div>
+          ) : (
+            sqlMostrado.map((c, i) => (
+              <div key={i} className="exp-sql-linha">
+                <span className={`exp-sql-badge sql-${c.tipo}`}>{c.tipo}</span>
+                <code>{resolverSQL(c.texto, c.parametros)}</code>
+              </div>
+            ))
+          )}
+        </div>
       </div>
     </div>
   );
