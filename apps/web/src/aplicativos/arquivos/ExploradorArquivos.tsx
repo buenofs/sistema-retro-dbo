@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import type { ComandoSQL, Item } from '@dbos/shared';
 import type { PropsApp } from '../../areaTrabalho/tipos';
 import { useLoja } from '../../areaTrabalho/loja';
@@ -29,6 +29,11 @@ export function ExploradorArquivos(_props: PropsApp) {
   const [copiado, setCopiado] = useState<number | null>(null);
   const [alvo, setAlvo] = useState<number | null>(null);
 
+  // Edição inline
+  const [edicao, setEdicao] = useState<{ id: number | 'novo'; tipo: 'pasta' | 'arquivo' } | null>(null);
+  const [nomeEdit, setNomeEdit] = useState('');
+  const ignorarBlur = useRef(false);
+
   const drives = useDrives();
   const conteudo = useConteudo(driveId, atual.id);
   const criarPasta = useCriarPasta();
@@ -53,18 +58,19 @@ export function ExploradorArquivos(_props: PropsApp) {
   }
 
   function novaPasta() {
-    const nome = window.prompt('Nome da nova pasta:');
-    if (nome) criarPasta.mutate({ nome, paiId: atual.id, driveId }, { onSuccess: (env) => setSqlAcao(env.sql) });
+    setEdicao({ id: 'novo', tipo: 'pasta' });
+    setNomeEdit('');
   }
   function novoArquivo() {
-    const nome = window.prompt('Nome do novo arquivo:');
-    if (nome) criarArquivo.mutate({ nome, paiId: atual.id, driveId, conteudo: '' }, { onSuccess: (env) => setSqlAcao(env.sql) });
+    setEdicao({ id: 'novo', tipo: 'arquivo' });
+    setNomeEdit('');
   }
   function renomearSel() {
     if (sel === null) return;
     const item = conteudo.data?.find((i) => i.id === sel);
-    const nome = window.prompt('Novo nome:', item?.nome);
-    if (nome) renomear.mutate({ id: sel, nome }, { onSuccess: (env) => setSqlAcao(env.sql) });
+    if (!item) return;
+    setEdicao({ id: item.id, tipo: item.tipo });
+    setNomeEdit(item.nome);
   }
   function apagarSel() {
     if (sel !== null) apagar.mutate(sel, { onSuccess: (env) => setSqlAcao(env.sql) });
@@ -74,25 +80,74 @@ export function ExploradorArquivos(_props: PropsApp) {
     if (copiado !== null) copiar.mutate({ id: copiado, paiId: atual.id }, { onSuccess: (env) => setSqlAcao(env.sql) });
   }
 
+  function cancelarEdicao() {
+    setEdicao(null);
+    setNomeEdit('');
+  }
+  function confirmarEdicao() {
+    // Enter chama isto e zera `edicao`; o blur do desmonte chama de novo, mas o guard acima já barra (edicao === null).
+    if (!edicao) return;
+    const nome = nomeEdit.trim();
+    if (!nome) { cancelarEdicao(); return; }
+    if (edicao.id === 'novo') {
+      if (edicao.tipo === 'pasta') {
+        criarPasta.mutate({ nome, paiId: atual.id, driveId }, { onSuccess: (env) => setSqlAcao(env.sql) });
+      } else {
+        criarArquivo.mutate({ nome, paiId: atual.id, driveId, conteudo: '' }, { onSuccess: (env) => setSqlAcao(env.sql) });
+      }
+    } else {
+      renomear.mutate({ id: edicao.id as number, nome }, { onSuccess: (env) => setSqlAcao(env.sql) });
+    }
+    cancelarEdicao();
+  }
+
+  const editInput = (
+    <input
+      className="exp-edit-input"
+      autoFocus
+      value={nomeEdit}
+      onChange={(e) => setNomeEdit(e.target.value)}
+      onClick={(e) => e.stopPropagation()}
+      onDoubleClick={(e) => e.stopPropagation()}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter') { e.preventDefault(); confirmarEdicao(); }
+        else if (e.key === 'Escape') { e.preventDefault(); ignorarBlur.current = true; cancelarEdicao(); }
+      }}
+      onBlur={() => { if (ignorarBlur.current) { ignorarBlur.current = false; return; } confirmarEdicao(); }}
+    />
+  );
+
   const sqlMostrado = sqlAcao ?? ultimoLote;
 
   return (
-    <div className="exp">
+    <div
+      className="exp"
+      onKeyDown={(e) => {
+        if (e.key === 'F2' && sel !== null && !edicao) { e.preventDefault(); renomearSel(); }
+      }}
+      tabIndex={-1}
+    >
       <div className="exp-barra">
         <select aria-label="Drive" value={driveId} onChange={(e) => { definirDrive(Number(e.target.value)); setPilha([{ id: null, nome: '' }]); setSqlAcao(null); }}>
           {drives.data?.map((d) => <option key={d.id} value={d.id}>{d.letra}: {d.rotulo}</option>)}
         </select>
         <button onClick={subir} disabled={pilha.length === 1}>Acima</button>
         <span className="exp-endereco">{caminho}</span>
-        <button onClick={novaPasta}>Nova Pasta</button>
-        <button onClick={novoArquivo}>Novo Arquivo</button>
-        <button onClick={renomearSel} disabled={sel === null}>Renomear</button>
+        <button onClick={novaPasta} disabled={!!edicao}>Nova Pasta</button>
+        <button onClick={novoArquivo} disabled={!!edicao}>Novo Arquivo</button>
+        <button onClick={renomearSel} disabled={sel === null || !!edicao}>Renomear</button>
         <button onClick={() => setCopiado(sel)} disabled={sel === null}>Copiar</button>
         <button onClick={colar} disabled={copiado === null}>Colar</button>
-        <button onClick={apagarSel} disabled={sel === null}>Apagar</button>
+        <button onClick={apagarSel} disabled={sel === null || !!edicao}>Apagar</button>
       </div>
       <div className="exp-lista">
         {conteudo.isLoading && <div style={{ padding: 8 }}>Carregando…</div>}
+        {edicao?.id === 'novo' && (
+          <div className="exp-item">
+            <Icone nome={edicao.tipo === 'pasta' ? 'folder' : 'newdoc'} tamanho={16} />
+            {editInput}
+          </div>
+        )}
         {conteudo.data?.map((item) => (
           <div
             key={item.id}
@@ -114,10 +169,14 @@ export function ExploradorArquivos(_props: PropsApp) {
             }}
           >
             <Icone nome={item.tipo === 'pasta' ? 'folder' : 'newdoc'} tamanho={16} />
-            <span>{item.nome}</span>
+            {edicao?.id === item.id ? (
+              editInput
+            ) : (
+              <span>{item.nome}</span>
+            )}
           </div>
         ))}
-        {conteudo.data?.length === 0 && <div style={{ padding: 8, opacity: 0.7 }}>(pasta vazia)</div>}
+        {conteudo.data?.length === 0 && !edicao && <div style={{ padding: 8, opacity: 0.7 }}>(pasta vazia)</div>}
       </div>
       <div className="exp-sql">
         <div className="exp-sql-cab">
