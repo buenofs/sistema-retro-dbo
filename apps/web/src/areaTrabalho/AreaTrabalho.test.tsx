@@ -15,7 +15,7 @@ beforeEach(() => {
 function renderizar() {
   return render(
     <ProvedorTema>
-      <AreaTrabalho usuario={{ login: 'sa', banco: 'DBOS_RH' }} />
+      <AreaTrabalho usuario={{ login: 'sa', banco: 'DBOS' }} />
     </ProvedorTema>,
   );
 }
@@ -37,8 +37,8 @@ test('botão direito num ícone abre menu "Abrir"', () => {
   expect(useMenuContexto.getState().itens.map((i) => i.rotulo)).toEqual(['Abrir']);
 });
 
-test('mostra o nome do banco conectado e o atalho de Relatório', () => {
+test('mostra o nome do banco conectado e o atalho de Monitor SQL', () => {
   const { getByText } = renderizar();
-  expect(getByText('DBOS_RH')).toBeInTheDocument();
-  expect(getByText('Relatório (Folha)')).toBeInTheDocument();
+  expect(getByText('DBOS')).toBeInTheDocument();
+  expect(getByText('Monitor SQL')).toBeInTheDocument();
 });

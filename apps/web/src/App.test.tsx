@@ -52,7 +52,7 @@ test('mostra a área de trabalho quando há sessão', async () => {
   vi.stubGlobal(
     'fetch',
     vi.fn(async () =>
-      new Response(JSON.stringify({ ok: true, dados: { login: 'sa', banco: 'DBOS_RH' } })),
+      new Response(JSON.stringify({ ok: true, dados: { login: 'sa', banco: 'DBOS' } })),
     ),
   );
   renderizar();
