@@ -7,6 +7,7 @@ import { Busca } from '../aplicativos/busca/Busca';
 import { Relacionamentos } from '../aplicativos/relacionamentos/Relacionamentos';
 import { Terminal } from '../aplicativos/terminal/Terminal';
 import { ExploradorArquivos } from '../aplicativos/arquivos/ExploradorArquivos';
+import { Lixeira } from '../aplicativos/lixeira/Lixeira';
 
 const EditorConsultas = lazy(() =>
   import('../aplicativos/consulta/EditorConsultas').then((m) => ({ default: m.EditorConsultas })),
@@ -83,6 +84,12 @@ export const registroApps: Record<TipoApp, DefinicaoApp> = {
     tamanhoInicial: { largura: 500, altura: 380 },
     componente: BlocoNotas,
   },
+  lixeira: {
+    titulo: 'Lixeira',
+    icone: 'trash',
+    tamanhoInicial: { largura: 420, altura: 320 },
+    componente: Lixeira,
+  },
 };
 
 // Ordem fixa em que os apps aparecem nos atalhos e no menu Iniciar.
@@ -96,4 +103,5 @@ export const ORDEM_APPS: TipoApp[] = [
   'relacionamentos',
   'terminal',
   'relatorio',
+  'lixeira',
 ];

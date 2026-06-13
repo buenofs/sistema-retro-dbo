@@ -12,7 +12,8 @@ export type TipoApp =
   | 'terminal'
   | 'relatorio'
   | 'arquivos'
-  | 'bloco';
+  | 'bloco'
+  | 'lixeira';
 export type EstadoVisual = 'normal' | 'minimizada' | 'maximizada';
 
 export interface Retangulo {
