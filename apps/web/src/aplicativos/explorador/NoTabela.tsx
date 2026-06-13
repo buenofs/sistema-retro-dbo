@@ -26,7 +26,7 @@ export const NoTabela = memo(function NoTabela({ objeto }: { objeto: ObjetoBanco
           }}
         >
           <Icone
-            nome={objeto.tipo === 'view' ? 'view' : 'table'}
+            nome={objeto.tipo === 'view' ? 'view' : 'database'}
             tamanho={16}
             alt=""
             style={{ marginRight: 4 }}

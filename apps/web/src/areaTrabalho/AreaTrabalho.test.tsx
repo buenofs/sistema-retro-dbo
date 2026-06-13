@@ -15,7 +15,7 @@ beforeEach(() => {
 function renderizar() {
   return render(
     <ProvedorTema>
-      <AreaTrabalho usuario={{ login: 'sa', banco: 'DBOS_RH' }} />
+      <AreaTrabalho usuario={{ login: 'sa', banco: 'DBOS' }} />
     </ProvedorTema>,
   );
 }
@@ -32,13 +32,13 @@ test('botão direito no fundo do desktop abre menu com os 8 apps', () => {
 
 test('botão direito num ícone abre menu "Abrir"', () => {
   const { getAllByText } = renderizar();
-  const botaoIcone = getAllByText('Explorador de Objetos')[0]!.closest('button') as HTMLElement;
+  const botaoIcone = getAllByText('Explorador de Objetos')[0]!.closest('.icone-atalho') as HTMLElement;
   fireEvent.contextMenu(botaoIcone);
   expect(useMenuContexto.getState().itens.map((i) => i.rotulo)).toEqual(['Abrir']);
 });
 
-test('mostra o nome do banco conectado e o atalho de Relatório', () => {
+test('mostra o nome do banco conectado e o atalho de Histórico de SQL', () => {
   const { getByText } = renderizar();
-  expect(getByText('DBOS_RH')).toBeInTheDocument();
-  expect(getByText('Relatório (Folha)')).toBeInTheDocument();
+  expect(getByText('DBOS')).toBeInTheDocument();
+  expect(getByText('Histórico de SQL')).toBeInTheDocument();
 });

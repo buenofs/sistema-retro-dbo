@@ -7,10 +7,11 @@ export type TipoApp =
   | 'explorador'
   | 'grade'
   | 'propriedades'
-  | 'busca'
-  | 'relacionamentos'
   | 'terminal'
-  | 'relatorio';
+  | 'arquivos'
+  | 'bloco'
+  | 'lixeira'
+  | 'monitor';
 export type EstadoVisual = 'normal' | 'minimizada' | 'maximizada';
 
 export interface Retangulo {

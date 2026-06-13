@@ -1,105 +1,198 @@
-import type { FiltrosBusca, Funcionario, ResultadoConsulta } from '@dbos/shared';
+export interface ItemTerminal {
+  id: number;
+  nome: string;
+  tipo: 'pasta' | 'arquivo';
+}
 
+// Interface desacoplada do React — o Terminal injeta a implementação real.
 export interface ContextoTerminal {
-  consultar: (sql: string) => Promise<ResultadoConsulta>;
-  buscar: (filtros: FiltrosBusca) => Promise<Funcionario[]>;
-  abrirApp: (tipo: 'relacionamentos' | 'consulta', dados?: unknown) => void;
+  letra: string;
+  listar: (paiId: number | null) => Promise<ItemTerminal[]>;
+  criarPasta: (nome: string, paiId: number | null) => Promise<void>;
+  criarArquivo: (nome: string, paiId: number | null, conteudo: string) => Promise<void>;
+  renomear: (id: number, nome: string) => Promise<void>;
+  mover: (id: number, paiId: number | null) => Promise<void>;
+  copiar: (id: number, paiId: number | null) => Promise<void>;
+  apagar: (id: number) => Promise<void>;
+  restaurar: (id: number) => Promise<void>;
+  esvaziar: () => Promise<void>;
+  lerConteudo: (id: number) => Promise<string>;
+  salvarConteudo: (id: number, conteudo: string) => Promise<void>;
+  listarLixeira: () => Promise<ItemTerminal[]>;
   limpar: () => void;
 }
 
-// Aliases pt-BR → objetos reais (whitelist; nenhum texto livre entra no SQL).
-const TABELAS: Record<string, string> = {
-  funcionarios: 'Funcionarios',
-  departamentos: 'Departamentos',
-  projetos: 'Projetos',
-  folha: 'FolhaPagamento',
-};
-const VIEWS: Record<string, string> = {
-  anomalias_folha: 'vw_AnomaliasFolha',
-  folha_resumo: 'vw_FolhaResumo',
-};
-const OPERADORES: Record<string, FiltrosBusca['salarioOp']> = { '>': 'gt', '<': 'lt', '=': 'eq' };
+interface Nivel {
+  id: number | null;
+  nome: string;
+}
 
 const AJUDA = [
   'Comandos disponíveis:',
-  '  ajuda                        mostra esta ajuda',
-  '  limpar                       limpa a tela',
-  '  listar <tabela>              funcionarios | departamentos | projetos | folha',
-  '  buscar <campo> <op> <valor>  ex.: buscar salario > 10000',
-  '  mostrar <view>               anomalias_folha | folha_resumo',
-  '  abrir <nome>.func            abre os relacionamentos do funcionario',
-  '  sql                          abre o Editor de Consultas',
+  '  ajuda | help               mostra esta ajuda',
+  '  limpar | cls               limpa a tela',
+  '  ls | dir                   lista a pasta atual',
+  '  cd <pasta> | cd ..         navega entre pastas',
+  '  mkdir <nome>               cria pasta',
+  '  touch <nome>               cria arquivo vazio',
+  '  ren <nome> <novo>          renomeia',
+  '  mv <nome> <pasta>          move (use .. para subir)',
+  '  cp <nome> <pasta>          copia',
+  '  rm <nome>                  manda para a Lixeira',
+  '  cat <arquivo>              mostra o conteúdo',
+  '  echo <texto> > <arquivo>   grava conteúdo',
+  '  lixeira                    lista a Lixeira',
+  '  restaurar <id>             restaura item da Lixeira',
+  '  empty                      esvazia a Lixeira',
 ];
 
-function tabelaTexto(r: ResultadoConsulta): string[] {
-  if (r.colunas.length === 0) return [`(${r.linhasAfetadas} linha(s) afetada(s))`];
-  const linhas = [r.colunas.join(' | ')];
-  for (const linha of r.linhas) {
-    linhas.push(linha.map((v) => (v === null || v === undefined ? 'NULL' : String(v))).join(' | '));
-  }
-  if (r.truncado) linhas.push(`... (${r.totalLinhas} linhas no total)`);
-  return linhas;
-}
+export function criarShell(ctx: ContextoTerminal) {
+  const pilha: Nivel[] = [{ id: null, nome: '' }];
+  const atual = () => pilha[pilha.length - 1]!;
 
-function funcionariosTexto(fs: Funcionario[]): string[] {
-  if (fs.length === 0) return ['(nenhum funcionario encontrado)'];
-  return fs.map((f) => `${f.id}  ${f.nome}  ${f.cargo ?? ''}  ${f.salario}  ${f.departamento ?? ''}`);
-}
-
-export async function executarComando(linha: string, ctx: ContextoTerminal): Promise<string[]> {
-  const partes = linha.trim().split(/\s+/);
-  const cmd = (partes[0] ?? '').toLowerCase();
-  if (cmd === '') return [];
-
-  if (cmd === 'ajuda') return AJUDA;
-  if (cmd === 'limpar') {
-    ctx.limpar();
-    return [];
-  }
-  if (cmd === 'sql') {
-    ctx.abrirApp('consulta');
-    return ['Abrindo o Editor de Consultas...'];
+  function prompt(): string {
+    return `${ctx.letra}:\\` + pilha.slice(1).map((n) => n.nome).join('\\') + '>';
   }
 
-  if (cmd === 'listar') {
-    const alvo = (partes[1] ?? '').toLowerCase();
-    const tabela = TABELAS[alvo];
-    if (!tabela) return [`Tabela desconhecida: ${alvo || '(vazio)'}. Tente: ${Object.keys(TABELAS).join(', ')}.`];
-    return tabelaTexto(await ctx.consultar(`SELECT * FROM dbo.${tabela}`));
+  async function acharNaPasta(nome: string): Promise<ItemTerminal | undefined> {
+    const itens = await ctx.listar(atual().id);
+    return itens.find((i) => i.nome.toLowerCase() === nome.toLowerCase());
   }
 
-  if (cmd === 'mostrar') {
-    const alvo = (partes[1] ?? '').toLowerCase();
-    const view = VIEWS[alvo];
-    if (!view) return [`View desconhecida: ${alvo || '(vazio)'}. Tente: ${Object.keys(VIEWS).join(', ')}.`];
-    return tabelaTexto(await ctx.consultar(`SELECT * FROM dbo.${view}`));
-  }
+  async function executar(linha: string): Promise<string[]> {
+    const partes = linha.trim().split(/\s+/);
+    const cmd = (partes[0] ?? '').toLowerCase();
+    if (cmd === '') return [];
 
-  if (cmd === 'buscar') {
-    const campo = (partes[1] ?? '').toLowerCase();
-    const op = partes[2] ?? '';
-    const valor = partes.slice(3).join(' ');
-    const filtros: FiltrosBusca = {};
-    if (campo === 'salario' && OPERADORES[op] && valor) {
-      filtros.salarioOp = OPERADORES[op];
-      filtros.salario = Number(valor);
-    } else if (campo === 'nome' && op === '=' && valor) {
-      filtros.nome = valor;
-    } else {
-      return ['Uso: buscar salario > 10000   |   buscar nome = Maria'];
+    switch (cmd) {
+      case 'ajuda':
+      case 'help':
+        return AJUDA;
+
+      case 'limpar':
+      case 'cls':
+        ctx.limpar();
+        return [];
+
+      case 'ls':
+      case 'dir': {
+        const itens = await ctx.listar(atual().id);
+        if (!itens.length) return ['(pasta vazia)'];
+        return itens.map((i) => `${i.tipo === 'pasta' ? '<DIR>' : '     '}  ${i.nome}`);
+      }
+
+      case 'cd': {
+        const alvo = partes[1] ?? '';
+        if (alvo === '..') {
+          if (pilha.length > 1) pilha.pop();
+          return [];
+        }
+        if (alvo === '\\' || alvo === '/') {
+          pilha.splice(1);
+          return [];
+        }
+        if (!alvo) return [];
+        const it = await acharNaPasta(alvo);
+        if (!it || it.tipo !== 'pasta') return [`Pasta não encontrada: ${alvo}`];
+        pilha.push({ id: it.id, nome: it.nome });
+        return [];
+      }
+
+      case 'mkdir':
+      case 'md': {
+        const nome = partes.slice(1).join(' ');
+        if (!nome) return ['Uso: mkdir <nome>'];
+        await ctx.criarPasta(nome, atual().id);
+        return [`Pasta criada: ${nome}`];
+      }
+
+      case 'touch': {
+        const nome = partes.slice(1).join(' ');
+        if (!nome) return ['Uso: touch <nome>'];
+        await ctx.criarArquivo(nome, atual().id, '');
+        return [`Arquivo criado: ${nome}`];
+      }
+
+      case 'ren': {
+        const origem = partes[1];
+        const novo = partes.slice(2).join(' ');
+        if (!origem || !novo) return ['Uso: ren <nome> <novo>'];
+        const it = await acharNaPasta(origem);
+        if (!it) return [`Não encontrado: ${origem}`];
+        await ctx.renomear(it.id, novo);
+        return [`Renomeado para ${novo}`];
+      }
+
+      case 'rm':
+      case 'del': {
+        const nome = partes.slice(1).join(' ');
+        if (!nome) return ['Uso: rm <nome>'];
+        const it = await acharNaPasta(nome);
+        if (!it) return [`Não encontrado: ${nome}`];
+        await ctx.apagar(it.id);
+        return [`Movido para a Lixeira: ${nome}`];
+      }
+
+      case 'mv':
+      case 'cp': {
+        const origem = partes[1];
+        const destino = partes[2];
+        if (!origem || !destino) return [`Uso: ${cmd} <nome> <pasta>`];
+        const it = await acharNaPasta(origem);
+        if (!it) return [`Não encontrado: ${origem}`];
+        let destId: number | null;
+        if (destino === '..') {
+          destId = pilha.length > 1 ? pilha[pilha.length - 2]!.id : null;
+        } else {
+          const dpasta = await acharNaPasta(destino);
+          if (!dpasta || dpasta.tipo !== 'pasta') return [`Pasta destino inválida: ${destino}`];
+          destId = dpasta.id;
+        }
+        if (cmd === 'mv') await ctx.mover(it.id, destId);
+        else await ctx.copiar(it.id, destId);
+        return [`${cmd === 'mv' ? 'Movido' : 'Copiado'}: ${origem} -> ${destino}`];
+      }
+
+      case 'cat': {
+        const nome = partes.slice(1).join(' ');
+        const it = await acharNaPasta(nome);
+        if (!it || it.tipo !== 'arquivo') return [`Arquivo não encontrado: ${nome}`];
+        return (await ctx.lerConteudo(it.id)).split('\n');
+      }
+
+      case 'echo': {
+        const m = linha.match(/^echo\s+(.*?)\s*>\s*(\S+)\s*$/i);
+        if (!m) return ['Uso: echo <texto> > <arquivo>'];
+        const texto = m[1] ?? '';
+        const nome = m[2]!;
+        const it = await acharNaPasta(nome);
+        if (it) await ctx.salvarConteudo(it.id, texto);
+        else await ctx.criarArquivo(nome, atual().id, texto);
+        return [`Gravado em ${nome}`];
+      }
+
+      case 'lixeira': {
+        const itens = await ctx.listarLixeira();
+        if (!itens.length) return ['(lixeira vazia)'];
+        return itens.map((i) => `${i.id}  ${i.nome}`);
+      }
+
+      case 'restaurar': {
+        const id = Number(partes[1]);
+        if (!id) return ['Uso: restaurar <id>  (veja "lixeira")'];
+        await ctx.restaurar(id);
+        return [`Restaurado: ${id}`];
+      }
+
+      case 'empty': {
+        await ctx.esvaziar();
+        return ['Lixeira esvaziada.'];
+      }
+
+      default:
+        return [`Comando inválido: ${cmd}. Digite "ajuda".`];
     }
-    return funcionariosTexto(await ctx.buscar(filtros));
   }
 
-  if (cmd === 'abrir') {
-    const nome = (partes[1] ?? '').replace(/\.func$/i, '');
-    if (!nome) return ['Uso: abrir <nome>.func'];
-    const achados = await ctx.buscar({ nome });
-    const f = achados[0];
-    if (!f) return [`Funcionario nao encontrado: ${nome}`];
-    ctx.abrirApp('relacionamentos', { tipo: 'funcionario', id: f.id });
-    return [`Abrindo relacionamentos de ${f.nome}...`];
-  }
-
-  return [`Comando ou nome invalido: ${cmd}. Digite "ajuda".`];
+  return { executar, prompt };
 }

@@ -3,16 +3,17 @@ import type { DefinicaoApp, TipoApp } from './tipos';
 import { ExploradorObjetos } from '../aplicativos/explorador/ExploradorObjetos';
 import { GradeDados } from '../aplicativos/grade/GradeDados';
 import { PropriedadesObjeto } from '../aplicativos/propriedades/PropriedadesObjeto';
-import { Busca } from '../aplicativos/busca/Busca';
-import { Relacionamentos } from '../aplicativos/relacionamentos/Relacionamentos';
 import { Terminal } from '../aplicativos/terminal/Terminal';
+import { MonitorSQL } from '../aplicativos/monitor/MonitorSQL';
+import { ExploradorArquivos } from '../aplicativos/arquivos/ExploradorArquivos';
+import { Lixeira } from '../aplicativos/lixeira/Lixeira';
 
 const EditorConsultas = lazy(() =>
   import('../aplicativos/consulta/EditorConsultas').then((m) => ({ default: m.EditorConsultas })),
 );
 
-const RelatorioFolha = lazy(() =>
-  import('../aplicativos/folha/RelatorioFolha').then((m) => ({ default: m.RelatorioFolha })),
+const BlocoNotas = lazy(() =>
+  import('../aplicativos/bloco/BlocoNotas').then((m) => ({ default: m.BlocoNotas })),
 );
 
 // O WM é genérico: cada tipoApp mapeia para metadados + um componente.
@@ -32,7 +33,7 @@ export const registroApps: Record<TipoApp, DefinicaoApp> = {
   },
   grade: {
     titulo: 'Grade de Dados',
-    icone: 'grid',
+    icone: 'database',
     tamanhoInicial: { largura: 640, altura: 440 },
     componente: GradeDados,
   },
@@ -42,40 +43,46 @@ export const registroApps: Record<TipoApp, DefinicaoApp> = {
     tamanhoInicial: { largura: 360, altura: 380 },
     componente: PropriedadesObjeto,
   },
-  busca: {
-    titulo: 'Buscar',
-    icone: 'search',
-    tamanhoInicial: { largura: 600, altura: 440 },
-    componente: Busca,
-  },
-  relacionamentos: {
-    titulo: 'Relacionamentos',
-    icone: 'network',
-    tamanhoInicial: { largura: 660, altura: 480 },
-    componente: Relacionamentos,
-  },
   terminal: {
     titulo: 'Terminal',
     icone: 'terminal',
     tamanhoInicial: { largura: 600, altura: 380 },
     componente: Terminal,
   },
-  relatorio: {
-    titulo: 'Relatório (Folha)',
-    icone: 'report',
-    tamanhoInicial: { largura: 600, altura: 480 },
-    componente: RelatorioFolha,
+  monitor: {
+    titulo: 'Histórico de SQL',
+    icone: 'clock',
+    tamanhoInicial: { largura: 620, altura: 420 },
+    componente: MonitorSQL,
+  },
+  arquivos: {
+    titulo: 'Explorador de Arquivos',
+    icone: 'folder',
+    tamanhoInicial: { largura: 640, altura: 420 },
+    componente: ExploradorArquivos,
+  },
+  bloco: {
+    titulo: 'Bloco de Notas',
+    icone: 'newdoc',
+    tamanhoInicial: { largura: 500, altura: 380 },
+    componente: BlocoNotas,
+  },
+  lixeira: {
+    titulo: 'Lixeira',
+    icone: 'trash',
+    tamanhoInicial: { largura: 420, altura: 320 },
+    componente: Lixeira,
   },
 };
 
 // Ordem fixa em que os apps aparecem nos atalhos e no menu Iniciar.
 export const ORDEM_APPS: TipoApp[] = [
+  'arquivos',
   'explorador',
-  'busca',
   'consulta',
   'grade',
   'propriedades',
-  'relacionamentos',
   'terminal',
-  'relatorio',
+  'monitor',
+  'lixeira',
 ];
