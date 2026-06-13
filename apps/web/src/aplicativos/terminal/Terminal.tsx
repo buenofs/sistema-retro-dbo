@@ -1,16 +1,26 @@
-import { useEffect, useRef, useState, type KeyboardEvent } from 'react';
-import type { FiltrosBusca, Funcionario, ResultadoConsulta } from '@dbos/shared';
-import { useLoja } from '../../areaTrabalho/loja';
+import { useEffect, useMemo, useRef, useState, type KeyboardEvent } from 'react';
+import type { ComandoSQL, Drive, Item } from '@dbos/shared';
 import { requisitar } from '../../api/cliente';
-import { executarComando, type ContextoTerminal } from './comandos';
+import { useContextoArquivos } from '../arquivos/contexto';
+import { criarShell, type ContextoTerminal, type ItemTerminal } from './comandos';
 import './terminal.css';
 
-const PROMPT = 'C:\\DBOS>';
+type Env<T> = { dados: T; sql: ComandoSQL[] };
+
+async function api<T>(caminho: string, method?: string, corpo?: unknown): Promise<Env<T>> {
+  const r = await requisitar<Env<T>>(
+    caminho,
+    method ? { method, body: corpo === undefined ? undefined : JSON.stringify(corpo) } : {},
+  );
+  if (!r.ok) throw new Error(r.erro.mensagem);
+  return r.dados;
+}
 
 export function Terminal() {
-  const abrirJanela = useLoja((s) => s.abrirJanela);
+  const driveId = useContextoArquivos((s) => s.driveId);
+  const [letra, setLetra] = useState('C');
   const [linhas, setLinhas] = useState<string[]>([
-    'DBOS [Versão 1.0]',
+    'DBOS [Versão 2.0]',
     'Digite "ajuda" para ver os comandos.',
     '',
   ]);
@@ -20,48 +30,61 @@ export function Terminal() {
   const fimRef = useRef<HTMLDivElement>(null);
   const entradaRef = useRef<HTMLInputElement>(null);
 
-  // Foca o input ao abrir o terminal.
+  // Descobre a letra do drive atual (para o prompt).
   useEffect(() => {
-    entradaRef.current?.focus();
-  }, []);
+    let vivo = true;
+    api<Drive[]>('/api/arquivos/drives').then((e) => {
+      const d = e.dados.find((x) => x.id === driveId);
+      if (vivo && d) setLetra(d.letra);
+    }).catch(() => {});
+    return () => { vivo = false; };
+  }, [driveId]);
 
-  // Clicar em qualquer lugar do terminal foca o input (a não ser que haja
-  // texto selecionado — para permitir copiar a saída).
+  const ctx: ContextoTerminal = useMemo(() => ({
+    letra,
+    listar: async (paiId) => {
+      const q = new URLSearchParams({ driveId: String(driveId) });
+      if (paiId !== null) q.set('paiId', String(paiId));
+      const e = await api<Item[]>(`/api/arquivos/listar?${q.toString()}`);
+      return e.dados.map((i): ItemTerminal => ({ id: i.id, nome: i.nome, tipo: i.tipo }));
+    },
+    criarPasta: async (nome, paiId) => { await api('/api/arquivos/pasta', 'POST', { nome, paiId, driveId }); },
+    criarArquivo: async (nome, paiId, conteudo) => { await api('/api/arquivos/arquivo', 'POST', { nome, paiId, driveId, conteudo }); },
+    renomear: async (id, nome) => { await api(`/api/arquivos/${id}/renomear`, 'PUT', { nome }); },
+    mover: async (id, paiId) => { await api(`/api/arquivos/${id}/mover`, 'PUT', { paiId }); },
+    copiar: async (id, paiId) => { await api(`/api/arquivos/${id}/copiar`, 'POST', { paiId }); },
+    apagar: async (id) => { await api(`/api/arquivos/${id}`, 'DELETE'); },
+    restaurar: async (id) => { await api(`/api/arquivos/${id}/restaurar`, 'PUT'); },
+    esvaziar: async () => { await api('/api/arquivos/lixeira', 'DELETE'); },
+    lerConteudo: async (id) => (await api<{ conteudo: string }>(`/api/arquivos/${id}`)).dados.conteudo,
+    salvarConteudo: async (id, conteudo) => { await api(`/api/arquivos/${id}/conteudo`, 'PUT', { conteudo }); },
+    listarLixeira: async () => {
+      const e = await api<Item[]>('/api/arquivos/lixeira');
+      return e.dados.map((i): ItemTerminal => ({ id: i.id, nome: i.nome, tipo: i.tipo }));
+    },
+    limpar: () => setLinhas([]),
+  }), [letra, driveId]);
+
+  // Shell estável por (driveId, letra): preserva o diretório atual entre comandos.
+  const shellRef = useRef(criarShell(ctx));
+  useEffect(() => { shellRef.current = criarShell(ctx); }, [ctx]);
+
+  useEffect(() => { entradaRef.current?.focus(); }, []);
+
   function focarEntrada() {
     if (window.getSelection()?.toString()) return;
     entradaRef.current?.focus();
   }
 
-  const ctx: ContextoTerminal = {
-    consultar: async (sql) => {
-      const r = await requisitar<ResultadoConsulta>('/api/consulta', {
-        method: 'POST',
-        body: JSON.stringify({ sql }),
-      });
-      if (!r.ok) throw new Error(r.erro.mensagem);
-      return r.dados;
-    },
-    buscar: async (filtros: FiltrosBusca) => {
-      const params = new URLSearchParams();
-      for (const [chave, valor] of Object.entries(filtros)) {
-        if (valor !== undefined && valor !== null && valor !== '') params.set(chave, String(valor));
-      }
-      const r = await requisitar<Funcionario[]>(`/api/busca/funcionarios?${params.toString()}`);
-      if (!r.ok) throw new Error(r.erro.mensagem);
-      return r.dados;
-    },
-    abrirApp: (tipo, dados) => abrirJanela(tipo, dados),
-    limpar: () => setLinhas([]),
-  };
-
   async function submeter() {
     const texto = entrada;
-    setLinhas((l) => [...l, `${PROMPT} ${texto}`]);
+    const prompt = shellRef.current.prompt();
+    setLinhas((l) => [...l, `${prompt} ${texto}`]);
     setEntrada('');
     if (texto.trim()) setHistorico((h) => [...h, texto]);
     setIndice(-1);
     try {
-      const saida = await executarComando(texto, ctx);
+      const saida = await shellRef.current.executar(texto);
       if (saida.length) setLinhas((l) => [...l, ...saida, '']);
     } catch (e) {
       setLinhas((l) => [...l, `Erro: ${e instanceof Error ? e.message : String(e)}`, '']);
@@ -97,12 +120,10 @@ export function Terminal() {
     <div className="terminal" onClick={focarEntrada}>
       <div className="terminal-saida">
         {linhas.map((l, i) => (
-          <div key={i} className="terminal-linha">
-            {l}
-          </div>
+          <div key={i} className="terminal-linha">{l}</div>
         ))}
         <div className="terminal-prompt">
-          <span className="terminal-ps">{PROMPT}</span>
+          <span className="terminal-ps">{shellRef.current.prompt()}</span>
           <input
             ref={entradaRef}
             className="terminal-input"
