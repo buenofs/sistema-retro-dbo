@@ -3,8 +3,6 @@ import type { DefinicaoApp, TipoApp } from './tipos';
 import { ExploradorObjetos } from '../aplicativos/explorador/ExploradorObjetos';
 import { GradeDados } from '../aplicativos/grade/GradeDados';
 import { PropriedadesObjeto } from '../aplicativos/propriedades/PropriedadesObjeto';
-import { Busca } from '../aplicativos/busca/Busca';
-import { Relacionamentos } from '../aplicativos/relacionamentos/Relacionamentos';
 import { Terminal } from '../aplicativos/terminal/Terminal';
 import { MonitorSQL } from '../aplicativos/monitor/MonitorSQL';
 import { ExploradorArquivos } from '../aplicativos/arquivos/ExploradorArquivos';
@@ -12,10 +10,6 @@ import { Lixeira } from '../aplicativos/lixeira/Lixeira';
 
 const EditorConsultas = lazy(() =>
   import('../aplicativos/consulta/EditorConsultas').then((m) => ({ default: m.EditorConsultas })),
-);
-
-const RelatorioFolha = lazy(() =>
-  import('../aplicativos/folha/RelatorioFolha').then((m) => ({ default: m.RelatorioFolha })),
 );
 
 const BlocoNotas = lazy(() =>
@@ -49,18 +43,6 @@ export const registroApps: Record<TipoApp, DefinicaoApp> = {
     tamanhoInicial: { largura: 360, altura: 380 },
     componente: PropriedadesObjeto,
   },
-  busca: {
-    titulo: 'Buscar',
-    icone: 'search',
-    tamanhoInicial: { largura: 600, altura: 440 },
-    componente: Busca,
-  },
-  relacionamentos: {
-    titulo: 'Relacionamentos',
-    icone: 'network',
-    tamanhoInicial: { largura: 660, altura: 480 },
-    componente: Relacionamentos,
-  },
   terminal: {
     titulo: 'Terminal',
     icone: 'terminal',
@@ -72,12 +54,6 @@ export const registroApps: Record<TipoApp, DefinicaoApp> = {
     icone: 'report',
     tamanhoInicial: { largura: 620, altura: 420 },
     componente: MonitorSQL,
-  },
-  relatorio: {
-    titulo: 'Relatório (Folha)',
-    icone: 'report',
-    tamanhoInicial: { largura: 600, altura: 480 },
-    componente: RelatorioFolha,
   },
   arquivos: {
     titulo: 'Explorador de Arquivos',
@@ -103,13 +79,10 @@ export const registroApps: Record<TipoApp, DefinicaoApp> = {
 export const ORDEM_APPS: TipoApp[] = [
   'arquivos',
   'explorador',
-  'busca',
   'consulta',
   'grade',
   'propriedades',
-  'relacionamentos',
   'terminal',
   'monitor',
-  'relatorio',
   'lixeira',
 ];

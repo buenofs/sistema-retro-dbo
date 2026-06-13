@@ -1,0 +1,15 @@
+@dbos/server dev: warn: File C:\dev\sistema-retro-dbo\packages\shared\src\index.ts is not in the project directory and will not be watched
+@dbos/server dev: warn: File C:\dev\sistema-retro-dbo\packages\shared\src\folha.ts is not in the project directory and will not be watched
+@dbos/server dev: warn: File C:\dev\sistema-retro-dbo\packages\shared\src\grade.ts is not in the project directory and will not be watched
+@dbos/server dev: warn: File C:\dev\sistema-retro-dbo\packages\shared\src\relacionamentos.ts is not in the project directory and will not be watched
+@dbos/server dev: warn: File C:\dev\sistema-retro-dbo\packages\shared\src\respostas.ts is not in the project directory and will not be watched
+@dbos/server dev: warn: File C:\dev\sistema-retro-dbo\packages\shared\src\credenciais.ts is not in the project directory and will not be watched
+@dbos/server dev: warn: File C:\dev\sistema-retro-dbo\packages\shared\src\propriedades.ts is not in the project directory and will not be watched
+@dbos/server dev: warn: File C:\dev\sistema-retro-dbo\packages\shared\src\busca.ts is not in the project directory and will not be watched
+@dbos/server dev: warn: File C:\dev\sistema-retro-dbo\packages\shared\src\consulta.ts is not in the project directory and will not be watched
+@dbos/server dev: warn: File C:\dev\sistema-retro-dbo\packages\shared\src\dominio.ts is not in the project directory and will not be watched
+@dbos/server dev: warn: File C:\dev\sistema-retro-dbo\packages\shared\src\sessao.ts is not in the project directory and will not be watched
+@dbos/server dev: warn: File C:\dev\sistema-retro-dbo\packages\shared\src\explorador.ts is not in the project directory and will not be watched
+@dbos/server dev: warn: File C:\dev\sistema-retro-dbo\packages\shared\src\arquivos.ts is not in the project directory and will not be watched
+@dbos/server dev: Servidor DBOS ouvindo na porta 3001
+@dbos/server dev: Exited with code 255
