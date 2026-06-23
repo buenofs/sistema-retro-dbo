@@ -7,7 +7,7 @@ import type { GerenciadorPools } from '../bd/gerenciadorPools';
 import { criarAutenticar } from '../plugins/sessao';
 import { RegistradorSQL } from '../bd/registradorSQL';
 import {
-  listarDrives, usoPorDrive, listarConteudo, arvoreDoDrive, listarLixeira, lerItem,
+  listarDrives, usoPorDrive, listarConteudo, listarLixeira, lerItem,
   criarItem, renomear, salvarConteudo, mover, enviarParaLixeira, restaurar,
   esvaziarLixeira, copiar,
 } from '../bd/consultasArquivos';
@@ -63,14 +63,6 @@ export function registrarRotasArquivos(app: FastifyInstance, gerenciador: Gerenc
     if (!a.success) return erroValidacao(reply, 'Parâmetros inválidos.');
     const reg = new RegistradorSQL('Listar pasta');
     const dados = await listarConteudo(req.sessao!.pool, reg, a.data.driveId, a.data.paiId ?? null);
-    return { ok: true, dados: { dados, sql: reg.comandos } };
-  });
-
-  app.get('/api/arquivos/arvore', { preHandler: autenticar }, async (req, reply) => {
-    const driveId = Number((req.query as { driveId?: string }).driveId);
-    if (!Number.isInteger(driveId) || driveId <= 0) return erroValidacao(reply, 'driveId inválido.');
-    const reg = new RegistradorSQL('Árvore do drive');
-    const dados = await arvoreDoDrive(req.sessao!.pool, reg, driveId);
     return { ok: true, dados: { dados, sql: reg.comandos } };
   });
 

@@ -1,7 +1,7 @@
 import type { ConnectionPool } from 'mssql';
-import type { Drive, Item, ItemArvore, UsoDrive } from '@dbos/shared';
+import type { Drive, Item, UsoDrive } from '@dbos/shared';
 import { RegistradorSQL } from './registradorSQL';
-import { ordemDeInsercao, type NoCopia } from './copiaArvore';
+import { subarvore, criaCiclo } from './arvore';
 
 const SEL_ITEM =
   'id, nome, tipo, paiId, driveId, donoId, CAST(tamanhoBytes AS BIGINT) AS tamanhoBytes, ' +
@@ -32,15 +32,6 @@ export async function listarConteudo(
     params,
   );
   return r as unknown as Item[];
-}
-
-export async function arvoreDoDrive(pool: ConnectionPool, reg: RegistradorSQL, driveId: number): Promise<ItemArvore[]> {
-  const r = await reg.executar<ItemArvore>(
-    pool,
-    'SELECT id, nome, tipo, paiId, driveId, caminho, profundidade FROM dbo.vw_ArvoreItens WHERE driveId = @drive AND naLixeira = 0 ORDER BY caminho',
-    { drive: driveId },
-  );
-  return r as unknown as ItemArvore[];
 }
 
 export async function listarLixeira(pool: ConnectionPool, reg: RegistradorSQL): Promise<Item[]> {
@@ -94,31 +85,31 @@ export async function salvarConteudo(pool: ConnectionPool, reg: RegistradorSQL, 
   await reg.executar(pool, 'UPDATE dbo.Itens SET conteudo = @conteudo, modificadoEm = SYSDATETIME() WHERE id = @id', { conteudo, id });
 }
 
-// Retorna true se `destino` está dentro da subárvore de `id` (ou é o próprio id).
-async function criaCiclo(pool: ConnectionPool, reg: RegistradorSQL, id: number, destino: number | null): Promise<boolean> {
-  if (destino === null) return false;
-  if (destino === id) return true;
-  const r = await reg.executar<{ ciclo: number }>(
-    pool,
-    'WITH sub AS (SELECT id FROM dbo.Itens WHERE id = @id UNION ALL SELECT i.id FROM dbo.Itens i JOIN sub ON i.paiId = sub.id) SELECT CASE WHEN @destino IN (SELECT id FROM sub) THEN 1 ELSE 0 END AS ciclo',
-    { id, destino },
-  );
-  return (r as unknown as { ciclo: number }[])[0]?.ciclo === 1;
+// Lê (id, paiId) de todos os itens — base para percorrer a árvore em memória.
+// Os dados do banco são acíclicos (a FK paiId + a checagem de ciclo garantem isso),
+// então os laços sobre essa lista sempre terminam.
+async function lerArvore(pool: ConnectionPool, reg: RegistradorSQL): Promise<{ id: number; paiId: number | null }[]> {
+  const r = await reg.executar<{ id: number; paiId: number | null }>(pool, 'SELECT id, paiId FROM dbo.Itens');
+  return r as unknown as { id: number; paiId: number | null }[];
 }
 
 export async function mover(pool: ConnectionPool, reg: RegistradorSQL, id: number, paiId: number | null): Promise<void> {
-  if (await criaCiclo(pool, reg, id, paiId)) throw new Error('MovimentoCiclico');
+  const itens = await lerArvore(pool, reg);
+  if (criaCiclo(itens, id, paiId)) throw new Error('MovimentoCiclico');
   await validarPai(pool, reg, paiId);
   await reg.executar(pool, 'UPDATE dbo.Itens SET paiId = @pai, modificadoEm = SYSDATETIME() WHERE id = @id', { pai: paiId, id });
 }
 
-// Soft-delete (=1) ou restauração (=0) da subárvore inteira.
+// Soft-delete (=1) ou restauração (=0) da subárvore inteira. A subárvore é
+// coletada em memória (subarvore) e marcada com um único UPDATE ... WHERE id IN (...).
 async function marcarLixeira(pool: ConnectionPool, reg: RegistradorSQL, id: number, valor: 0 | 1): Promise<void> {
-  await reg.executar(
-    pool,
-    'WITH sub AS (SELECT id FROM dbo.Itens WHERE id = @id UNION ALL SELECT i.id FROM dbo.Itens i JOIN sub ON i.paiId = sub.id) UPDATE dbo.Itens SET naLixeira = @valor WHERE id IN (SELECT id FROM sub)',
-    { id, valor },
-  );
+  const itens = await lerArvore(pool, reg);
+  const ids = subarvore(itens, id).map((n) => n.id);
+  if (ids.length === 0) return;
+  const lugares = ids.map((_, k) => `@i${k}`).join(', ');
+  const params: Record<string, unknown> = { valor };
+  ids.forEach((v, k) => { params[`i${k}`] = v; });
+  await reg.executar(pool, `UPDATE dbo.Itens SET naLixeira = @valor WHERE id IN (${lugares})`, params);
 }
 
 export const enviarParaLixeira = (pool: ConnectionPool, reg: RegistradorSQL, id: number) => marcarLixeira(pool, reg, id, 1);
@@ -133,16 +124,26 @@ export async function esvaziarLixeira(pool: ConnectionPool, reg: RegistradorSQL)
 
 // Copia um item (e a subárvore, se pasta) para dentro de `destino`.
 export async function copiar(pool: ConnectionPool, reg: RegistradorSQL, id: number, destino: number | null, donoId: number): Promise<void> {
-  if (await criaCiclo(pool, reg, id, destino)) throw new Error('MovimentoCiclico');
+  const itens = await lerArvore(pool, reg);
+  if (criaCiclo(itens, id, destino)) throw new Error('MovimentoCiclico');
   await validarPai(pool, reg, destino);
 
-  const subR = await reg.executar<NoCopia & { nome: string; tipo: 'pasta' | 'arquivo'; conteudo: string | null; driveId: number }>(
+  // Ids da subárvore, já em ordem de pais-antes-dos-filhos.
+  const idsSub = subarvore(itens, id).map((n) => n.id);
+  const lugares = idsSub.map((_, k) => `@i${k}`).join(', ');
+  const paramsSub: Record<string, unknown> = {};
+  idsSub.forEach((v, k) => { paramsSub[`i${k}`] = v; });
+
+  const linhas = (await reg.executar<{ id: number; paiId: number | null; nome: string; tipo: 'pasta' | 'arquivo'; conteudo: string | null; driveId: number }>(
     pool,
-    'WITH sub AS (SELECT id, paiId, 0 AS profundidade FROM dbo.Itens WHERE id = @id UNION ALL SELECT i.id, i.paiId, s.profundidade + 1 FROM dbo.Itens i JOIN sub s ON i.paiId = s.id) ' +
-      'SELECT i.id, i.paiId, s.profundidade, i.nome, i.tipo, i.conteudo, i.driveId FROM dbo.Itens i JOIN sub s ON s.id = i.id',
-    { id },
-  );
-  const nos = ordemDeInsercao(subR as unknown as (NoCopia & { nome: string; tipo: 'pasta' | 'arquivo'; conteudo: string | null; driveId: number })[]);
+    `SELECT id, paiId, nome, tipo, conteudo, driveId FROM dbo.Itens WHERE id IN (${lugares})`,
+    paramsSub,
+  )) as unknown as { id: number; paiId: number | null; nome: string; tipo: 'pasta' | 'arquivo'; conteudo: string | null; driveId: number }[];
+
+  // Reordena os dados completos conforme a ordem da subárvore.
+  const porId = new Map(linhas.map((l) => [l.id, l]));
+  const nos = idsSub.map((i) => porId.get(i)!);
+
   const driveDestino = destino === null
     ? nos[0]!.driveId
     : ((await reg.executar<{ driveId: number }>(pool, 'SELECT driveId FROM dbo.Itens WHERE id = @d', { d: destino })) as unknown as { driveId: number }[])[0]!.driveId;
