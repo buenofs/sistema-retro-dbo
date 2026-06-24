@@ -3,10 +3,6 @@ import type { Drive, Item, UsoDrive } from '@dbos/shared';
 import { RegistradorSQL } from './registradorSQL';
 import { subarvore, criaCiclo } from './arvore';
 
-const SEL_ITEM =
-  'id, nome, tipo, paiId, driveId, donoId, CAST(tamanhoBytes AS BIGINT) AS tamanhoBytes, ' +
-  "CONVERT(varchar(33), criadoEm, 126) AS criadoEm, CONVERT(varchar(33), modificadoEm, 126) AS modificadoEm";
-
 export async function listarDrives(pool: ConnectionPool, reg: RegistradorSQL): Promise<Drive[]> {
   const r = await reg.executar<Drive>(pool, 'SELECT id, letra, rotulo, capacidadeBytes FROM dbo.Drives ORDER BY letra');
   return r as unknown as Drive[];
@@ -26,9 +22,10 @@ export async function listarConteudo(
   const filtroPai = paiId === null ? 'paiId IS NULL' : 'paiId = @pai';
   const params: Record<string, unknown> = { drive: driveId };
   if (paiId !== null) params.pai = paiId;
+  // 'pasta' vem depois de 'arquivo' no alfabeto, então tipo DESC deixa as pastas primeiro.
   const r = await reg.executar<Item>(
     pool,
-    `SELECT ${SEL_ITEM} FROM dbo.Itens WHERE driveId = @drive AND ${filtroPai} AND naLixeira = 0 ORDER BY CASE tipo WHEN 'pasta' THEN 0 ELSE 1 END, nome`,
+    `SELECT id, nome, tipo, paiId, driveId, donoId, tamanhoBytes, criadoEm, modificadoEm FROM dbo.Itens WHERE driveId = @drive AND ${filtroPai} AND naLixeira = 0 ORDER BY tipo DESC, nome`,
     params,
   );
   return r as unknown as Item[];
@@ -37,7 +34,7 @@ export async function listarConteudo(
 export async function listarLixeira(pool: ConnectionPool, reg: RegistradorSQL): Promise<Item[]> {
   const r = await reg.executar<Item>(
     pool,
-    'SELECT id, nome, tipo, paiId, driveId, donoId, tamanhoBytes, \'\' AS criadoEm, CONVERT(varchar(33), modificadoEm, 126) AS modificadoEm FROM dbo.vw_Lixeira ORDER BY nome',
+    'SELECT id, nome, tipo, paiId, driveId, donoId, tamanhoBytes, \'\' AS criadoEm, modificadoEm FROM dbo.vw_Lixeira ORDER BY nome',
   );
   return r as unknown as Item[];
 }
