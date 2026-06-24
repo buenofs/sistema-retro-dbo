@@ -1,143 +1,124 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import type { ComandoSQL, Drive, Item, UsoDrive } from '@dbos/shared';
-import { requisitar } from '../../api/cliente';
-import { ErroApiError } from '../consulta/ganchos';
-
-// Envelope da Fase 1: payload + o SQL que rodou.
-export type Envelope<T> = { dados: T; sql: ComandoSQL[] };
-
-async function pegar<T>(caminho: string): Promise<Envelope<T>> {
-  const r = await requisitar<Envelope<T>>(caminho);
-  if (!r.ok) throw new ErroApiError(r.erro);
-  return r.dados;
-}
-
-async function mandar<T>(caminho: string, method: string, corpo?: unknown): Promise<Envelope<T>> {
-  const r = await requisitar<Envelope<T>>(caminho, {
-    method,
-    body: corpo === undefined ? undefined : JSON.stringify(corpo),
-  });
-  if (!r.ok) throw new ErroApiError(r.erro);
-  return r.dados;
-}
+import type { Drive, Item, UsoDrive } from '@dbos/shared';
+import { pegar, mandar, type Envelope } from '../../api/cliente';
 
 export function useDrives() {
   return useQuery({
     queryKey: ['arquivos', 'drives'],
-    queryFn: () => pegar<Drive[]>('/api/arquivos/drives').then((e) => e.dados),
+    queryFn: () => pegar<Envelope<Drive[]>>('/api/arquivos/drives').then((envelope) => envelope.dados),
   });
 }
 
 export function useConteudo(driveId: number, paiId: number | null) {
-  const q = new URLSearchParams({ driveId: String(driveId) });
-  if (paiId !== null) q.set('paiId', String(paiId));
+  const params = new URLSearchParams({ driveId: String(driveId) });
+  if (paiId !== null) params.set('paiId', String(paiId));
   return useQuery({
     queryKey: ['arquivos', 'conteudo', driveId, paiId],
-    queryFn: () => pegar<Item[]>(`/api/arquivos/listar?${q.toString()}`).then((e) => e.dados),
+    queryFn: () => pegar<Envelope<Item[]>>(`/api/arquivos/listar?${params.toString()}`).then((envelope) => envelope.dados),
   });
 }
 
 export function useLixeira() {
   return useQuery({
     queryKey: ['arquivos', 'lixeira'],
-    queryFn: () => pegar<Item[]>('/api/arquivos/lixeira').then((e) => e.dados),
+    queryFn: () => pegar<Envelope<Item[]>>('/api/arquivos/lixeira').then((envelope) => envelope.dados),
   });
 }
 
 export function useUso() {
   return useQuery({
     queryKey: ['arquivos', 'uso'],
-    queryFn: () => pegar<UsoDrive[]>('/api/arquivos/uso').then((e) => e.dados),
+    queryFn: () => pegar<Envelope<UsoDrive[]>>('/api/arquivos/uso').then((envelope) => envelope.dados),
   });
 }
 
 export function useItem(id: number) {
   return useQuery({
     queryKey: ['arquivos', 'item', id],
-    queryFn: () => pegar<{ id: number; nome: string; conteudo: string }>(`/api/arquivos/${id}`).then((e) => e.dados),
+    queryFn: () => pegar<Envelope<{ id: number; nome: string; conteudo: string }>>(`/api/arquivos/${id}`).then((envelope) => envelope.dados),
     enabled: id > 0,
   });
 }
 
 function useInvalidar() {
-  const qc = useQueryClient();
-  return () => qc.invalidateQueries({ queryKey: ['arquivos'] });
+  const clienteQuery = useQueryClient();
+  return () => clienteQuery.invalidateQueries({ queryKey: ['arquivos'] });
 }
 
 export function useCriarPasta() {
-  const inv = useInvalidar();
+  const invalidar = useInvalidar();
   return useMutation({
-    mutationFn: (v: { nome: string; paiId: number | null; driveId: number }) =>
-      mandar<{ id: number }>('/api/arquivos/pasta', 'POST', v),
-    onSuccess: inv,
+    mutationFn: (valores: { nome: string; paiId: number | null; driveId: number }) =>
+      mandar<Envelope<{ id: number }>>('/api/arquivos/pasta', 'POST', valores),
+    onSuccess: invalidar,
   });
 }
 
 export function useCriarArquivo() {
-  const inv = useInvalidar();
+  const invalidar = useInvalidar();
   return useMutation({
-    mutationFn: (v: { nome: string; paiId: number | null; driveId: number; conteudo?: string }) =>
-      mandar<{ id: number }>('/api/arquivos/arquivo', 'POST', v),
-    onSuccess: inv,
+    mutationFn: (valores: { nome: string; paiId: number | null; driveId: number; conteudo?: string }) =>
+      mandar<Envelope<{ id: number }>>('/api/arquivos/arquivo', 'POST', valores),
+    onSuccess: invalidar,
   });
 }
 
 export function useRenomear() {
-  const inv = useInvalidar();
+  const invalidar = useInvalidar();
   return useMutation({
-    mutationFn: (v: { id: number; nome: string }) =>
-      mandar<{ id: number }>(`/api/arquivos/${v.id}/renomear`, 'PUT', { nome: v.nome }),
-    onSuccess: inv,
+    mutationFn: (valores: { id: number; nome: string }) =>
+      mandar<Envelope<{ id: number }>>(`/api/arquivos/${valores.id}/renomear`, 'PUT', { nome: valores.nome }),
+    onSuccess: invalidar,
   });
 }
 
 export function useMover() {
-  const inv = useInvalidar();
+  const invalidar = useInvalidar();
   return useMutation({
-    mutationFn: (v: { id: number; paiId: number | null }) =>
-      mandar<{ id: number }>(`/api/arquivos/${v.id}/mover`, 'PUT', { paiId: v.paiId }),
-    onSuccess: inv,
+    mutationFn: (valores: { id: number; paiId: number | null }) =>
+      mandar<Envelope<{ id: number }>>(`/api/arquivos/${valores.id}/mover`, 'PUT', { paiId: valores.paiId }),
+    onSuccess: invalidar,
   });
 }
 
 export function useCopiar() {
-  const inv = useInvalidar();
+  const invalidar = useInvalidar();
   return useMutation({
-    mutationFn: (v: { id: number; paiId: number | null }) =>
-      mandar<{ id: number }>(`/api/arquivos/${v.id}/copiar`, 'POST', { paiId: v.paiId }),
-    onSuccess: inv,
+    mutationFn: (valores: { id: number; paiId: number | null }) =>
+      mandar<Envelope<{ id: number }>>(`/api/arquivos/${valores.id}/copiar`, 'POST', { paiId: valores.paiId }),
+    onSuccess: invalidar,
   });
 }
 
 export function useApagar() {
-  const inv = useInvalidar();
+  const invalidar = useInvalidar();
   return useMutation({
-    mutationFn: (id: number) => mandar<{ id: number }>(`/api/arquivos/${id}`, 'DELETE'),
-    onSuccess: inv,
+    mutationFn: (id: number) => mandar<Envelope<{ id: number }>>(`/api/arquivos/${id}`, 'DELETE'),
+    onSuccess: invalidar,
   });
 }
 
 export function useRestaurar() {
-  const inv = useInvalidar();
+  const invalidar = useInvalidar();
   return useMutation({
-    mutationFn: (id: number) => mandar<{ id: number }>(`/api/arquivos/${id}/restaurar`, 'PUT'),
-    onSuccess: inv,
+    mutationFn: (id: number) => mandar<Envelope<{ id: number }>>(`/api/arquivos/${id}/restaurar`, 'PUT'),
+    onSuccess: invalidar,
   });
 }
 
 export function useEsvaziarLixeira() {
-  const inv = useInvalidar();
+  const invalidar = useInvalidar();
   return useMutation({
-    mutationFn: () => mandar<Record<string, never>>('/api/arquivos/lixeira', 'DELETE'),
-    onSuccess: inv,
+    mutationFn: () => mandar<Envelope<Record<string, never>>>('/api/arquivos/lixeira', 'DELETE'),
+    onSuccess: invalidar,
   });
 }
 
 export function useSalvarConteudo() {
-  const inv = useInvalidar();
+  const invalidar = useInvalidar();
   return useMutation({
-    mutationFn: (v: { id: number; conteudo: string }) =>
-      mandar<{ id: number }>(`/api/arquivos/${v.id}/conteudo`, 'PUT', { conteudo: v.conteudo }),
-    onSuccess: inv,
+    mutationFn: (valores: { id: number; conteudo: string }) =>
+      mandar<Envelope<{ id: number }>>(`/api/arquivos/${valores.id}/conteudo`, 'PUT', { conteudo: valores.conteudo }),
+    onSuccess: invalidar,
   });
 }
