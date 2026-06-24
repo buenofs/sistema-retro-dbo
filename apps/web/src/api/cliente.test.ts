@@ -1,5 +1,5 @@
 import { test, expect, vi, afterEach } from 'vitest';
-import { requisitar } from './cliente';
+import { requisitar, pegar, mandar, ErroApiError } from './cliente';
 import { useLojaLogSQL } from '../aplicativos/monitor/lojaLog';
 
 afterEach(() => vi.unstubAllGlobals());
@@ -34,4 +34,18 @@ test('requisitar empurra dados.sql para o Monitor', async () => {
   await requisitar('/api/arquivos/pasta', { method: 'POST', body: '{}' });
   expect(useLojaLogSQL.getState().comandos).toHaveLength(1);
   expect(useLojaLogSQL.getState().comandos[0]!.acao).toBe('Criar pasta');
+});
+
+test('pegar desembrulha os dados quando ok', async () => {
+  vi.stubGlobal('fetch', vi.fn(async () =>
+    new Response(JSON.stringify({ ok: true, dados: { valor: 42 } }), { status: 200 }),
+  ));
+  await expect(pegar<{ valor: number }>('/x')).resolves.toEqual({ valor: 42 });
+});
+
+test('mandar lança ErroApiError quando ok=false', async () => {
+  vi.stubGlobal('fetch', vi.fn(async () =>
+    new Response(JSON.stringify({ ok: false, erro: { tipo: 'validacao', mensagem: 'não' } }), { status: 400 }),
+  ));
+  await expect(mandar('/x', 'POST', { a: 1 })).rejects.toBeInstanceOf(ErroApiError);
 });
