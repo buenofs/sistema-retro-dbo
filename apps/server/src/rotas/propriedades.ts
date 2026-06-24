@@ -3,6 +3,7 @@ import { esquemaRefObjeto, type RespostaPropriedades } from '@dbos/shared';
 import type { GerenciadorPools } from '../bd/gerenciadorPools';
 import { criarAutenticar } from '../plugins/sessao';
 import { obterPropriedades } from '../bd/consultasPropriedades';
+import { criarBanco } from '../bd/banco';
 
 export function registrarRotasPropriedades(
   app: FastifyInstance,
@@ -22,7 +23,8 @@ export function registrarRotasPropriedades(
         },
       });
     }
-    const props = await obterPropriedades(req.sessao!.pool, analise.data);
+    // sem ação: consultas de catálogo não vão para o Monitor
+    const props = await obterPropriedades(criarBanco(req.sessao!.pool), analise.data);
     if (!props) {
       return reply
         .status(404)
