@@ -3,7 +3,7 @@ import type { UsuarioSessao } from '@dbos/shared';
 import { ORDEM_APPS, registroApps } from './registroApps';
 import { useLoja } from './loja';
 import { type ItemMenu, useMenuContexto } from './useMenuContexto';
-import { usarSonsJanelas } from './usarSonsJanelas';
+import { useSonsJanelas } from './useSonsJanelas';
 import { CamadaJanelas } from './CamadaJanelas';
 import { BarraTarefas } from './BarraTarefas';
 import { GerenciadorDialogos } from './GerenciadorDialogos';
@@ -15,7 +15,7 @@ import { useIconesDesktop, useSelecaoIcones, LARGURA_ICONE, ALTURA_ICONE } from 
 import './areaTrabalho.css';
 
 export function AreaTrabalho({ usuario }: { usuario: UsuarioSessao }) {
-  usarSonsJanelas();
+  useSonsJanelas();
   const abrirJanela = useLoja((s) => s.abrirJanela);
   const abrirMenu = useMenuContexto((s) => s.abrir);
   const abrirPainel = usePainelTweaks((s) => s.abrir);

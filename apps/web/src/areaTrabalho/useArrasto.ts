@@ -14,7 +14,7 @@ export interface OpcoesArrasto {
 
 // Devolve um handler de onPointerDown. Enquanto o ponteiro se move, chama
 // aoMover no máximo uma vez por frame (rAF) com o deslocamento total.
-export function usarArrasto({ aoIniciar, aoMover, aoFinalizar }: OpcoesArrasto) {
+export function useArrasto({ aoIniciar, aoMover, aoFinalizar }: OpcoesArrasto) {
   const ref = useRef({ inicioX: 0, inicioY: 0, ultimoX: 0, ultimoY: 0, frame: 0, ativo: false });
 
   return useCallback(
