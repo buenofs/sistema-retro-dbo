@@ -11,5 +11,5 @@ export const usePainelTweaks = create<LojaPainel>((set) => ({
   aberto: false,
   abrir: () => set({ aberto: true }),
   fechar: () => set({ aberto: false }),
-  alternar: () => set((s) => ({ aberto: !s.aberto })),
+  alternar: () => set((estado) => ({ aberto: !estado.aberto })),
 }));

@@ -41,17 +41,17 @@ export function ProvedorTema({ children }: { children: ReactNode }) {
     return () => mq.removeEventListener('change', aoMudar);
   }, []);
 
-  const definirPele = useCallback((pele: Pele) => setTema((t) => ({ ...t, pele })), []);
+  const definirPele = useCallback((pele: Pele) => setTema((temaAtual) => ({ ...temaAtual, pele })), []);
   const definirAero = useCallback(
-    (p: Partial<TweaksAero>) => setTema((t) => ({ ...t, aero: { ...t.aero, ...p } })),
+    (parcial: Partial<TweaksAero>) => setTema((temaAtual) => ({ ...temaAtual, aero: { ...temaAtual.aero, ...parcial } })),
     [],
   );
   const definir98 = useCallback(
-    (p: Partial<Tweaks98>) => setTema((t) => ({ ...t, n98: { ...t.n98, ...p } })),
+    (parcial: Partial<Tweaks98>) => setTema((temaAtual) => ({ ...temaAtual, n98: { ...temaAtual.n98, ...parcial } })),
     [],
   );
-  const definirMotion = useCallback((valor: boolean) => setTema((t) => ({ ...t, motion: valor })), []);
-  const definirSound = useCallback((valor: boolean) => setTema((t) => ({ ...t, sound: valor })), []);
+  const definirMotion = useCallback((valor: boolean) => setTema((temaAtual) => ({ ...temaAtual, motion: valor })), []);
+  const definirSound = useCallback((valor: boolean) => setTema((temaAtual) => ({ ...temaAtual, sound: valor })), []);
 
   const valor = useMemo<ContextoTemaValor>(
     () => ({ tema, definirPele, definirAero, definir98, definirMotion, definirSound }),

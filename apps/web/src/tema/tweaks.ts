@@ -30,41 +30,41 @@ function motionValor(motion: boolean): string {
 // Escreve o tema inteiro no documento. Pura (sem React); idempotente.
 export function aplicarTema(estado: EstadoTema): void {
   if (typeof document === 'undefined') return;
-  const r = document.documentElement.style;
+  const estilo = document.documentElement.style;
   const corpo = document.body;
 
   corpo.dataset.skin = estado.pele;
-  r.setProperty('--motion', motionValor(estado.motion));
+  estilo.setProperty('--motion', motionValor(estado.motion));
   definirSomHabilitado(estado.sound);
 
   // Limpa overrides específicos de pele → voltam ao token de tokens.css.
-  for (const v of VARS_PELE) r.removeProperty(v);
+  for (const nomeVar of VARS_PELE) estilo.removeProperty(nomeVar);
   delete corpo.dataset.corners;
   delete corpo.dataset.wp;
   delete corpo.dataset.pat;
   corpo.style.removeProperty('font-size');
 
   if (estado.pele === 'aero') {
-    const a: TweaksAero = estado.aero;
-    r.setProperty('--accent-h', String(a.accentHue));
-    const reto = a.corners === 'reto';
-    r.setProperty('--round', reto ? '0px' : '8px');
-    r.setProperty('--round-sm', reto ? '0px' : '4px');
-    r.setProperty('--round-btn', reto ? '0px' : '6px');
-    r.setProperty('--glass-blur', a.glass ? '14px' : '0px');
+    const aero: TweaksAero = estado.aero;
+    estilo.setProperty('--accent-h', String(aero.accentHue));
+    const reto = aero.corners === 'reto';
+    estilo.setProperty('--round', reto ? '0px' : '8px');
+    estilo.setProperty('--round-sm', reto ? '0px' : '4px');
+    estilo.setProperty('--round-btn', reto ? '0px' : '6px');
+    estilo.setProperty('--glass-blur', aero.glass ? '14px' : '0px');
     corpo.dataset.corners = reto ? 'reto' : 'aero';
-    corpo.dataset.wp = a.wallpaper;
+    corpo.dataset.wp = aero.wallpaper;
   } else {
-    const n: Tweaks98 = estado.n98;
-    r.setProperty('--accent', n.accent);
-    r.setProperty('--crt', n.crt ? '0.5' : '0');
-    corpo.dataset.pat = n.pattern;
-    corpo.style.fontSize = n.density === 'compacto' ? '11px' : '12px';
+    const n98: Tweaks98 = estado.n98;
+    estilo.setProperty('--accent', n98.accent);
+    estilo.setProperty('--crt', n98.crt ? '0.5' : '0');
+    corpo.dataset.pat = n98.pattern;
+    corpo.style.fontSize = n98.density === 'compacto' ? '11px' : '12px';
   }
 }
 
-function ehPele(v: unknown): v is Pele {
-  return v === 'aero' || v === '98';
+function ehPele(valor: unknown): valor is Pele {
+  return valor === 'aero' || valor === '98';
 }
 
 // Merge por chave: campos ausentes/ inválidos caem no padrão.
@@ -72,13 +72,13 @@ export function lerEstadoInicial(): EstadoTema {
   try {
     const cru = localStorage.getItem(CHAVE_TEMA);
     if (!cru) return TEMA_PADRAO;
-    const o = JSON.parse(cru) as Partial<EstadoTema>;
+    const bruto = JSON.parse(cru) as Partial<EstadoTema>;
     return {
-      pele: ehPele(o.pele) ? o.pele : TEMA_PADRAO.pele,
-      aero: { ...TEMA_PADRAO.aero, ...(o.aero ?? {}) },
-      n98: { ...TEMA_PADRAO.n98, ...(o.n98 ?? {}) },
-      motion: typeof o.motion === 'boolean' ? o.motion : TEMA_PADRAO.motion,
-      sound: typeof o.sound === 'boolean' ? o.sound : TEMA_PADRAO.sound,
+      pele: ehPele(bruto.pele) ? bruto.pele : TEMA_PADRAO.pele,
+      aero: { ...TEMA_PADRAO.aero, ...(bruto.aero ?? {}) },
+      n98: { ...TEMA_PADRAO.n98, ...(bruto.n98 ?? {}) },
+      motion: typeof bruto.motion === 'boolean' ? bruto.motion : TEMA_PADRAO.motion,
+      sound: typeof bruto.sound === 'boolean' ? bruto.sound : TEMA_PADRAO.sound,
     };
   } catch {
     return TEMA_PADRAO;
