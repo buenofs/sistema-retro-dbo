@@ -17,11 +17,11 @@ export const useLojaLogSQL = create<LojaLogSQL>((set) => ({
   ultimoLote: [],
   pausado: false,
   registrar: (cmds) =>
-    set((s) => {
-      if (cmds.length === 0) return s;
-      if (s.pausado) return { ...s, ultimoLote: cmds };
-      return { comandos: [...s.comandos, ...cmds].slice(-MAX), ultimoLote: cmds };
+    set((estado) => {
+      if (cmds.length === 0) return estado;
+      if (estado.pausado) return { ...estado, ultimoLote: cmds };
+      return { comandos: [...estado.comandos, ...cmds].slice(-MAX), ultimoLote: cmds };
     }),
   limpar: () => set({ comandos: [] }),
-  alternarPausa: () => set((s) => ({ pausado: !s.pausado })),
+  alternarPausa: () => set((estado) => ({ pausado: !estado.pausado })),
 }));

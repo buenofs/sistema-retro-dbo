@@ -38,7 +38,7 @@ export function BlocoNotas({ janela }: PropsApp) {
       <textarea
         aria-label="Conteúdo"
         value={texto}
-        onChange={(e) => setTexto(e.target.value)}
+        onChange={(evento) => setTexto(evento.target.value)}
         style={{ flex: 1, resize: 'none', border: 'none', padding: 8, fontFamily: 'monospace' }}
       />
     </div>

@@ -17,7 +17,7 @@ export function EditorConsultas() {
   const [texto, setTexto] = useState(SQL_INICIAL);
   const [ms, setMs] = useState<number | null>(null);
   const executar = useExecutarConsulta();
-  const abrirDialogo = useDialogos((s) => s.abrir);
+  const abrirDialogo = useDialogos((loja) => loja.abrir);
   const { pele } = useTema();
   const sessao = useSessao();
 
@@ -26,8 +26,8 @@ export function EditorConsultas() {
     setMs(null);
     executar.mutate(texto, {
       onSettled: () => setMs(Math.round(performance.now() - inicio)),
-      onError: (e) => {
-        const erro = e instanceof ErroApiError ? e.erro : undefined;
+      onError: (erroBruto) => {
+        const erro = erroBruto instanceof ErroApiError ? erroBruto.erro : undefined;
         const detalhe = [erro?.detalhe, erro?.codigoSql ? `Erro SQL ${erro.codigoSql}` : undefined]
           .filter(Boolean)
           .join('\n');
@@ -51,9 +51,9 @@ export function EditorConsultas() {
       </div>
       <div
         className="editor-codigo"
-        onKeyDown={(e) => {
-          if (e.key === 'F5') {
-            e.preventDefault();
+        onKeyDown={(evento) => {
+          if (evento.key === 'F5') {
+            evento.preventDefault();
             rodar();
           }
         }}

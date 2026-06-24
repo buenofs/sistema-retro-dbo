@@ -5,10 +5,10 @@ import { Estado } from '../comuns/Estado';
 
 const ALTURA_LINHA = 22;
 
-function formatarValor(v: unknown): string {
-  if (v === null || v === undefined) return 'NULL';
-  if (typeof v === 'object') return JSON.stringify(v);
-  return String(v);
+function formatarValor(valor: unknown): string {
+  if (valor === null || valor === undefined) return 'NULL';
+  if (typeof valor === 'object') return JSON.stringify(valor);
+  return String(valor);
 }
 
 export function GradeResultado({ resultado }: { resultado: ResultadoConsulta }) {
@@ -32,9 +32,9 @@ export function GradeResultado({ resultado }: { resultado: ResultadoConsulta }) 
   return (
     <div className="grade-resultado">
       <div className="grade-cabecalho" style={{ gridTemplateColumns: colunas }}>
-        {resultado.colunas.map((c) => (
-          <div key={c} className="grade-celula grade-th">
-            {c}
+        {resultado.colunas.map((coluna) => (
+          <div key={coluna} className="grade-celula grade-th">
+            {coluna}
           </div>
         ))}
       </div>

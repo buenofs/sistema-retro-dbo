@@ -51,12 +51,12 @@ export function criarShell(ctx: ContextoTerminal) {
   const atual = () => pilha[pilha.length - 1]!;
 
   function prompt(): string {
-    return `${ctx.letra}:\\` + pilha.slice(1).map((n) => n.nome).join('\\') + '>';
+    return `${ctx.letra}:\\` + pilha.slice(1).map((nivel) => nivel.nome).join('\\') + '>';
   }
 
   async function acharNaPasta(nome: string): Promise<ItemTerminal | undefined> {
     const itens = await ctx.listar(atual().id);
-    return itens.find((i) => i.nome.toLowerCase() === nome.toLowerCase());
+    return itens.find((item) => item.nome.toLowerCase() === nome.toLowerCase());
   }
 
   async function executar(linha: string): Promise<string[]> {
@@ -78,7 +78,7 @@ export function criarShell(ctx: ContextoTerminal) {
       case 'dir': {
         const itens = await ctx.listar(atual().id);
         if (!itens.length) return ['(pasta vazia)'];
-        return itens.map((i) => `${i.tipo === 'pasta' ? '<DIR>' : '     '}  ${i.nome}`);
+        return itens.map((item) => `${item.tipo === 'pasta' ? '<DIR>' : '     '}  ${item.nome}`);
       }
 
       case 'cd': {
@@ -92,9 +92,9 @@ export function criarShell(ctx: ContextoTerminal) {
           return [];
         }
         if (!alvo) return [];
-        const it = await acharNaPasta(alvo);
-        if (!it || it.tipo !== 'pasta') return [`Pasta não encontrada: ${alvo}`];
-        pilha.push({ id: it.id, nome: it.nome });
+        const item = await acharNaPasta(alvo);
+        if (!item || item.tipo !== 'pasta') return [`Pasta não encontrada: ${alvo}`];
+        pilha.push({ id: item.id, nome: item.nome });
         return [];
       }
 
@@ -117,9 +117,9 @@ export function criarShell(ctx: ContextoTerminal) {
         const origem = partes[1];
         const novo = partes.slice(2).join(' ');
         if (!origem || !novo) return ['Uso: ren <nome> <novo>'];
-        const it = await acharNaPasta(origem);
-        if (!it) return [`Não encontrado: ${origem}`];
-        await ctx.renomear(it.id, novo);
+        const item = await acharNaPasta(origem);
+        if (!item) return [`Não encontrado: ${origem}`];
+        await ctx.renomear(item.id, novo);
         return [`Renomeado para ${novo}`];
       }
 
@@ -127,9 +127,9 @@ export function criarShell(ctx: ContextoTerminal) {
       case 'del': {
         const nome = partes.slice(1).join(' ');
         if (!nome) return ['Uso: rm <nome>'];
-        const it = await acharNaPasta(nome);
-        if (!it) return [`Não encontrado: ${nome}`];
-        await ctx.apagar(it.id);
+        const item = await acharNaPasta(nome);
+        if (!item) return [`Não encontrado: ${nome}`];
+        await ctx.apagar(item.id);
         return [`Movido para a Lixeira: ${nome}`];
       }
 
@@ -138,8 +138,8 @@ export function criarShell(ctx: ContextoTerminal) {
         const origem = partes[1];
         const destino = partes[2];
         if (!origem || !destino) return [`Uso: ${cmd} <nome> <pasta>`];
-        const it = await acharNaPasta(origem);
-        if (!it) return [`Não encontrado: ${origem}`];
+        const item = await acharNaPasta(origem);
+        if (!item) return [`Não encontrado: ${origem}`];
         let destId: number | null;
         if (destino === '..') {
           destId = pilha.length > 1 ? pilha[pilha.length - 2]!.id : null;
@@ -148,25 +148,25 @@ export function criarShell(ctx: ContextoTerminal) {
           if (!dpasta || dpasta.tipo !== 'pasta') return [`Pasta destino inválida: ${destino}`];
           destId = dpasta.id;
         }
-        if (cmd === 'mv') await ctx.mover(it.id, destId);
-        else await ctx.copiar(it.id, destId);
+        if (cmd === 'mv') await ctx.mover(item.id, destId);
+        else await ctx.copiar(item.id, destId);
         return [`${cmd === 'mv' ? 'Movido' : 'Copiado'}: ${origem} -> ${destino}`];
       }
 
       case 'cat': {
         const nome = partes.slice(1).join(' ');
-        const it = await acharNaPasta(nome);
-        if (!it || it.tipo !== 'arquivo') return [`Arquivo não encontrado: ${nome}`];
-        return (await ctx.lerConteudo(it.id)).split('\n');
+        const item = await acharNaPasta(nome);
+        if (!item || item.tipo !== 'arquivo') return [`Arquivo não encontrado: ${nome}`];
+        return (await ctx.lerConteudo(item.id)).split('\n');
       }
 
       case 'echo': {
-        const m = linha.match(/^echo\s+(.*?)\s*>\s*(\S+)\s*$/i);
-        if (!m) return ['Uso: echo <texto> > <arquivo>'];
-        const texto = m[1] ?? '';
-        const nome = m[2]!;
-        const it = await acharNaPasta(nome);
-        if (it) await ctx.salvarConteudo(it.id, texto);
+        const achado = linha.match(/^echo\s+(.*?)\s*>\s*(\S+)\s*$/i);
+        if (!achado) return ['Uso: echo <texto> > <arquivo>'];
+        const texto = achado[1] ?? '';
+        const nome = achado[2]!;
+        const item = await acharNaPasta(nome);
+        if (item) await ctx.salvarConteudo(item.id, texto);
         else await ctx.criarArquivo(nome, atual().id, texto);
         return [`Gravado em ${nome}`];
       }
@@ -174,7 +174,7 @@ export function criarShell(ctx: ContextoTerminal) {
       case 'lixeira': {
         const itens = await ctx.listarLixeira();
         if (!itens.length) return ['(lixeira vazia)'];
-        return itens.map((i) => `${i.id}  ${i.nome}`);
+        return itens.map((item) => `${item.id}  ${item.nome}`);
       }
 
       case 'restaurar': {

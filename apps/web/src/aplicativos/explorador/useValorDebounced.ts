@@ -4,8 +4,8 @@ import { useEffect, useState } from 'react';
 export function useValorDebounced<T>(valor: T, atrasoMs: number): T {
   const [debounced, setDebounced] = useState(valor);
   useEffect(() => {
-    const t = setTimeout(() => setDebounced(valor), atrasoMs);
-    return () => clearTimeout(t);
+    const timer = setTimeout(() => setDebounced(valor), atrasoMs);
+    return () => clearTimeout(timer);
   }, [valor, atrasoMs]);
   return debounced;
 }
