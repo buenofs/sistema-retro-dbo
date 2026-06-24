@@ -85,9 +85,18 @@ export async function salvarConteudo(pool: ConnectionPool, reg: RegistradorSQL, 
   await reg.executar(pool, 'UPDATE dbo.Itens SET conteudo = @conteudo, modificadoEm = SYSDATETIME() WHERE id = @id', { conteudo, id });
 }
 
+// Monta os placeholders e os parâmetros para uma cláusula IN (@i0, @i1, ...).
+function listaIn(ids: number[]): { lugares: string; params: Record<string, unknown> } {
+  return {
+    lugares: ids.map((_, k) => `@i${k}`).join(', '),
+    params: Object.fromEntries(ids.map((v, k) => [`i${k}`, v])),
+  };
+}
+
 // Lê (id, paiId) de todos os itens — base para percorrer a árvore em memória.
-// Os dados do banco são acíclicos (a FK paiId + a checagem de ciclo garantem isso),
-// então os laços sobre essa lista sempre terminam.
+// Sem filtro de lixeira nem de drive: tanto a checagem de ciclo quanto a coleta
+// de subárvore precisam da árvore completa. Os dados são acíclicos (FK paiId +
+// checagem de ciclo garantem), então os laços sobre essa lista sempre terminam.
 async function lerArvore(pool: ConnectionPool, reg: RegistradorSQL): Promise<{ id: number; paiId: number | null }[]> {
   const r = await reg.executar<{ id: number; paiId: number | null }>(pool, 'SELECT id, paiId FROM dbo.Itens');
   return r as unknown as { id: number; paiId: number | null }[];
@@ -106,9 +115,8 @@ async function marcarLixeira(pool: ConnectionPool, reg: RegistradorSQL, id: numb
   const itens = await lerArvore(pool, reg);
   const ids = subarvore(itens, id).map((n) => n.id);
   if (ids.length === 0) return;
-  const lugares = ids.map((_, k) => `@i${k}`).join(', ');
-  const params: Record<string, unknown> = { valor };
-  ids.forEach((v, k) => { params[`i${k}`] = v; });
+  const { lugares, params } = listaIn(ids);
+  params.valor = valor;
   await reg.executar(pool, `UPDATE dbo.Itens SET naLixeira = @valor WHERE id IN (${lugares})`, params);
 }
 
@@ -130,9 +138,7 @@ export async function copiar(pool: ConnectionPool, reg: RegistradorSQL, id: numb
 
   // Ids da subárvore, já em ordem de pais-antes-dos-filhos.
   const idsSub = subarvore(itens, id).map((n) => n.id);
-  const lugares = idsSub.map((_, k) => `@i${k}`).join(', ');
-  const paramsSub: Record<string, unknown> = {};
-  idsSub.forEach((v, k) => { paramsSub[`i${k}`] = v; });
+  const { lugares, params: paramsSub } = listaIn(idsSub);
 
   const linhas = (await reg.executar<{ id: number; paiId: number | null; nome: string; tipo: 'pasta' | 'arquivo'; conteudo: string | null; driveId: number }>(
     pool,
