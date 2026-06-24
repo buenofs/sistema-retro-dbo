@@ -9,11 +9,11 @@ import { ExploradorArquivos } from '../aplicativos/arquivos/ExploradorArquivos';
 import { Lixeira } from '../aplicativos/lixeira/Lixeira';
 
 const EditorConsultas = lazy(() =>
-  import('../aplicativos/consulta/EditorConsultas').then((m) => ({ default: m.EditorConsultas })),
+  import('../aplicativos/consulta/EditorConsultas').then((modulo) => ({ default: modulo.EditorConsultas })),
 );
 
 const BlocoNotas = lazy(() =>
-  import('../aplicativos/bloco/BlocoNotas').then((m) => ({ default: m.BlocoNotas })),
+  import('../aplicativos/bloco/BlocoNotas').then((modulo) => ({ default: modulo.BlocoNotas })),
 );
 
 // O WM é genérico: cada tipoApp mapeia para metadados + um componente.

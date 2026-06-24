@@ -9,24 +9,24 @@ import type { TipoApp } from './tipos';
 const LIMIAR = 4; // px para começar a arrastar
 
 export function IconesDesktop() {
-  const abrirJanela = useLoja((s) => s.abrirJanela);
-  const abrirMenu = useMenuContexto((s) => s.abrir);
-  const posicoes = useIconesDesktop((s) => s.posicoes);
-  const mover = useIconesDesktop((s) => s.mover);
-  const selecionados = useSelecaoIcones((s) => s.selecionados);
-  const selecionarUm = useSelecaoIcones((s) => s.selecionarUm);
-  const alternar = useSelecaoIcones((s) => s.alternar);
+  const abrirJanela = useLoja((loja) => loja.abrirJanela);
+  const abrirMenu = useMenuContexto((loja) => loja.abrir);
+  const posicoes = useIconesDesktop((loja) => loja.posicoes);
+  const mover = useIconesDesktop((loja) => loja.mover);
+  const selecionados = useSelecaoIcones((loja) => loja.selecionados);
+  const selecionarUm = useSelecaoIcones((loja) => loja.selecionarUm);
+  const alternar = useSelecaoIcones((loja) => loja.alternar);
 
   const arraste = useRef<{
     x0: number; y0: number; movido: boolean;
     origens: Map<string, { x: number; y: number }>;
   } | null>(null);
 
-  function aoPressionar(e: React.PointerEvent, tipo: TipoApp) {
-    e.stopPropagation(); // impede o marquee do desktop
-    if (e.button !== 0) return;
+  function aoPressionar(evento: React.PointerEvent, tipo: TipoApp) {
+    evento.stopPropagation(); // impede o marquee do desktop
+    if (evento.button !== 0) return;
     const sel = useSelecaoIcones.getState().selecionados;
-    if (e.ctrlKey || e.metaKey || e.shiftKey) {
+    if (evento.ctrlKey || evento.metaKey || evento.shiftKey) {
       alternar(tipo);
     } else if (!sel.has(tipo)) {
       selecionarUm(tipo);
@@ -35,51 +35,51 @@ export function IconesDesktop() {
     const alvos = selAtual.has(tipo) ? [...selAtual] : [tipo];
     const pos = useIconesDesktop.getState().posicoes;
     const origens = new Map<string, { x: number; y: number }>();
-    for (const t of alvos) origens.set(t, { ...(pos[t] ?? { x: 0, y: 0 }) });
-    arraste.current = { x0: e.clientX, y0: e.clientY, movido: false, origens };
+    for (const tipoAlvo of alvos) origens.set(tipoAlvo, { ...(pos[tipoAlvo] ?? { x: 0, y: 0 }) });
+    arraste.current = { x0: evento.clientX, y0: evento.clientY, movido: false, origens };
   }
 
-  function aoMover(e: React.PointerEvent) {
-    const a = arraste.current;
-    if (!a) return;
-    const dx = e.clientX - a.x0;
-    const dy = e.clientY - a.y0;
-    if (!a.movido) {
+  function aoMover(evento: React.PointerEvent) {
+    const arrasteAtual = arraste.current;
+    if (!arrasteAtual) return;
+    const dx = evento.clientX - arrasteAtual.x0;
+    const dy = evento.clientY - arrasteAtual.y0;
+    if (!arrasteAtual.movido) {
       if (Math.hypot(dx, dy) < LIMIAR) return;
-      a.movido = true;
-      e.currentTarget.setPointerCapture?.(e.pointerId);
+      arrasteAtual.movido = true;
+      evento.currentTarget.setPointerCapture?.(evento.pointerId);
     }
-    for (const [t, o] of a.origens) mover(t as TipoApp, o.x + dx, o.y + dy);
+    for (const [tipoArrastado, origem] of arrasteAtual.origens) mover(tipoArrastado as TipoApp, origem.x + dx, origem.y + dy);
   }
 
-  function aoSoltar(e: React.PointerEvent, tipo: TipoApp) {
-    const a = arraste.current;
+  function aoSoltar(evento: React.PointerEvent, tipo: TipoApp) {
+    const arrasteAtual = arraste.current;
     arraste.current = null;
-    if (a?.movido) e.currentTarget.releasePointerCapture?.(e.pointerId);
-    else if (a && !(e.ctrlKey || e.metaKey || e.shiftKey)) selecionarUm(tipo);
+    if (arrasteAtual?.movido) evento.currentTarget.releasePointerCapture?.(evento.pointerId);
+    else if (arrasteAtual && !(evento.ctrlKey || evento.metaKey || evento.shiftKey)) selecionarUm(tipo);
   }
 
   return (
     <div className="icones-area">
       {ORDEM_APPS.map((tipo) => {
-        const p = posicoes[tipo] ?? { x: 8, y: 8 };
+        const posicao = posicoes[tipo] ?? { x: 8, y: 8 };
         const ativo = selecionados.has(tipo);
         return (
           <div
             key={tipo}
             className={`icone-atalho${ativo ? ' sel' : ''}`}
-            style={{ left: p.x, top: p.y }}
+            style={{ left: posicao.x, top: posicao.y }}
             role="button"
             tabIndex={0}
-            onPointerDown={(e) => aoPressionar(e, tipo)}
+            onPointerDown={(evento) => aoPressionar(evento, tipo)}
             onPointerMove={aoMover}
-            onPointerUp={(e) => aoSoltar(e, tipo)}
+            onPointerUp={(evento) => aoSoltar(evento, tipo)}
             onDoubleClick={() => abrirJanela(tipo)}
-            onContextMenu={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
+            onContextMenu={(evento) => {
+              evento.preventDefault();
+              evento.stopPropagation();
               if (!useSelecaoIcones.getState().selecionados.has(tipo)) selecionarUm(tipo);
-              abrirMenu(e.clientX, e.clientY, [{ rotulo: 'Abrir', aoClicar: () => abrirJanela(tipo) }]);
+              abrirMenu(evento.clientX, evento.clientY, [{ rotulo: 'Abrir', aoClicar: () => abrirJanela(tipo) }]);
             }}
           >
             <span className="icone-atalho-glifo" aria-hidden="true">

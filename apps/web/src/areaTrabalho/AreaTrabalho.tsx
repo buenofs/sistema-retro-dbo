@@ -16,49 +16,49 @@ import './areaTrabalho.css';
 
 export function AreaTrabalho({ usuario }: { usuario: UsuarioSessao }) {
   useSonsJanelas();
-  const abrirJanela = useLoja((s) => s.abrirJanela);
-  const abrirMenu = useMenuContexto((s) => s.abrir);
-  const abrirPainel = usePainelTweaks((s) => s.abrir);
-  const limparSelecao = useSelecaoIcones((s) => s.limpar);
-  const definirSelecao = useSelecaoIcones((s) => s.definir);
+  const abrirJanela = useLoja((loja) => loja.abrirJanela);
+  const abrirMenu = useMenuContexto((loja) => loja.abrir);
+  const abrirPainel = usePainelTweaks((loja) => loja.abrir);
+  const limparSelecao = useSelecaoIcones((loja) => loja.limpar);
+  const definirSelecao = useSelecaoIcones((loja) => loja.definir);
   const [marquee, setMarquee] = useState<{ x0: number; y0: number; x1: number; y1: number } | null>(null);
   const marqueeRef = useRef<{ x0: number; y0: number } | null>(null);
 
-  function ehFundo(e: React.PointerEvent) {
-    const alvo = e.target as HTMLElement;
+  function ehFundo(evento: React.PointerEvent) {
+    const alvo = evento.target as HTMLElement;
     return (
-      alvo === e.currentTarget ||
+      alvo === evento.currentTarget ||
       alvo.classList.contains('camada-bolhas') ||
       alvo.classList.contains('bolha') ||
       alvo.classList.contains('icones-area')
     );
   }
-  function aoPressionarFundo(e: React.PointerEvent) {
-    if (e.button !== 0 || !ehFundo(e)) return;
-    if (!(e.ctrlKey || e.metaKey || e.shiftKey)) limparSelecao();
-    marqueeRef.current = { x0: e.clientX, y0: e.clientY };
-    setMarquee({ x0: e.clientX, y0: e.clientY, x1: e.clientX, y1: e.clientY });
-    (e.currentTarget as HTMLElement).setPointerCapture?.(e.pointerId);
+  function aoPressionarFundo(evento: React.PointerEvent) {
+    if (evento.button !== 0 || !ehFundo(evento)) return;
+    if (!(evento.ctrlKey || evento.metaKey || evento.shiftKey)) limparSelecao();
+    marqueeRef.current = { x0: evento.clientX, y0: evento.clientY };
+    setMarquee({ x0: evento.clientX, y0: evento.clientY, x1: evento.clientX, y1: evento.clientY });
+    (evento.currentTarget as HTMLElement).setPointerCapture?.(evento.pointerId);
   }
-  function aoMoverFundo(e: React.PointerEvent) {
-    const m = marqueeRef.current;
-    if (!m) return;
-    setMarquee({ x0: m.x0, y0: m.y0, x1: e.clientX, y1: e.clientY });
-    const minX = Math.min(m.x0, e.clientX), maxX = Math.max(m.x0, e.clientX);
-    const minY = Math.min(m.y0, e.clientY), maxY = Math.max(m.y0, e.clientY);
+  function aoMoverFundo(evento: React.PointerEvent) {
+    const marqueeInicio = marqueeRef.current;
+    if (!marqueeInicio) return;
+    setMarquee({ x0: marqueeInicio.x0, y0: marqueeInicio.y0, x1: evento.clientX, y1: evento.clientY });
+    const minX = Math.min(marqueeInicio.x0, evento.clientX), maxX = Math.max(marqueeInicio.x0, evento.clientX);
+    const minY = Math.min(marqueeInicio.y0, evento.clientY), maxY = Math.max(marqueeInicio.y0, evento.clientY);
     const pos = useIconesDesktop.getState().posicoes;
     const dentro: string[] = [];
     for (const tipo of ORDEM_APPS) {
-      const p = pos[tipo];
-      if (!p) continue;
-      if (p.x < maxX && p.x + LARGURA_ICONE > minX && p.y < maxY && p.y + ALTURA_ICONE > minY) dentro.push(tipo);
+      const posicao = pos[tipo];
+      if (!posicao) continue;
+      if (posicao.x < maxX && posicao.x + LARGURA_ICONE > minX && posicao.y < maxY && posicao.y + ALTURA_ICONE > minY) dentro.push(tipo);
     }
     definirSelecao(dentro);
   }
-  function aoSoltarFundo(e: React.PointerEvent) {
+  function aoSoltarFundo(evento: React.PointerEvent) {
     marqueeRef.current = null;
     setMarquee(null);
-    (e.currentTarget as HTMLElement).releasePointerCapture?.(e.pointerId);
+    (evento.currentTarget as HTMLElement).releasePointerCapture?.(evento.pointerId);
   }
 
   return (
@@ -67,15 +67,15 @@ export function AreaTrabalho({ usuario }: { usuario: UsuarioSessao }) {
       onPointerDown={aoPressionarFundo}
       onPointerMove={aoMoverFundo}
       onPointerUp={aoSoltarFundo}
-      onContextMenu={(e) => {
-        if (e.target !== e.currentTarget) return;
-        e.preventDefault();
+      onContextMenu={(evento) => {
+        if (evento.target !== evento.currentTarget) return;
+        evento.preventDefault();
         const itens: ItemMenu[] = ORDEM_APPS.map((tipo) => ({
           rotulo: `Abrir ${registroApps[tipo].titulo}`,
           aoClicar: () => abrirJanela(tipo),
         }));
         itens.push({ rotulo: 'Propriedades', aoClicar: () => abrirPainel() });
-        abrirMenu(e.clientX, e.clientY, itens);
+        abrirMenu(evento.clientX, evento.clientY, itens);
       }}
     >
       <div className="camada-bolhas" aria-hidden="true">

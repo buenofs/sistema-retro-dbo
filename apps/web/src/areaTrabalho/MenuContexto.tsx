@@ -5,15 +5,15 @@ import { useMenuContexto } from './useMenuContexto';
 // Portal único do menu de contexto (spec §4.3). Fecha ao clicar fora ou Esc.
 export function MenuContexto() {
   const { aberto, x, y, itens } = useMenuContexto(
-    useShallow((s) => ({ aberto: s.aberto, x: s.x, y: s.y, itens: s.itens })),
+    useShallow((loja) => ({ aberto: loja.aberto, x: loja.x, y: loja.y, itens: loja.itens })),
   );
-  const fechar = useMenuContexto((s) => s.fechar);
+  const fechar = useMenuContexto((loja) => loja.fechar);
 
   useEffect(() => {
     if (!aberto) return;
     const aoClicarFora = () => fechar();
-    const aoTecla = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') fechar();
+    const aoTecla = (evento: KeyboardEvent) => {
+      if (evento.key === 'Escape') fechar();
     };
     window.addEventListener('click', aoClicarFora);
     window.addEventListener('keydown', aoTecla);

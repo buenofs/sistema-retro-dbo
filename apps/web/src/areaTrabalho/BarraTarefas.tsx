@@ -13,8 +13,8 @@ export function BarraTarefas({ login }: { login: string }) {
 
   useEffect(() => {
     if (!menuAberto) return;
-    function aoClicarFora(e: MouseEvent) {
-      const alvo = e.target as Node;
+    function aoClicarFora(evento: MouseEvent) {
+      const alvo = evento.target as Node;
       if (refMenu.current?.contains(alvo)) return;
       if (refBotao.current?.contains(alvo)) return;
       setMenuAberto(false);
@@ -25,17 +25,17 @@ export function BarraTarefas({ login }: { login: string }) {
   // useShallow compara só um nível: comparar um array de objetos recém-criados
   // nunca casa (refs distintas) e cai em loop. Assinamos o array de janelas e
   // derivamos os dados de exibição no render.
-  const janelas = useLoja(useShallow((s) => s.janelas)).map((j) => ({
-    id: j.id,
-    titulo: j.titulo,
-    icone: j.icone,
-    minimizada: j.estado === 'minimizada',
+  const janelas = useLoja(useShallow((loja) => loja.janelas)).map((janela) => ({
+    id: janela.id,
+    titulo: janela.titulo,
+    icone: janela.icone,
+    minimizada: janela.estado === 'minimizada',
   }));
-  const idFocada = useLoja((s) => s.idFocada);
-  const focar = useLoja((s) => s.focar);
-  const minimizar = useLoja((s) => s.minimizar);
-  const restaurar = useLoja((s) => s.restaurar);
-  const alternarPainel = usePainelTweaks((s) => s.alternar);
+  const idFocada = useLoja((loja) => loja.idFocada);
+  const focar = useLoja((loja) => loja.focar);
+  const minimizar = useLoja((loja) => loja.minimizar);
+  const restaurar = useLoja((loja) => loja.restaurar);
+  const alternarPainel = usePainelTweaks((loja) => loja.alternar);
 
   function aoClicarJanela(id: string, minimizada: boolean) {
     if (minimizada) {
@@ -55,7 +55,7 @@ export function BarraTarefas({ login }: { login: string }) {
         className="botao-iniciar"
         aria-haspopup="menu"
         aria-expanded={menuAberto}
-        onClick={() => setMenuAberto((v) => !v)}
+        onClick={() => setMenuAberto((anterior) => !anterior)}
       >
         Iniciar
       </button>
@@ -65,13 +65,13 @@ export function BarraTarefas({ login }: { login: string }) {
         </div>
       )}
       <div className="barra-tarefas-janelas">
-        {janelas.map((j) => (
+        {janelas.map((janela) => (
           <button
-            key={j.id}
-            className={`botao-janela ${idFocada === j.id && !j.minimizada ? 'ativo' : ''}`}
-            onClick={() => aoClicarJanela(j.id, j.minimizada)}
+            key={janela.id}
+            className={`botao-janela ${idFocada === janela.id && !janela.minimizada ? 'ativo' : ''}`}
+            onClick={() => aoClicarJanela(janela.id, janela.minimizada)}
           >
-            <Icone nome={j.icone} tamanho={16} alt="" style={{ marginRight: 4 }} /> {j.titulo}
+            <Icone nome={janela.icone} tamanho={16} alt="" style={{ marginRight: 4 }} /> {janela.titulo}
           </button>
         ))}
       </div>
