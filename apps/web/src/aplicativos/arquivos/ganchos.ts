@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import type { ComandoSQL, Drive, Item, ItemArvore, UsoDrive } from '@dbos/shared';
+import type { ComandoSQL, Drive, Item, UsoDrive } from '@dbos/shared';
 import { requisitar } from '../../api/cliente';
 import { ErroApiError } from '../consulta/ganchos';
 
@@ -34,13 +34,6 @@ export function useConteudo(driveId: number, paiId: number | null) {
   return useQuery({
     queryKey: ['arquivos', 'conteudo', driveId, paiId],
     queryFn: () => pegar<Item[]>(`/api/arquivos/listar?${q.toString()}`).then((e) => e.dados),
-  });
-}
-
-export function useArvore(driveId: number) {
-  return useQuery({
-    queryKey: ['arquivos', 'arvore', driveId],
-    queryFn: () => pegar<ItemArvore[]>(`/api/arquivos/arvore?driveId=${driveId}`).then((e) => e.dados),
   });
 }
 
