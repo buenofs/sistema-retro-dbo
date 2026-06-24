@@ -10,17 +10,17 @@ interface RefObj {
 }
 
 function refDaJanela(janela: EstadoJanela): RefObj | null {
-  const d = janela.dados as { esquema?: unknown; tabela?: unknown } | null | undefined;
-  if (d && typeof d.esquema === 'string' && typeof d.tabela === 'string') {
-    return { esquema: d.esquema, tabela: d.tabela };
+  const dados = janela.dados as { esquema?: unknown; tabela?: unknown } | null | undefined;
+  if (dados && typeof dados.esquema === 'string' && typeof dados.tabela === 'string') {
+    return { esquema: dados.esquema, tabela: dados.tabela };
   }
   return null;
 }
 
 function formatarData(iso: string | null): string {
   if (!iso) return '—';
-  const d = new Date(iso);
-  return Number.isNaN(d.getTime()) ? iso : d.toLocaleString('pt-BR');
+  const data = new Date(iso);
+  return Number.isNaN(data.getTime()) ? iso : data.toLocaleString('pt-BR');
 }
 
 export function PropriedadesObjeto({ janela }: PropsApp) {
@@ -39,39 +39,39 @@ function DetalhePropriedades({ esquema, tabela }: RefObj) {
   const consulta = usePropriedades(esquema, tabela);
   if (consulta.isPending) return <Estado>Carregando…</Estado>;
   if (consulta.isError) return <Estado variante="erro">{consulta.error.message}</Estado>;
-  const p = consulta.data;
+  const propriedades = consulta.data;
 
   return (
     <div className="painel">
       <div className="prop-cabecalho">
-        <Icone nome={p.tipo === 'view' ? 'view' : 'table'} tamanho={32} alt="" />
+        <Icone nome={propriedades.tipo === 'view' ? 'view' : 'table'} tamanho={32} alt="" />
         <div>
-          <div className="prop-titulo">{p.nome}</div>
+          <div className="prop-titulo">{propriedades.nome}</div>
           <div className="prop-subtitulo">
-            {p.tipo === 'view' ? 'View' : 'Tabela'} · {p.esquema}
+            {propriedades.tipo === 'view' ? 'View' : 'Tabela'} · {propriedades.esquema}
           </div>
         </div>
       </div>
 
       <div className="prop-kv">
-        <div className="prop-linha"><span className="prop-chave">Colunas</span><strong>{p.totalColunas}</strong></div>
-        <div className="prop-linha"><span className="prop-chave">Linhas (aprox.)</span><strong>{p.totalLinhas}</strong></div>
-        <div className="prop-linha"><span className="prop-chave">Criado em</span><strong>{formatarData(p.criadoEm)}</strong></div>
-        <div className="prop-linha"><span className="prop-chave">Modificado em</span><strong>{formatarData(p.modificadoEm)}</strong></div>
+        <div className="prop-linha"><span className="prop-chave">Colunas</span><strong>{propriedades.totalColunas}</strong></div>
+        <div className="prop-linha"><span className="prop-chave">Linhas (aprox.)</span><strong>{propriedades.totalLinhas}</strong></div>
+        <div className="prop-linha"><span className="prop-chave">Criado em</span><strong>{formatarData(propriedades.criadoEm)}</strong></div>
+        <div className="prop-linha"><span className="prop-chave">Modificado em</span><strong>{formatarData(propriedades.modificadoEm)}</strong></div>
       </div>
 
       <fieldset>
-        <legend>Índices ({p.indices.length})</legend>
-        {p.indices.length === 0 ? (
+        <legend>Índices ({propriedades.indices.length})</legend>
+        {propriedades.indices.length === 0 ? (
           <p style={{ margin: '2px 0' }}>Nenhum índice.</p>
         ) : (
           <ul className="tree-view">
-            {p.indices.map((i) => (
-              <li key={i.nome} className="prop-indice">
-                {i.chavePrimaria && <Icone nome="key" tamanho={12} alt="chave primária" />}
+            {propriedades.indices.map((indice) => (
+              <li key={indice.nome} className="prop-indice">
+                {indice.chavePrimaria && <Icone nome="key" tamanho={12} alt="chave primária" />}
                 <span>
-                  {i.nome} — {i.tipo}
-                  {i.unico ? ', único' : ''} ({i.colunas.join(', ')})
+                  {indice.nome} — {indice.tipo}
+                  {indice.unico ? ', único' : ''} ({indice.colunas.join(', ')})
                 </span>
               </li>
             ))}

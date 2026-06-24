@@ -18,10 +18,10 @@ export function ExploradorObjetos() {
 
   const objetos = consulta.data ?? [];
   const filtrados = termo
-    ? objetos.filter((o) => o.nome.toLowerCase().includes(termo))
+    ? objetos.filter((objeto) => objeto.nome.toLowerCase().includes(termo))
     : objetos;
-  const tabelas = filtrados.filter((o) => o.tipo === 'tabela');
-  const views = filtrados.filter((o) => o.tipo === 'view');
+  const tabelas = filtrados.filter((objeto) => objeto.tipo === 'tabela');
+  const views = filtrados.filter((objeto) => objeto.tipo === 'view');
 
   return (
     <div className="painel">
@@ -29,7 +29,7 @@ export function ExploradorObjetos() {
         aria-label="Filtrar objetos"
         placeholder="Filtrar…"
         value={filtro}
-        onChange={(e) => setFiltro(e.target.value)}
+        onChange={(evento) => setFiltro(evento.target.value)}
         style={{ width: '100%', marginBottom: 8, boxSizing: 'border-box' }}
       />
       <ul className="tree-view">
@@ -40,8 +40,8 @@ export function ExploradorObjetos() {
               Tabelas ({tabelas.length})
             </summary>
             <ul>
-              {tabelas.map((o) => (
-                <NoTabela key={`${o.esquema}.${o.nome}`} objeto={o} />
+              {tabelas.map((objeto) => (
+                <NoTabela key={`${objeto.esquema}.${objeto.nome}`} objeto={objeto} />
               ))}
             </ul>
           </details>
@@ -53,8 +53,8 @@ export function ExploradorObjetos() {
               Views ({views.length})
             </summary>
             <ul>
-              {views.map((o) => (
-                <NoTabela key={`${o.esquema}.${o.nome}`} objeto={o} />
+              {views.map((objeto) => (
+                <NoTabela key={`${objeto.esquema}.${objeto.nome}`} objeto={objeto} />
               ))}
             </ul>
           </details>

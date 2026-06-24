@@ -16,10 +16,10 @@ import './arquivos.css';
 interface Nivel { id: number | null; nome: string }
 
 export function ExploradorArquivos(_props: PropsApp) {
-  const driveId = useContextoArquivos((s) => s.driveId);
-  const definirDrive = useContextoArquivos((s) => s.definirDrive);
-  const abrirJanela = useLoja((s) => s.abrirJanela);
-  const ultimoLote = useLojaLogSQL((s) => s.ultimoLote);
+  const driveId = useContextoArquivos((loja) => loja.driveId);
+  const definirDrive = useContextoArquivos((loja) => loja.definirDrive);
+  const abrirJanela = useLoja((loja) => loja.abrirJanela);
+  const ultimoLote = useLojaLogSQL((loja) => loja.ultimoLote);
 
   const [sqlAcao, setSqlAcao] = useState<ComandoSQL[] | null>(null);
 
@@ -44,17 +44,17 @@ export function ExploradorArquivos(_props: PropsApp) {
   const mover = useMover();
   const copiar = useCopiar();
 
-  const letra = drives.data?.find((d) => d.id === driveId)?.letra ?? 'C';
-  const caminho = `${letra}:\\` + pilha.slice(1).map((n) => n.nome).join('\\');
+  const letra = drives.data?.find((drive) => drive.id === driveId)?.letra ?? 'C';
+  const caminho = `${letra}:\\` + pilha.slice(1).map((nivel) => nivel.nome).join('\\');
 
   function entrar(item: Item) {
     setSqlAcao(null);
-    if (item.tipo === 'pasta') setPilha((p) => [...p, { id: item.id, nome: item.nome }]);
+    if (item.tipo === 'pasta') setPilha((anterior) => [...anterior, { id: item.id, nome: item.nome }]);
     else abrirJanela('bloco', { id: item.id, nome: item.nome });
   }
   function subir() {
     setSqlAcao(null);
-    setPilha((p) => (p.length > 1 ? p.slice(0, -1) : p));
+    setPilha((anterior) => (anterior.length > 1 ? anterior.slice(0, -1) : anterior));
     setSel(null);
   }
 
@@ -68,10 +68,10 @@ export function ExploradorArquivos(_props: PropsApp) {
   }
   function renomearSel() {
     if (sel === null) return;
-    const item = conteudo.data?.find((i) => i.id === sel);
-    if (!item) return;
-    setEdicao({ id: item.id, tipo: item.tipo });
-    setNomeEdit(item.nome);
+    const itemSelecionado = conteudo.data?.find((item) => item.id === sel);
+    if (!itemSelecionado) return;
+    setEdicao({ id: itemSelecionado.id, tipo: itemSelecionado.tipo });
+    setNomeEdit(itemSelecionado.nome);
   }
   function apagarSel() {
     if (sel !== null) apagar.mutate(sel, { onSuccess: (env) => setSqlAcao(env.sql) });
@@ -107,12 +107,12 @@ export function ExploradorArquivos(_props: PropsApp) {
       className="exp-edit-input"
       autoFocus
       value={nomeEdit}
-      onChange={(e) => setNomeEdit(e.target.value)}
-      onClick={(e) => e.stopPropagation()}
-      onDoubleClick={(e) => e.stopPropagation()}
-      onKeyDown={(e) => {
-        if (e.key === 'Enter') { e.preventDefault(); confirmarEdicao(); }
-        else if (e.key === 'Escape') { e.preventDefault(); ignorarBlur.current = true; cancelarEdicao(); }
+      onChange={(evento) => setNomeEdit(evento.target.value)}
+      onClick={(evento) => evento.stopPropagation()}
+      onDoubleClick={(evento) => evento.stopPropagation()}
+      onKeyDown={(evento) => {
+        if (evento.key === 'Enter') { evento.preventDefault(); confirmarEdicao(); }
+        else if (evento.key === 'Escape') { evento.preventDefault(); ignorarBlur.current = true; cancelarEdicao(); }
       }}
       onBlur={() => { if (ignorarBlur.current) { ignorarBlur.current = false; return; } confirmarEdicao(); }}
     />
@@ -123,14 +123,14 @@ export function ExploradorArquivos(_props: PropsApp) {
   return (
     <div
       className="exp"
-      onKeyDown={(e) => {
-        if (e.key === 'F2' && sel !== null && !edicao) { e.preventDefault(); renomearSel(); }
+      onKeyDown={(evento) => {
+        if (evento.key === 'F2' && sel !== null && !edicao) { evento.preventDefault(); renomearSel(); }
       }}
       tabIndex={-1}
     >
       <div className="exp-barra">
-        <select aria-label="Drive" value={driveId} onChange={(e) => { definirDrive(Number(e.target.value)); setPilha([{ id: null, nome: '' }]); setSqlAcao(null); }}>
-          {drives.data?.map((d) => <option key={d.id} value={d.id}>{d.letra}: {d.rotulo}</option>)}
+        <select aria-label="Drive" value={driveId} onChange={(evento) => { definirDrive(Number(evento.target.value)); setPilha([{ id: null, nome: '' }]); setSqlAcao(null); }}>
+          {drives.data?.map((drive) => <option key={drive.id} value={drive.id}>{drive.letra}: {drive.rotulo}</option>)}
         </select>
         <button onClick={subir} disabled={pilha.length === 1}>Acima</button>
         <span className="exp-endereco">{caminho}</span>
@@ -156,13 +156,13 @@ export function ExploradorArquivos(_props: PropsApp) {
             onClick={() => setSel(item.id)}
             onDoubleClick={() => entrar(item)}
             draggable
-            onDragStart={(e) => e.dataTransfer.setData('text/id', String(item.id))}
-            onDragOver={(e) => { if (item.tipo === 'pasta') { e.preventDefault(); setAlvo(item.id); } }}
-            onDragLeave={() => setAlvo((a) => (a === item.id ? null : a))}
-            onDrop={(e) => {
-              e.preventDefault();
+            onDragStart={(evento) => evento.dataTransfer.setData('text/id', String(item.id))}
+            onDragOver={(evento) => { if (item.tipo === 'pasta') { evento.preventDefault(); setAlvo(item.id); } }}
+            onDragLeave={() => setAlvo((anterior) => (anterior === item.id ? null : anterior))}
+            onDrop={(evento) => {
+              evento.preventDefault();
               setAlvo(null);
-              const arrastado = Number(e.dataTransfer.getData('text/id'));
+              const arrastado = Number(evento.dataTransfer.getData('text/id'));
               if (item.tipo === 'pasta' && arrastado && arrastado !== item.id) {
                 mover.mutate({ id: arrastado, paiId: item.id }, { onSuccess: (env) => setSqlAcao(env.sql) });
                 setSel(null);
@@ -188,10 +188,10 @@ export function ExploradorArquivos(_props: PropsApp) {
           {sqlMostrado.length === 0 ? (
             <div className="exp-sql-vazia">(nenhuma ação ainda — navegue ou crie algo)</div>
           ) : (
-            sqlMostrado.map((c, i) => (
+            sqlMostrado.map((comando, i) => (
               <div key={i} className="exp-sql-linha">
-                <span className={`exp-sql-badge sql-${c.tipo}`}>{c.tipo}</span>
-                <code>{resolverSQL(c.texto, c.parametros)}</code>
+                <span className={`exp-sql-badge sql-${comando.tipo}`}>{comando.tipo}</span>
+                <code>{resolverSQL(comando.texto, comando.parametros)}</code>
               </div>
             ))
           )}
