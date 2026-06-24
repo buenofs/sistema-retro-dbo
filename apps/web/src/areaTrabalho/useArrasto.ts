@@ -21,28 +21,28 @@ export function useArrasto({ aoIniciar, aoMover, aoFinalizar }: OpcoesArrasto) {
     (evento: PointerEventReact) => {
       evento.preventDefault();
       evento.stopPropagation();
-      const e = ref.current;
-      e.inicioX = e.ultimoX = evento.clientX;
-      e.inicioY = e.ultimoY = evento.clientY;
-      e.ativo = true;
+      const estado = ref.current;
+      estado.inicioX = estado.ultimoX = evento.clientX;
+      estado.inicioY = estado.ultimoY = evento.clientY;
+      estado.ativo = true;
       aoIniciar?.();
 
       function aoMoverPonteiro(ev: PointerEvent) {
-        e.ultimoX = ev.clientX;
-        e.ultimoY = ev.clientY;
-        if (e.frame) return; // já há um frame agendado
-        e.frame = requestAnimationFrame(() => {
-          e.frame = 0;
-          if (!e.ativo) return;
-          aoMover({ dx: e.ultimoX - e.inicioX, dy: e.ultimoY - e.inicioY });
+        estado.ultimoX = ev.clientX;
+        estado.ultimoY = ev.clientY;
+        if (estado.frame) return; // já há um frame agendado
+        estado.frame = requestAnimationFrame(() => {
+          estado.frame = 0;
+          if (!estado.ativo) return;
+          aoMover({ dx: estado.ultimoX - estado.inicioX, dy: estado.ultimoY - estado.inicioY });
         });
       }
 
       function aoSoltar() {
-        e.ativo = false;
-        if (e.frame) {
-          cancelAnimationFrame(e.frame);
-          e.frame = 0;
+        estado.ativo = false;
+        if (estado.frame) {
+          cancelAnimationFrame(estado.frame);
+          estado.frame = 0;
         }
         window.removeEventListener('pointermove', aoMoverPonteiro);
         window.removeEventListener('pointerup', aoSoltar);

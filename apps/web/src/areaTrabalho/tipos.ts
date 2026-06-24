@@ -55,7 +55,7 @@ export interface LojaAreaTrabalho {
   abrirJanela: (tipoApp: TipoApp, dados?: unknown) => void;
   fecharJanela: (id: IdJanela) => void;
   focar: (id: IdJanela) => void;
-  mover: (id: IdJanela, x: number, y: number) => void;
+  mover: (id: IdJanela, eixoX: number, eixoY: number) => void;
   redimensionar: (id: IdJanela, largura: number, altura: number) => void;
   minimizar: (id: IdJanela) => void;
   maximizar: (id: IdJanela) => void;

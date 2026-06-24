@@ -16,7 +16,7 @@ function layoutInicial(): Record<string, Ponto> {
 
 interface LojaPosicoes {
   posicoes: Record<string, Ponto>;
-  mover: (tipo: TipoApp, x: number, y: number) => void;
+  mover: (tipo: TipoApp, eixoX: number, eixoY: number) => void;
   garantir: (tipos: readonly TipoApp[]) => void;
 }
 
@@ -24,15 +24,15 @@ export const useIconesDesktop = create<LojaPosicoes>()(
   persist(
     (set) => ({
       posicoes: layoutInicial(),
-      mover: (tipo, x, y) =>
-        set((s) => ({ posicoes: { ...s.posicoes, [tipo]: { x: Math.max(0, x), y: Math.max(0, y) } } })),
+      mover: (tipo, eixoX, eixoY) =>
+        set((estado) => ({ posicoes: { ...estado.posicoes, [tipo]: { x: Math.max(0, eixoX), y: Math.max(0, eixoY) } } })),
       garantir: (tipos) =>
-        set((s) => {
-          const out = { ...s.posicoes };
-          let i = Object.keys(out).length;
+        set((estado) => {
+          const out = { ...estado.posicoes };
+          let proximoIndice = Object.keys(out).length;
           let mudou = false;
-          for (const t of tipos) if (!out[t]) { out[t] = { x: 8, y: 8 + i * ESPACO_Y }; i++; mudou = true; }
-          return mudou ? { posicoes: out } : s;
+          for (const tipo of tipos) if (!out[tipo]) { out[tipo] = { x: 8, y: 8 + proximoIndice * ESPACO_Y }; proximoIndice++; mudou = true; }
+          return mudou ? { posicoes: out } : estado;
         }),
     }),
     { name: 'dbos-icones-desktop' },
@@ -50,7 +50,7 @@ export const useSelecaoIcones = create<LojaSelecao>((set) => ({
   selecionados: new Set(),
   definir: (ids) => set({ selecionados: new Set(ids) }),
   alternar: (id) =>
-    set((s) => { const n = new Set(s.selecionados); if (n.has(id)) n.delete(id); else n.add(id); return { selecionados: n }; }),
+    set((estado) => { const novaSelecao = new Set(estado.selecionados); if (novaSelecao.has(id)) novaSelecao.delete(id); else novaSelecao.add(id); return { selecionados: novaSelecao }; }),
   selecionarUm: (id) => set({ selecionados: new Set([id]) }),
   limpar: () => set({ selecionados: new Set() }),
 }));

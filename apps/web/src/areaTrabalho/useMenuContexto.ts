@@ -10,7 +10,7 @@ interface LojaMenuContexto {
   x: number;
   y: number;
   itens: ItemMenu[];
-  abrir: (x: number, y: number, itens: ItemMenu[]) => void;
+  abrir: (eixoX: number, eixoY: number, itens: ItemMenu[]) => void;
   fechar: () => void;
 }
 
@@ -20,6 +20,6 @@ export function estadoInicialMenuContexto() {
 
 export const useMenuContexto = create<LojaMenuContexto>((set) => ({
   ...estadoInicialMenuContexto(),
-  abrir: (x, y, itens) => set({ aberto: true, x, y, itens }),
+  abrir: (eixoX, eixoY, itens) => set({ aberto: true, x: eixoX, y: eixoY, itens }),
   fechar: () => set({ aberto: false, itens: [] }),
 }));
