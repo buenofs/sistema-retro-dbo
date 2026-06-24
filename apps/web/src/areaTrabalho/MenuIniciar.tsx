@@ -5,8 +5,8 @@ import { Icone } from '../tema/icones/Icone';
 import { usePainelTweaks } from '../tema/painel';
 
 export function MenuIniciar({ login, aoFechar }: { login: string; aoFechar: () => void }) {
-  const abrirJanela = useLoja((s) => s.abrirJanela);
-  const abrirPainel = usePainelTweaks((s) => s.abrir);
+  const abrirJanela = useLoja((loja) => loja.abrirJanela);
+  const abrirPainel = usePainelTweaks((loja) => loja.abrir);
   const sair = useLogout();
 
   return (

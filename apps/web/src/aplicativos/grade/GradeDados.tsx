@@ -37,7 +37,7 @@ export function GradeDados({ janela }: PropsApp) {
   );
 }
 
-function SeletorTabela({ aoEscolher }: { aoEscolher: (r: RefTabela) => void }) {
+function SeletorTabela({ aoEscolher }: { aoEscolher: (ref: RefTabela) => void }) {
   const consulta = useObjetos();
   if (consulta.isPending) return <Estado>Carregando tabelas…</Estado>;
   if (consulta.isError) return <Estado variante="erro">{consulta.error.message}</Estado>;
