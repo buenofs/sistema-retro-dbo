@@ -5,6 +5,7 @@ import { ErroApiError } from '../consulta/ganchos';
 import { Icone } from '../../tema/icones/Icone';
 import { converterValor, ehTipoNumerico, ehTipoMoeda, formatarMoeda } from './conversao';
 import { useAtualizarLinha, useInserirLinha, useLinhas, useRemoverLinha } from './ganchos';
+import { Estado } from '../comuns/Estado';
 
 const TAMANHO_PAGINA = 100;
 
@@ -41,8 +42,8 @@ export function TabelaGrade({ esquema, tabela }: { esquema: string; tabela: stri
     });
   }
 
-  if (consulta.isPending) return <p style={{ padding: 8 }}>Carregando linhas…</p>;
-  if (consulta.isError) return <p style={{ padding: 8, color: 'red' }}>{consulta.error.message}</p>;
+  if (consulta.isPending) return <Estado>Carregando linhas…</Estado>;
+  if (consulta.isError) return <Estado variante="erro">{consulta.error.message}</Estado>;
 
   const dados = consulta.data;
   const editavel = dados.chavePrimaria.length > 0;

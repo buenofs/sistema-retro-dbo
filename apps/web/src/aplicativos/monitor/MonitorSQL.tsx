@@ -2,6 +2,7 @@ import { useState } from 'react';
 import type { TipoComando } from '@dbos/shared';
 import { useLojaLogSQL } from './lojaLog';
 import { resolverSQL } from './resolver';
+import { Estado } from '../comuns/Estado';
 import './monitor.css';
 
 const TIPOS: TipoComando[] = ['INSERT', 'UPDATE', 'DELETE', 'SELECT'];
@@ -53,7 +54,7 @@ export function MonitorSQL() {
             <div className="mon-sql">{resolverSQL(c.texto, c.parametros)}</div>
           </div>
         ))}
-        {visiveis.length === 0 && <div style={{ padding: 8, opacity: 0.7 }}>(sem comandos — faça uma ação no SO)</div>}
+        {visiveis.length === 0 && <Estado variante="vazio">(sem comandos — faça uma ação no SO)</Estado>}
       </div>
     </div>
   );

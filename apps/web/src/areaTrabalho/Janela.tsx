@@ -6,6 +6,7 @@ import { LimiteErroJanela } from './LimiteErroJanela';
 import { useArrasto } from './useArrasto';
 import { ALTURA_BARRA, limitarRetangulo } from './limites';
 import { Icone } from '../tema/icones/Icone';
+import { Estado } from '../aplicativos/comuns/Estado';
 
 const LARGURA_MIN = 200;
 const ALTURA_MIN = 120;
@@ -108,7 +109,7 @@ export const Janela = memo(function Janela({ id }: { id: IdJanela }) {
         style={{ height: 'calc(100% - 2.2rem)', margin: 0, overflow: 'auto' }}
       >
         <LimiteErroJanela titulo={janela.titulo}>
-          <Suspense fallback={<p style={{ padding: 8 }}>Carregando…</p>}>
+          <Suspense fallback={<Estado>Carregando…</Estado>}>
             <Componente janela={janela} />
           </Suspense>
         </LimiteErroJanela>

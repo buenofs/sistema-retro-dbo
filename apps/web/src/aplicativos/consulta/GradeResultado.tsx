@@ -1,6 +1,7 @@
 import { useRef } from 'react';
 import { useVirtualizer } from '@tanstack/react-virtual';
 import type { ResultadoConsulta } from '@dbos/shared';
+import { Estado } from '../comuns/Estado';
 
 const ALTURA_LINHA = 22;
 
@@ -22,7 +23,7 @@ export function GradeResultado({ resultado }: { resultado: ResultadoConsulta }) 
   // Comando sem recordset (INSERT/UPDATE/DELETE).
   if (resultado.colunas.length === 0) {
     return (
-      <p style={{ padding: 8 }}>Comando executado. Linhas afetadas: {resultado.linhasAfetadas}.</p>
+      <Estado>Comando executado. Linhas afetadas: {resultado.linhasAfetadas}.</Estado>
     );
   }
 

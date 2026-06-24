@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import type { PropsApp } from '../../areaTrabalho/tipos';
 import { useItem, useSalvarConteudo } from '../arquivos/ganchos';
+import { Estado } from '../comuns/Estado';
 
 interface DadosBloco { id: number; nome: string }
 
@@ -23,7 +24,7 @@ export function BlocoNotas({ janela }: PropsApp) {
   // Se a janela passar a apontar para outro arquivo, recarrega.
   useEffect(() => { setCarregado(false); }, [id]);
 
-  if (!dados) return <div style={{ padding: 8 }}>Nenhum arquivo aberto.</div>;
+  if (!dados) return <Estado>Nenhum arquivo aberto.</Estado>;
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>

@@ -10,6 +10,7 @@ import {
 } from './ganchos';
 import { useLojaLogSQL } from '../monitor/lojaLog';
 import { resolverSQL } from '../monitor/resolver';
+import { Estado } from '../comuns/Estado';
 import './arquivos.css';
 
 interface Nivel { id: number | null; nome: string }
@@ -141,7 +142,7 @@ export function ExploradorArquivos(_props: PropsApp) {
         <button onClick={apagarSel} disabled={sel === null || !!edicao}>Apagar</button>
       </div>
       <div className="exp-lista">
-        {conteudo.isLoading && <div style={{ padding: 8 }}>Carregando…</div>}
+        {conteudo.isLoading && <Estado>Carregando…</Estado>}
         {edicao?.id === 'novo' && (
           <div className="exp-item">
             <Icone nome={edicao.tipo === 'pasta' ? 'folder' : 'newdoc'} tamanho={16} />
@@ -176,7 +177,7 @@ export function ExploradorArquivos(_props: PropsApp) {
             )}
           </div>
         ))}
-        {conteudo.data?.length === 0 && !edicao && <div style={{ padding: 8, opacity: 0.7 }}>(pasta vazia)</div>}
+        {conteudo.data?.length === 0 && !edicao && <Estado variante="vazio">(pasta vazia)</Estado>}
       </div>
       <div className="exp-sql">
         <div className="exp-sql-cab">

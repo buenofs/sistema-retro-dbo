@@ -4,6 +4,7 @@ import { sql } from '@codemirror/lang-sql';
 import { ErroApiError, useExecutarConsulta } from './ganchos';
 import { GradeResultado } from './GradeResultado';
 import { useDialogos } from '../../areaTrabalho/useDialogos';
+import { Estado } from '../comuns/Estado';
 import { Icone } from '../../tema/icones/Icone';
 import { useTema } from '../../tema/ganchos';
 import { useSessao } from '../../autenticacao/ganchos';
@@ -68,7 +69,7 @@ export function EditorConsultas() {
         {executar.data ? (
           <GradeResultado resultado={executar.data} />
         ) : (
-          <p style={{ padding: 8 }}>Execute uma consulta para ver o resultado.</p>
+          <Estado>Execute uma consulta para ver o resultado.</Estado>
         )}
       </div>
       <div className="editor-statusbar">
