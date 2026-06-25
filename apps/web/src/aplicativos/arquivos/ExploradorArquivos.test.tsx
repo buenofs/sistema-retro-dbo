@@ -44,10 +44,12 @@ test('lista pastas e arquivos da raiz', async () => {
 });
 
 test('Nova Pasta dispara POST /api/arquivos/pasta', async () => {
-  vi.spyOn(window, 'prompt').mockReturnValue('NovaPasta');
   montar();
   await screen.findByText('Documentos');
   fireEvent.click(screen.getByText('Nova Pasta'));
+  const input = screen.getByRole('textbox');
+  fireEvent.change(input, { target: { value: 'NovaPasta' } });
+  fireEvent.keyDown(input, { key: 'Enter' });
   await waitFor(() =>
     expect(fetch).toHaveBeenCalledWith('/api/arquivos/pasta', expect.objectContaining({ method: 'POST' })),
   );
