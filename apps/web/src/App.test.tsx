@@ -6,7 +6,6 @@ import { ProvedorTema } from './tema/ProvedorTema';
 import { useLoja, estadoInicial } from './areaTrabalho/loja';
 import { useBoot } from './boot';
 
-// O boot é testado isoladamente (TelaBoot.test); aqui concluímos na hora.
 vi.mock('./TelaBoot', async () => {
   const { useEffect } = await import('react');
   return {

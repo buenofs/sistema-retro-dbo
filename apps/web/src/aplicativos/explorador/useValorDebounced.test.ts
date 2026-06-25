@@ -16,7 +16,7 @@ test('atualiza só depois do atraso', () => {
     { initialProps: { v: 'a' } },
   );
   rerender({ v: 'b' });
-  expect(result.current).toBe('a'); // ainda dentro do atraso
+  expect(result.current).toBe('a');
   act(() => vi.advanceTimersByTime(200));
   expect(result.current).toBe('b');
 });

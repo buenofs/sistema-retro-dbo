@@ -20,9 +20,9 @@ test('mostra a ação e a prévia resolvida', () => {
 test('desmarcar um tipo esconde aquele tipo', () => {
   useLojaLogSQL.getState().registrar([cmd('Criar pasta', 'INSERT'), cmd('Apagar', 'DELETE')]);
   render(<MonitorSQL />);
-  fireEvent.click(screen.getByLabelText('Filtrar DELETE')); // desmarca DELETE → esconde DELETE
-  expect(screen.getByText('Criar pasta')).toBeInTheDocument();   // INSERT continua visível
-  expect(screen.queryByText('Apagar')).not.toBeInTheDocument();  // DELETE escondido
+  fireEvent.click(screen.getByLabelText('Filtrar DELETE'));
+  expect(screen.getByText('Criar pasta')).toBeInTheDocument();
+  expect(screen.queryByText('Apagar')).not.toBeInTheDocument();
 });
 
 test('limpar zera a lista', () => {

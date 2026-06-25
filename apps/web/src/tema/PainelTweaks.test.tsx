@@ -30,7 +30,7 @@ test('não renderiza quando fechado', () => {
 });
 
 test('na pele 98 mostra controles de 98 (densidade, CRT) e não os de Aero', () => {
-  montar(); // pele padrão = 98
+  montar();
   expect(screen.getByText('Densidade')).toBeInTheDocument();
   expect(screen.getByText(/Monitor CRT/)).toBeInTheDocument();
   expect(screen.queryByText(/Vidro/)).toBeNull();

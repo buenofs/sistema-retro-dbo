@@ -16,8 +16,8 @@ test('gruda em 0 quando passa da borda superior/esquerda', () => {
 
 test('gruda na borda direita/inferior considerando a barra de tarefas', () => {
   const r = limitarRetangulo({ x: 5000, y: 5000, largura: 300, altura: 200 }, VP);
-  expect(r.x).toBe(VP.largura - 300); // 700
-  expect(r.y).toBe(VP.altura - ALTURA_BARRA - 200); // 700 - 30 - 200 = 470
+  expect(r.x).toBe(VP.largura - 300);
+  expect(r.y).toBe(VP.altura - ALTURA_BARRA - 200);
 });
 
 test('janela maior que o viewport gruda em 0 (sem coordenada negativa)', () => {

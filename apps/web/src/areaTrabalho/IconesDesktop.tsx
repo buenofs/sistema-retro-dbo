@@ -6,7 +6,7 @@ import { Icone } from '../tema/icones/Icone';
 import { useIconesDesktop, useSelecaoIcones } from './lojaIconesDesktop';
 import type { TipoApp } from './tipos';
 
-const LIMIAR = 4; // px para começar a arrastar
+const LIMIAR = 4;
 
 export function IconesDesktop() {
   const abrirJanela = useLoja((loja) => loja.abrirJanela);
@@ -23,7 +23,7 @@ export function IconesDesktop() {
   } | null>(null);
 
   function aoPressionar(evento: React.PointerEvent, tipo: TipoApp) {
-    evento.stopPropagation(); // impede o marquee do desktop
+    evento.stopPropagation();
     if (evento.button !== 0) return;
     const sel = useSelecaoIcones.getState().selecionados;
     if (evento.ctrlKey || evento.metaKey || evento.shiftKey) {

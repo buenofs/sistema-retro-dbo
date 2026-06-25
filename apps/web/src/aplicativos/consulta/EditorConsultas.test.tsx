@@ -40,7 +40,7 @@ test('executar com sucesso mostra a grade de resultado', async () => {
   );
   renderizar();
   fireEvent.click(screen.getByRole('button', { name: /Executar/ }));
-  expect(await screen.findByText('um')).toBeInTheDocument(); // cabeçalho da coluna
+  expect(await screen.findByText('um')).toBeInTheDocument();
 });
 
 test('executar com erro abre um diálogo de erro', async () => {
