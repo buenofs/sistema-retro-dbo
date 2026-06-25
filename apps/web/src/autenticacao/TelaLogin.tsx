@@ -3,7 +3,6 @@ import { useLogin } from './ganchos';
 import { Icone } from '../tema/icones/Icone';
 import './telaLogin.css';
 
-// Diálogo de logon estilo Win9x "Log On to DBOS", sobre o wallpaper.
 export function TelaLogin() {
   const [login, setLogin] = useState('');
   const [senha, setSenha] = useState('');

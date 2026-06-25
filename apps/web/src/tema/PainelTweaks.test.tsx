@@ -38,7 +38,6 @@ test('na pele 98 mostra controles de 98 (densidade, CRT) e não os de Aero', () 
 
 test('trocar a pele para Aero revela os controles de Aero', () => {
   montar();
-  // segmentado de Pele: clicar em "Aero"
   fireEvent.click(screen.getByRole('button', { name: 'Aero' }));
   expect(document.body.dataset.skin).toBe('aero');
   expect(screen.getByText(/Vidro/)).toBeInTheDocument();

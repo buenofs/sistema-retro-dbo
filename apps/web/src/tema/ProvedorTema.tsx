@@ -24,13 +24,11 @@ export const ContextoTema = createContext<ContextoTemaValor | null>(null);
 export function ProvedorTema({ children }: { children: ReactNode }) {
   const [tema, setTema] = useState<EstadoTema>(lerEstadoInicial);
 
-  // Aplica + persiste a cada mudança.
   useEffect(() => {
     aplicarTema(tema);
     persistirTema(tema);
   }, [tema]);
 
-  // Re-aplica quando prefers-reduced-motion muda (sem perder o estado atual).
   const temaRef = useRef(tema);
   temaRef.current = tema;
   useEffect(() => {

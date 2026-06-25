@@ -9,7 +9,6 @@ interface Estado {
   erro: Error | null;
 }
 
-// Captura crashes de render do app e mostra um painel retrô, isolando a janela (spec §6.5).
 export class LimiteErroJanela extends Component<Props, Estado> {
   state: Estado = { erro: null };
 
@@ -18,7 +17,6 @@ export class LimiteErroJanela extends Component<Props, Estado> {
   }
 
   componentDidCatch(_erro: Error, _info: ErrorInfo) {
-    // Ponto de log futuro; por ora o painel já comunica o erro ao usuário.
   }
 
   render() {

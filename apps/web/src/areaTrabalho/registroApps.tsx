@@ -16,8 +16,6 @@ const BlocoNotas = lazy(() =>
   import('../aplicativos/bloco/BlocoNotas').then((modulo) => ({ default: modulo.BlocoNotas })),
 );
 
-// O WM é genérico: cada tipoApp mapeia para metadados + um componente.
-// Adicionar um app futuro = registrar o componente real aqui.
 export const registroApps: Record<TipoApp, DefinicaoApp> = {
   explorador: {
     titulo: 'Explorador de Objetos',
@@ -75,7 +73,6 @@ export const registroApps: Record<TipoApp, DefinicaoApp> = {
   },
 };
 
-// Ordem fixa em que os apps aparecem nos atalhos e no menu Iniciar.
 export const ORDEM_APPS: TipoApp[] = [
   'arquivos',
   'explorador',

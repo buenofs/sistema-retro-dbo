@@ -9,7 +9,6 @@ function Bomba(): never {
 afterEach(() => vi.restoreAllMocks());
 
 test('mostra o painel de erro quando o filho lança', () => {
-  // React loga o erro capturado no console; silenciamos para não poluir a saída.
   vi.spyOn(console, 'error').mockImplementation(() => {});
   render(
     <LimiteErroJanela titulo="Teste">

@@ -22,9 +22,6 @@ export function BarraTarefas({ login }: { login: string }) {
     document.addEventListener('mousedown', aoClicarFora);
     return () => document.removeEventListener('mousedown', aoClicarFora);
   }, [menuAberto]);
-  // useShallow compara só um nível: comparar um array de objetos recém-criados
-  // nunca casa (refs distintas) e cai em loop. Assinamos o array de janelas e
-  // derivamos os dados de exibição no render.
   const janelas = useLoja(useShallow((loja) => loja.janelas)).map((janela) => ({
     id: janela.id,
     titulo: janela.titulo,

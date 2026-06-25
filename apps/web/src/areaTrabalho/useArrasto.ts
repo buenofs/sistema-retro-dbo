@@ -7,13 +7,10 @@ export interface DeltaArrasto {
 
 export interface OpcoesArrasto {
   aoIniciar?: () => void;
-  // dx/dy são o deslocamento TOTAL desde o pointerdown (evita acúmulo de erro).
   aoMover: (delta: DeltaArrasto) => void;
   aoFinalizar?: () => void;
 }
 
-// Devolve um handler de onPointerDown. Enquanto o ponteiro se move, chama
-// aoMover no máximo uma vez por frame (rAF) com o deslocamento total.
 export function useArrasto({ aoIniciar, aoMover, aoFinalizar }: OpcoesArrasto) {
   const ref = useRef({ inicioX: 0, inicioY: 0, ultimoX: 0, ultimoY: 0, frame: 0, ativo: false });
 
@@ -30,7 +27,7 @@ export function useArrasto({ aoIniciar, aoMover, aoFinalizar }: OpcoesArrasto) {
       function aoMoverPonteiro(ev: PointerEvent) {
         estado.ultimoX = ev.clientX;
         estado.ultimoY = ev.clientY;
-        if (estado.frame) return; // já há um frame agendado
+        if (estado.frame) return;
         estado.frame = requestAnimationFrame(() => {
           estado.frame = 0;
           if (!estado.ativo) return;

@@ -14,8 +14,6 @@ function abrirERenderizar() {
 
 test('mostra título e ícone do app', () => {
   abrirERenderizar();
-  // O título/ícone vivem na barra de título; restringimos a busca ao chrome
-  // da janela para não casar com algum eco do título no corpo do app.
   const tb = screen.getByText('Editor de Consultas', { selector: '.title-bar-text' });
   expect(tb).toBeInTheDocument();
   expect(tb.querySelector('img')).toBeInTheDocument();

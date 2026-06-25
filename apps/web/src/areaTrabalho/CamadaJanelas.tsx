@@ -2,8 +2,6 @@ import { useShallow } from 'zustand/react/shallow';
 import { useLoja } from './loja';
 import { Janela } from './Janela';
 
-// Renderiza todas as janelas não fechadas. As minimizadas continuam montadas
-// (display:none no <Janela>) para preservar o estado dos apps em fases futuras.
 export function CamadaJanelas() {
   const ids = useLoja(useShallow((loja) => loja.janelas.map((janela) => janela.id)));
   return (

@@ -27,7 +27,6 @@ function motionValor(motion: boolean): string {
   return motion && !prefereReduzirMovimento() ? '1' : '0.001';
 }
 
-// Escreve o tema inteiro no documento. Pura (sem React); idempotente.
 export function aplicarTema(estado: EstadoTema): void {
   if (typeof document === 'undefined') return;
   const estilo = document.documentElement.style;
@@ -37,7 +36,6 @@ export function aplicarTema(estado: EstadoTema): void {
   estilo.setProperty('--motion', motionValor(estado.motion));
   definirSomHabilitado(estado.sound);
 
-  // Limpa overrides específicos de pele → voltam ao token de tokens.css.
   for (const nomeVar of VARS_PELE) estilo.removeProperty(nomeVar);
   delete corpo.dataset.corners;
   delete corpo.dataset.wp;
@@ -67,7 +65,6 @@ function ehPele(valor: unknown): valor is Pele {
   return valor === 'aero' || valor === '98';
 }
 
-// Merge por chave: campos ausentes/ inválidos caem no padrão.
 export function lerEstadoInicial(): EstadoTema {
   try {
     const cru = localStorage.getItem(CHAVE_TEMA);
@@ -89,6 +86,5 @@ export function persistirTema(estado: EstadoTema): void {
   try {
     localStorage.setItem(CHAVE_TEMA, JSON.stringify(estado));
   } catch {
-    /* best-effort */
   }
 }

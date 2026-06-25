@@ -29,17 +29,14 @@ export interface EstadoJanela {
   retangulo: Retangulo;
   zIndex: number;
   estado: EstadoVisual;
-  // Para onde 'restaurar' deve voltar quando a janela está minimizada.
   anterior: 'normal' | 'maximizada';
-  dados: unknown; // payload específico do app (null nos placeholders)
+  dados: unknown;
 }
 
-// Props que todo componente de app recebe do WM.
 export interface PropsApp {
   janela: EstadoJanela;
 }
 
-// Entrada do registro: metadados + o componente React do app.
 export interface DefinicaoApp {
   titulo: string;
   icone: NomeIcone;

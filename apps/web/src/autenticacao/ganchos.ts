@@ -4,8 +4,7 @@ import { requisitar, mandar } from '../api/cliente';
 
 const CHAVE_SESSAO = ['sessao'] as const;
 
-// Consulta a sessão atual: devolve o usuário ou null (não autenticado).
-// Usa `requisitar` cru de propósito — precisa do ramo ok/null, sem lançar.
+/** Sessão atual: usuário ou null; usa requisitar cru de propósito (precisa do ramo ok/null, sem lançar). */
 export function useSessao() {
   return useQuery({
     queryKey: CHAVE_SESSAO,
@@ -16,7 +15,6 @@ export function useSessao() {
   });
 }
 
-// Login: em erro, ErroApiError leva a mensagem pt-BR à tela.
 export function useLogin() {
   const clienteQuery = useQueryClient();
   return useMutation({
@@ -26,8 +24,7 @@ export function useLogin() {
   });
 }
 
-// Logout fire-and-forget: zera a sessão no cache ao concluir.
-// Mantém `requisitar` cru porque não deve lançar em falha.
+/** Logout fire-and-forget: zera a sessão no cache; mantém requisitar cru para não lançar em falha. */
 export function useLogout() {
   const clienteQuery = useQueryClient();
   return useMutation({

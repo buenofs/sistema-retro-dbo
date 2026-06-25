@@ -18,7 +18,6 @@ function viewport() {
 export const Janela = memo(function Janela({ id }: { id: IdJanela }) {
   const janela = useLoja(useCallback((loja) => loja.janelas.find((janelaAtual) => janelaAtual.id === id), [id]));
   const idFocada = useLoja((loja) => loja.idFocada);
-  // Ações do Zustand têm referência estável entre renders.
   const focar = useLoja((loja) => loja.focar);
   const mover = useLoja((loja) => loja.mover);
   const redimensionar = useLoja((loja) => loja.redimensionar);
@@ -27,7 +26,6 @@ export const Janela = memo(function Janela({ id }: { id: IdJanela }) {
   const restaurar = useLoja((loja) => loja.restaurar);
   const fechar = useLoja((loja) => loja.fecharJanela);
 
-  // Retângulo no início do arrasto (lido via getState p/ manter os callbacks estáveis).
   const inicio = useRef<Retangulo>({ x: 0, y: 0, largura: 0, altura: 0 });
   const aoIniciar = useCallback(() => {
     const atual = useLoja.getState().janelas.find((janelaAtual) => janelaAtual.id === id);

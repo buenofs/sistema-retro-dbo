@@ -2,7 +2,6 @@ import { useEffect } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import { useMenuContexto } from './useMenuContexto';
 
-// Portal único do menu de contexto (spec §4.3). Fecha ao clicar fora ou Esc.
 export function MenuContexto() {
   const { aberto, x, y, itens } = useMenuContexto(
     useShallow((loja) => ({ aberto: loja.aberto, x: loja.x, y: loja.y, itens: loja.itens })),

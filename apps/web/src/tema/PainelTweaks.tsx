@@ -20,7 +20,6 @@ export function PainelTweaks() {
   const fechar = usePainelTweaks((loja) => loja.fechar);
   const reiniciarBoot = useBoot((loja) => loja.reiniciar);
 
-  // arrasto simples pelo cabeçalho
   const [pos, setPos] = useState<{ x: number; y: number } | null>(null);
   const arrasto = useRef<{ dx: number; dy: number } | null>(null);
 
