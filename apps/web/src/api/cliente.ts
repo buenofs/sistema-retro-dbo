@@ -6,12 +6,13 @@ export async function requisitar<T>(
   caminho: string,
   opcoes: RequestInit = {},
 ): Promise<Resposta<T>> {
+  const temCorpo = opcoes.body !== undefined && opcoes.body !== null;
   let resposta: Response;
   try {
     resposta = await fetch(caminho, {
       credentials: 'include',
       ...opcoes,
-      headers: { 'content-type': 'application/json', ...opcoes.headers },
+      headers: { ...(temCorpo ? { 'content-type': 'application/json' } : {}), ...opcoes.headers },
     });
   } catch {
     return { ok: false, erro: { tipo: 'rede', mensagem: 'Não foi possível falar com o servidor.' } };

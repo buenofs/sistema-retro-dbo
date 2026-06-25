@@ -49,3 +49,25 @@ test('mandar lança ErroApiError quando ok=false', async () => {
   ));
   await expect(mandar('/x', 'POST', { a: 1 })).rejects.toBeInstanceOf(ErroApiError);
 });
+
+function espiarFetch() {
+  const espia = vi.fn((_caminho: string, _opcoes?: RequestInit) =>
+    Promise.resolve(new Response(JSON.stringify({ ok: true, dados: { id: 1 } }), { status: 200 })),
+  );
+  vi.stubGlobal('fetch', espia);
+  return espia;
+}
+
+test('requisição sem corpo não envia content-type (DELETE/PUT/GET)', async () => {
+  const espia = espiarFetch();
+  await mandar('/api/arquivos/9', 'DELETE');
+  const cabecalhos = espia.mock.calls[0]![1]!.headers as Record<string, string>;
+  expect(cabecalhos['content-type']).toBeUndefined();
+});
+
+test('requisição com corpo envia content-type application/json', async () => {
+  const espia = espiarFetch();
+  await mandar('/api/arquivos/pasta', 'POST', { nome: 'X' });
+  const cabecalhos = espia.mock.calls[0]![1]!.headers as Record<string, string>;
+  expect(cabecalhos['content-type']).toBe('application/json');
+});
