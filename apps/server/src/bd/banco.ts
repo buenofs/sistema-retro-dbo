@@ -6,15 +6,12 @@ type Parametros = Record<string, unknown>;
 export interface Banco {
   readonly comandos: ComandoSQL[];
   consultar<Linha>(texto: string, parametros?: Parametros): Promise<Linha[]>;
-  executar(texto: string, parametros?: Parametros): Promise<number>; // linhas afetadas
+  executar(texto: string, parametros?: Parametros): Promise<number>;
 }
 
-// Classifica o SQL pela primeira palavra-chave de comando (ignora CTE `WITH`).
+/** Classifica o SQL pela primeira palavra-chave, ignorando CTE `WITH`. */
 export function tipoDoTexto(texto: string): TipoComando {
   const limpo = texto.trim().toUpperCase();
-  // Heurística simples e deliberada (herdada sem mudança): classifica pela primeira
-  // palavra-chave só para o rótulo do Monitor; CTEs com parênteses aninhados podem
-  // rotular errado, o que é inofensivo por ser cosmético.
   const corpo = limpo.startsWith('WITH') ? limpo.slice(limpo.indexOf(')') + 1) : limpo;
   if (/\bINSERT\b/.test(corpo)) return 'INSERT';
   if (/\bUPDATE\b/.test(corpo)) return 'UPDATE';
@@ -22,7 +19,6 @@ export function tipoDoTexto(texto: string): TipoComando {
   return 'SELECT';
 }
 
-// Soma uma lista de números — usado para totalizar `rowsAffected`. Um lugar só.
 export function somar(numeros: number[] = []): number {
   return numeros.reduce((total, parcela) => total + parcela, 0);
 }
@@ -35,8 +31,7 @@ function agora(): string {
   return new Date().toISOString();
 }
 
-// A forma única de falar com o banco. `acao` opcional: com ação, registra cada
-// comando para o Monitor; sem ação, roda silencioso (catálogo/metadados).
+/** Forma única de falar com o banco; com `acao` registra cada comando no Monitor, sem `acao` roda silencioso. */
 export function criarBanco(pool: ConnectionPool, acao?: string): Banco {
   const comandos: ComandoSQL[] = [];
 
@@ -44,15 +39,11 @@ export function criarBanco(pool: ConnectionPool, acao?: string): Banco {
     const requisicao = pool.request();
     for (const nome of Object.keys(parametros)) requisicao.input(nome, parametros[nome]);
     const comando: ComandoSQL = {
-      // `ComandoSQL.acao` é string obrigatória, então o default '' satisfaz o tipo;
-      // o comando só é empurrado quando `acao` é truthy (ver `if (acao)` no finally),
-      // logo o '' nunca chega a ser registrado de fato.
       acao: acao ?? '',
       tipo: tipoDoTexto(texto),
       texto,
       parametros,
       linhasAfetadas: 0,
-      // Marca quando o comando foi EMITIDO (não quando terminou) — é o que o Monitor quer.
       em: agora(),
     };
     try {
@@ -63,7 +54,7 @@ export function criarBanco(pool: ConnectionPool, acao?: string): Banco {
       comando.erro = mensagem(erro);
       throw erro;
     } finally {
-      if (acao) comandos.push(comando); // registro num lugar só, sem try/catch duplicado
+      if (acao) comandos.push(comando);
     }
   }
 

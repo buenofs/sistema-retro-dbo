@@ -13,11 +13,11 @@ export function usoPorDrive(banco: Banco): Promise<UsoDrive[]> {
   );
 }
 
+/** Lista o conteúdo de uma pasta; 'pasta' vem depois de 'arquivo' no alfabeto, então tipo DESC deixa as pastas primeiro. */
 export function listarConteudo(banco: Banco, driveId: number, paiId: number | null): Promise<Item[]> {
   const filtroPai = paiId === null ? 'paiId IS NULL' : 'paiId = @pai';
   const parametros: Record<string, unknown> = { drive: driveId };
   if (paiId !== null) parametros.pai = paiId;
-  // 'pasta' vem depois de 'arquivo' no alfabeto, então tipo DESC deixa as pastas primeiro.
   return banco.consultar<Item>(
     `SELECT id, nome, tipo, paiId, driveId, donoId, tamanhoBytes, criadoEm, modificadoEm FROM dbo.Itens WHERE driveId = @drive AND ${filtroPai} AND naLixeira = 0 ORDER BY tipo DESC, nome`,
     parametros,
@@ -41,7 +41,6 @@ export async function lerItem(
   return linhas[0] ?? null;
 }
 
-// Lança Error('PaiInvalido') se paiId não existir ou não for pasta.
 async function validarPai(banco: Banco, paiId: number | null): Promise<void> {
   if (paiId === null) return;
   const linhas = await banco.consultar<{ tipo: string }>('SELECT tipo FROM dbo.Itens WHERE id = @pai', { pai: paiId });
@@ -68,9 +67,7 @@ export async function salvarConteudo(banco: Banco, id: number, conteudo: string)
   await banco.executar('UPDATE dbo.Itens SET conteudo = @conteudo, modificadoEm = SYSDATETIME() WHERE id = @id', { conteudo, id });
 }
 
-// Lê (id, paiId) de todos os itens — base para percorrer a árvore em memória.
-// Sem filtro de lixeira nem de drive: ciclo e subárvore precisam da árvore completa.
-// Os dados são acíclicos (FK paiId + checagem de ciclo garantem), então os laços terminam.
+/** Lê (id, paiId) de todos os itens; árvore completa (ciclo e subárvore precisam dela) e acíclica, então os laços terminam. */
 function lerArvore(banco: Banco): Promise<{ id: number; paiId: number | null }[]> {
   return banco.consultar<{ id: number; paiId: number | null }>('SELECT id, paiId FROM dbo.Itens');
 }
@@ -82,7 +79,6 @@ export async function mover(banco: Banco, id: number, paiId: number | null): Pro
   await banco.executar('UPDATE dbo.Itens SET paiId = @pai, modificadoEm = SYSDATETIME() WHERE id = @id', { pai: paiId, id });
 }
 
-// Soft-delete (=1) ou restauração (=0) da subárvore inteira, num único UPDATE ... IN (...).
 async function marcarLixeira(banco: Banco, id: number, valor: 0 | 1): Promise<void> {
   const itens = await lerArvore(banco);
   const ids = subarvore(itens, id).map((no) => no.id);
@@ -94,19 +90,17 @@ async function marcarLixeira(banco: Banco, id: number, valor: 0 | 1): Promise<vo
 export const enviarParaLixeira = (banco: Banco, id: number) => marcarLixeira(banco, id, 1);
 export const restaurar = (banco: Banco, id: number) => marcarLixeira(banco, id, 0);
 
-// Seguro num único DELETE: marcarLixeira sempre envia subárvores inteiras, então
-// os itens com naLixeira=1 formam um conjunto fechado pela FK paiId.
+/** DELETE único e seguro: itens com naLixeira=1 formam um conjunto fechado pela FK paiId. */
 export async function esvaziarLixeira(banco: Banco): Promise<void> {
   await banco.executar('DELETE FROM dbo.Itens WHERE naLixeira = 1');
 }
 
-// Copia um item (e a subárvore, se pasta) para dentro de `destino`.
 export async function copiar(banco: Banco, id: number, destino: number | null, donoId: number): Promise<void> {
   const itens = await lerArvore(banco);
   if (criaCiclo(itens, id, destino)) throw new Error('MovimentoCiclico');
   await validarPai(banco, destino);
 
-  const idsSub = subarvore(itens, id).map((no) => no.id); // pais antes dos filhos
+  const idsSub = subarvore(itens, id).map((no) => no.id);
   const { lugares, parametros } = listaIn(idsSub);
 
   const linhas = await banco.consultar<{ id: number; paiId: number | null; nome: string; tipo: 'pasta' | 'arquivo'; conteudo: string | null; driveId: number }>(
@@ -115,7 +109,6 @@ export async function copiar(banco: Banco, id: number, destino: number | null, d
   );
 
   const porId = new Map(linhas.map((linha) => [linha.id, linha]));
-  // todos os ids de idsSub foram buscados acima, então estão no mapa
   const nos = idsSub.map((idSub) => porId.get(idSub)!);
 
   let driveDestino = nos[0]!.driveId;
@@ -124,7 +117,7 @@ export async function copiar(banco: Banco, id: number, destino: number | null, d
     driveDestino = alvo[0]!.driveId;
   }
 
-  const mapa = new Map<number, number>(); // idAntigo -> idNovo
+  const mapa = new Map<number, number>();
   for (const no of nos) {
     const novoPai = no.id === id ? destino : mapa.get(no.paiId!)!;
     const inseridas = await banco.consultar<{ id: number }>(

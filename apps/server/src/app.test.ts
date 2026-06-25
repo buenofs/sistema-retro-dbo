@@ -1,9 +1,6 @@
 import { test, expect } from 'bun:test';
 import { construirApp } from './app';
 
-// Sobe o app numa porta efêmera e testa pela rota HTTP real.
-// Nota: não usamos app.inject() porque o light-my-request (helper do Fastify)
-// é incompatível com o runtime do Bun. O servidor HTTP real funciona normalmente.
 test('GET /api/saude responde ok', async () => {
   const app = construirApp();
   await app.listen({ port: 0, host: '127.0.0.1' });

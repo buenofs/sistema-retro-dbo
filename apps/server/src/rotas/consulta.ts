@@ -22,7 +22,6 @@ export function registrarRotasConsulta(
         },
       });
     }
-    // Lido a cada request para os testes poderem sobrescrever o teto.
     const maxLinhas = Number(process.env.SQL_MAX_LINHAS ?? 1000);
     const dados = await executarConsulta(req.sessao!.pool, analise.data.sql, maxLinhas);
     const resposta: RespostaConsulta = { ok: true, dados };

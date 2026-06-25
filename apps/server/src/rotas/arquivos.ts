@@ -12,14 +12,12 @@ import {
   esvaziarLixeira, copiar,
 } from '../bd/consultasArquivos';
 
-// Dono padrão: 1 (felipe). Numa evolução, viria do mapa login->usuario.
 const DONO_PADRAO = 1;
 
 function erroValidacao(reply: FastifyReply, mensagem: string, status = 400) {
   return reply.status(status).send({ ok: false, erro: { tipo: 'validacao', mensagem } });
 }
 
-// Lê e valida o :id da rota. Retorna o número, ou null (e já responde 400).
 function parsearId(req: { params: unknown }, reply: FastifyReply): number | null {
   const id = Number((req.params as { id?: string }).id);
   if (!Number.isInteger(id) || id <= 0) {
@@ -29,7 +27,7 @@ function parsearId(req: { params: unknown }, reply: FastifyReply): number | null
   return id;
 }
 
-// Traduz erros de domínio e violações de constraint em mensagens amigáveis.
+/** Traduz erros de domínio e violações de constraint em mensagens amigáveis. */
 function tratar(reply: FastifyReply, erro: unknown, banco: Banco) {
   const msg = erro instanceof Error ? erro.message : String(erro);
   const mapa: Record<string, string> = {

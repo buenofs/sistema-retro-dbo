@@ -4,8 +4,6 @@ import type { Banco } from './banco';
 export async function obterPropriedades(banco: Banco, ref: RefObjeto): Promise<PropriedadesObjeto | null> {
   const parametros = { esquema: ref.esquema, tabela: ref.tabela };
 
-  // Um Request roda uma query só; cada consulta recebe um request novo já com os
-  // parâmetros @esquema/@tabela (cru, mas parametrizado — spec §2.2).
   const infos = await banco.consultar<{ tipo: string; criadoEm: Date; modificadoEm: Date }>(`
       SELECT o.type_desc AS tipo, o.create_date AS criadoEm, o.modify_date AS modificadoEm
       FROM sys.objects o

@@ -66,7 +66,7 @@ test('SQL inválido devolve erro tipo sql com codigoSql 208', async () => {
     expect(r.status).toBe(400);
     const { erro } = await r.json();
     expect(erro.tipo).toBe('sql');
-    expect(erro.codigoSql).toBe(208); // Invalid object name
+    expect(erro.codigoSql).toBe(208);
   });
 });
 
@@ -84,7 +84,7 @@ test('corpo sem sql devolve 400 de validação', async () => {
 });
 
 test('teto de linhas marca truncado e corta as linhas', async () => {
-  process.env.SQL_MAX_LINHAS = '2'; // lido por construirApp dentro de comServidor
+  process.env.SQL_MAX_LINHAS = '2';
   await comServidor(async (base) => {
     const cookie = await entrar(base);
     const r = await consultar(

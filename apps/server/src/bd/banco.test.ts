@@ -1,7 +1,6 @@
 import { test, expect } from 'bun:test';
 import { criarBanco, tipoDoTexto, somar } from './banco';
 
-// Pool falso: registra inputs e devolve um resultado controlado.
 function poolFalso(resultado: { recordset?: unknown[]; rowsAffected?: number[]; erro?: Error }) {
   const inputs: Record<string, unknown> = {};
   return {

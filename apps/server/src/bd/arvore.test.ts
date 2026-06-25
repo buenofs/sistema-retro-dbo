@@ -2,11 +2,11 @@ import { test, expect } from 'bun:test';
 import { subarvore, criaCiclo, type NoArvore } from './arvore';
 
 const itens: NoArvore[] = [
-  { id: 1, paiId: null }, // raiz A
-  { id: 2, paiId: 1 },    // filho de 1
-  { id: 3, paiId: 2 },    // neto (filho de 2)
-  { id: 4, paiId: 1 },    // filho de 1
-  { id: 5, paiId: null }, // raiz B (não relacionada)
+  { id: 1, paiId: null },
+  { id: 2, paiId: 1 },
+  { id: 3, paiId: 2 },
+  { id: 4, paiId: 1 },
+  { id: 5, paiId: null },
 ];
 
 test('subarvore inclui a raiz e todos os descendentes', () => {

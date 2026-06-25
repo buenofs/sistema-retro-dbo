@@ -23,7 +23,6 @@ export function registrarRotasPropriedades(
         },
       });
     }
-    // sem ação: consultas de catálogo não vão para o Monitor
     const props = await obterPropriedades(criarBanco(req.sessao!.pool), analise.data);
     if (!props) {
       return reply

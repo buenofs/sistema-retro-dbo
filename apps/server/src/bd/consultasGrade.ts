@@ -8,14 +8,13 @@ export interface MetadadosTabela {
   chavePrimaria: string[];
 }
 
-// Colunas + PK da tabela (reusa a consulta de catálogo da Fase 3).
 export async function obterMetadados(banco: Banco, ref: RefObjeto): Promise<MetadadosTabela> {
   const colunas = await listarColunas(banco, ref);
   const chavePrimaria = colunas.filter((coluna) => coluna.ehChavePrimaria).map((coluna) => coluna.nome);
   return { colunas, chavePrimaria };
 }
 
-// Página de linhas via OFFSET/FETCH. Ordena pela PK (ou 1ª coluna).
+/** Lista uma página de linhas via OFFSET/FETCH; ordena pela PK ou pela primeira coluna. */
 export async function listarLinhas(
   banco: Banco,
   ref: RefObjeto,

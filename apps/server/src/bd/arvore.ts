@@ -1,11 +1,9 @@
-// Lógica de árvore em memória — sem SQL. Percorre itens pela ligação paiId.
 export interface NoArvore {
   id: number;
   paiId: number | null;
 }
 
-// Subárvore de `raizId`, incluindo a própria raiz, em ordem de largura
-// (pais sempre antes dos filhos — útil para reinserir ao copiar).
+/** Retorna a subárvore de `raizId` (inclusive) em ordem de largura; pais sempre antes dos filhos. */
 export function subarvore<T extends NoArvore>(itens: T[], raizId: number): T[] {
   const filhosPorPai = new Map<number, T[]>();
   for (const it of itens) {
@@ -28,8 +26,7 @@ export function subarvore<T extends NoArvore>(itens: T[], raizId: number): T[] {
   return resultado;
 }
 
-// Mover/copiar `id` para dentro de `destino` cria ciclo?
-// Sim se o destino é o próprio item ou um descendente dele.
+/** Retorna true se mover/copiar `id` para `destino` criaria um ciclo (destino é o próprio item ou descendente). */
 export function criaCiclo(itens: NoArvore[], id: number, destino: number | null): boolean {
   if (destino === null) return false;
   if (destino === id) return true;

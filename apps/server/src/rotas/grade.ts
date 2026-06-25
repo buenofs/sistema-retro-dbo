@@ -23,7 +23,6 @@ function erroValidacao(reply: FastifyReply, mensagem: string, status = 400) {
   return reply.status(status).send({ ok: false, erro: { tipo: 'validacao', mensagem } });
 }
 
-// Devolve o nome da primeira coluna inválida, ou null se todas existem.
 function colunaInvalida(meta: MetadadosTabela, nomes: string[]): string | null {
   const validas = new Set(meta.colunas.map((coluna) => coluna.nome));
   for (const nome of nomes) if (!validas.has(nome)) return nome;
@@ -37,7 +36,6 @@ export function registrarRotasGrade(app: FastifyInstance, gerenciador: Gerenciad
     const a = esquemaPaginaGrade.safeParse(req.query);
     if (!a.success) return erroValidacao(reply, a.error.issues[0]?.message ?? 'Parâmetros inválidos.');
     const ref = { esquema: a.data.esquema, tabela: a.data.tabela };
-    // sem ação: consultas de grade não vão para o Monitor
     const banco = criarBanco(req.sessao!.pool);
     const meta = await obterMetadados(banco, ref);
     if (meta.colunas.length === 0) return erroValidacao(reply, 'Tabela não encontrada.', 404);
@@ -50,7 +48,6 @@ export function registrarRotasGrade(app: FastifyInstance, gerenciador: Gerenciad
     const a = esquemaInsercao.safeParse(req.body);
     if (!a.success) return erroValidacao(reply, 'Dados de inserção inválidos.');
     const ref = { esquema: a.data.esquema, tabela: a.data.tabela };
-    // sem ação: consultas de grade não vão para o Monitor
     const banco = criarBanco(req.sessao!.pool);
     const meta = await obterMetadados(banco, ref);
     if (meta.colunas.length === 0) return erroValidacao(reply, 'Tabela não encontrada.', 404);
@@ -67,7 +64,6 @@ export function registrarRotasGrade(app: FastifyInstance, gerenciador: Gerenciad
     if (Object.keys(a.data.valores).length === 0) return erroValidacao(reply, 'Nada para atualizar.');
     if (Object.keys(a.data.chave).length === 0) return erroValidacao(reply, 'Chave ausente.');
     const ref = { esquema: a.data.esquema, tabela: a.data.tabela };
-    // sem ação: consultas de grade não vão para o Monitor
     const banco = criarBanco(req.sessao!.pool);
     const meta = await obterMetadados(banco, ref);
     if (meta.colunas.length === 0) return erroValidacao(reply, 'Tabela não encontrada.', 404);
@@ -83,7 +79,6 @@ export function registrarRotasGrade(app: FastifyInstance, gerenciador: Gerenciad
     if (!a.success) return erroValidacao(reply, 'Dados de remoção inválidos.');
     if (Object.keys(a.data.chave).length === 0) return erroValidacao(reply, 'Chave ausente.');
     const ref = { esquema: a.data.esquema, tabela: a.data.tabela };
-    // sem ação: consultas de grade não vão para o Monitor
     const banco = criarBanco(req.sessao!.pool);
     const meta = await obterMetadados(banco, ref);
     if (meta.colunas.length === 0) return erroValidacao(reply, 'Tabela não encontrada.', 404);

@@ -1,14 +1,14 @@
 import { construirApp } from './app';
 
 const PORTA = Number(process.env.PORTA ?? 3001);
-const INTERVALO_LIMPEZA_MS = 60_000; // varre sessões ociosas a cada minuto
+const INTERVALO_LIMPEZA_MS = 60_000;
 
 const app = construirApp();
 
 const limpeza = setInterval(() => {
   void app.pools.limparExpiradas(Date.now());
 }, INTERVALO_LIMPEZA_MS);
-limpeza.unref?.(); // não segura o processo vivo sozinho
+limpeza.unref?.();
 
 app
   .listen({ port: PORTA, host: '0.0.0.0' })

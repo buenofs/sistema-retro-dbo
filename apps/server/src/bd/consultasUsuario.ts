@@ -2,10 +2,7 @@ import type { ConnectionPool } from 'mssql';
 import type { ResultadoConsulta } from '@dbos/shared';
 import { somar } from './banco';
 
-// Exceção sancionada ao handle `banco`: este é o console SQL. Roda o SQL do
-// usuário VERBATIM (spec §2.2) e precisa do resultado bruto (colunas, contagem),
-// que o handle não expõe. A fronteira de segurança é a permissão do login + o
-// requestTimeout do pool + o teto `maxLinhas`.
+/** Console SQL: roda o SQL do usuário verbatim; exceção sancionada ao handle banco (precisa do resultado bruto). Fronteira de segurança: permissão do login + timeout + maxLinhas. */
 export async function executarConsulta(
   pool: ConnectionPool,
   sqlTexto: string,
