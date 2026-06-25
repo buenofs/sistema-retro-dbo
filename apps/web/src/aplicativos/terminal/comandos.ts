@@ -4,7 +4,6 @@ export interface ItemTerminal {
   tipo: 'pasta' | 'arquivo';
 }
 
-// Interface desacoplada do React — o Terminal injeta a implementação real.
 export interface ContextoTerminal {
   letra: string;
   listar: (paiId: number | null) => Promise<ItemTerminal[]>;
@@ -46,6 +45,7 @@ const AJUDA = [
   '  empty                      esvazia a Lixeira',
 ];
 
+/** Cria um shell de linha de comando que opera sobre o ContextoTerminal injetado. */
 export function criarShell(ctx: ContextoTerminal) {
   const pilha: Nivel[] = [{ id: null, nome: '' }];
   const atual = () => pilha[pilha.length - 1]!;

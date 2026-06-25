@@ -4,8 +4,7 @@ const TIPOS_NUMERICOS = [
   'int', 'bigint', 'smallint', 'tinyint', 'decimal', 'numeric', 'float', 'real', 'money', 'smallmoney',
 ];
 
-// Converte o texto digitado para o tipo adequado da coluna. O resto vai como
-// string e o SQL Server converte implicitamente (spec: parametrizado e seguro).
+/** Converte o texto digitado para o tipo da coluna; o resto vai como string e o SQL Server converte implicitamente. */
 export function converterValor(coluna: ColunaBanco, texto: string): ValorCelula {
   if (texto === '') return coluna.anulavel ? null : '';
   const base = baseTipo(coluna.tipoDado);

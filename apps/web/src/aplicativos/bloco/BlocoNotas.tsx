@@ -13,7 +13,6 @@ export function BlocoNotas({ janela }: PropsApp) {
   const [texto, setTexto] = useState('');
   const [carregado, setCarregado] = useState(false);
 
-  // Sincroniza o textarea quando o conteúdo chega.
   useEffect(() => {
     if (consulta.data && !carregado) {
       setTexto(consulta.data.conteudo);
@@ -21,7 +20,6 @@ export function BlocoNotas({ janela }: PropsApp) {
     }
   }, [consulta.data, carregado]);
 
-  // Se a janela passar a apontar para outro arquivo, recarrega.
   useEffect(() => { setCarregado(false); }, [id]);
 
   if (!dados) return <Estado>Nenhum arquivo aberto.</Estado>;

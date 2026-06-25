@@ -20,7 +20,6 @@ export function GradeResultado({ resultado }: { resultado: ResultadoConsulta }) 
     overscan: 12,
   });
 
-  // Comando sem recordset (INSERT/UPDATE/DELETE).
   if (resultado.colunas.length === 0) {
     return (
       <Estado>Comando executado. Linhas afetadas: {resultado.linhasAfetadas}.</Estado>

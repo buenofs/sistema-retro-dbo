@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-// Devolve `valor` só depois que ele para de mudar por `atrasoMs` (spec §2.3).
+/** Devolve `valor` somente após `atrasoMs` ms sem mudanças (debounce). */
 export function useValorDebounced<T>(valor: T, atrasoMs: number): T {
   const [debounced, setDebounced] = useState(valor);
   useEffect(() => {

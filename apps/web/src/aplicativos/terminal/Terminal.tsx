@@ -19,7 +19,6 @@ export function Terminal() {
   const fimRef = useRef<HTMLDivElement>(null);
   const entradaRef = useRef<HTMLInputElement>(null);
 
-  // Descobre a letra do drive atual (para o prompt).
   useEffect(() => {
     let vivo = true;
     pegar<Envelope<Drive[]>>('/api/arquivos/drives').then((envelope) => {
@@ -54,7 +53,6 @@ export function Terminal() {
     limpar: () => setLinhas([]),
   }), [letra, driveId]);
 
-  // Shell estável por (driveId, letra): preserva o diretório atual entre comandos.
   const shellRef = useRef(criarShell(ctx));
   useEffect(() => { shellRef.current = criarShell(ctx); }, [ctx]);
 
