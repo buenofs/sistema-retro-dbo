@@ -3,10 +3,10 @@ import type { TipoObjeto } from './explorador';
 
 export interface IndiceBanco {
   nome: string;
-  tipo: string; // type_desc do SQL Server: CLUSTERED / NONCLUSTERED / ...
+  tipo: string;
   unico: boolean;
   chavePrimaria: boolean;
-  colunas: string[]; // colunas-chave do índice, em ordem
+  colunas: string[];
 }
 
 export interface PropriedadesObjeto {
@@ -14,9 +14,9 @@ export interface PropriedadesObjeto {
   nome: string;
   tipo: TipoObjeto;
   totalColunas: number;
-  totalLinhas: number; // aproximado (sys.partitions); 0 para views
-  criadoEm: string | null; // ISO
-  modificadoEm: string | null; // ISO
+  totalLinhas: number;
+  criadoEm: string | null;
+  modificadoEm: string | null;
   indices: IndiceBanco[];
 }
 

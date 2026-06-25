@@ -1,10 +1,9 @@
 import type { Resposta } from './respostas';
 
-// Usuário autenticado, exposto ao cliente. NUNCA inclui a senha.
+/** Usuário autenticado exposto ao cliente; nunca inclui a senha. */
 export interface UsuarioSessao {
   login: string;
-  banco: string; // nome do banco conectado (SQL_BANCO)
+  banco: string;
 }
 
-// Resposta do login e da checagem de sessão atual.
 export type RespostaSessao = Resposta<UsuarioSessao>;
