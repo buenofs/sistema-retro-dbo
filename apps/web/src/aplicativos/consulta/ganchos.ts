@@ -2,7 +2,6 @@ import { useMutation } from '@tanstack/react-query';
 import type { ErroApi, ResultadoConsulta } from '@dbos/shared';
 import { requisitar } from '../../api/cliente';
 
-// Erro que preserva o ErroApi inteiro (mensagem + detalhe + codigoSql) para o diálogo.
 export class ErroApiError extends Error {
   constructor(public readonly erro: ErroApi) {
     super(erro.mensagem);

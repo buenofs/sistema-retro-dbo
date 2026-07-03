@@ -2,7 +2,6 @@ import { useQuery } from '@tanstack/react-query';
 import type { ColunaBanco, ObjetoBanco } from '@dbos/shared';
 import { requisitar } from '../../api/cliente';
 
-// Lista de objetos do banco. Em erro, lança a mensagem pt-BR para a tela exibir.
 export function useObjetos() {
   return useQuery({
     queryKey: ['explorador', 'objetos'],
@@ -14,7 +13,6 @@ export function useObjetos() {
   });
 }
 
-// Colunas de um objeto. Chave estruturada (spec §6.2) → cache por objeto.
 export function useColunas(esquema: string, tabela: string) {
   return useQuery({
     queryKey: ['explorador', 'colunas', esquema, tabela],

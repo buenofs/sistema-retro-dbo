@@ -4,7 +4,6 @@ import { useLoja } from './loja';
 import { MenuIniciar } from './MenuIniciar';
 import { Relogio } from './Relogio';
 import { Icone } from '../tema/icones/Icone';
-import { usePainelTweaks } from '../tema/painel';
 
 export function BarraTarefas({ login }: { login: string }) {
   const [menuAberto, setMenuAberto] = useState(false);
@@ -22,9 +21,7 @@ export function BarraTarefas({ login }: { login: string }) {
     document.addEventListener('mousedown', aoClicarFora);
     return () => document.removeEventListener('mousedown', aoClicarFora);
   }, [menuAberto]);
-  // useShallow compara só um nível: comparar um array de objetos recém-criados
-  // nunca casa (refs distintas) e cai em loop. Assinamos o array de janelas e
-  // derivamos os dados de exibição no render.
+  // useShallow compara só um nível: assinar um array de objetos novos cai em loop; assine s.janelas e derive no render.
   const janelas = useLoja(useShallow((s) => s.janelas)).map((j) => ({
     id: j.id,
     titulo: j.titulo,
@@ -35,8 +32,6 @@ export function BarraTarefas({ login }: { login: string }) {
   const focar = useLoja((s) => s.focar);
   const minimizar = useLoja((s) => s.minimizar);
   const restaurar = useLoja((s) => s.restaurar);
-  const alternarPainel = usePainelTweaks((s) => s.alternar);
-
   function aoClicarJanela(id: string, minimizada: boolean) {
     if (minimizada) {
       restaurar(id);
@@ -76,14 +71,6 @@ export function BarraTarefas({ login }: { login: string }) {
         ))}
       </div>
       <span className="bandeja-icones">
-        <button
-          type="button"
-          className="bandeja-engrenagem"
-          aria-label="Configurações"
-          onClick={alternarPainel}
-        >
-          <Icone nome="props" tamanho={16} alt="" />
-        </button>
         <Icone nome="database" tamanho={16} alt="" />
         <Icone nome="wifi" tamanho={16} alt="" />
         <Icone nome="speaker" tamanho={16} alt="" />

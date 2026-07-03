@@ -1,9 +1,8 @@
 import type { Retangulo } from './tipos';
 
-// Altura da barra de tarefas (px). Compartilhada entre o clamp e o CSS.
+// Compartilhada entre o clamp e o CSS.
 export const ALTURA_BARRA = 30;
 
-// Mantém o retângulo dentro do viewport, deixando a barra de tarefas livre embaixo.
 export function limitarRetangulo(
   r: Retangulo,
   viewport: { largura: number; altura: number },

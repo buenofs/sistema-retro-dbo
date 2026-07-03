@@ -1,5 +1,4 @@
-import { memo, useContext, type CSSProperties } from 'react';
-import { ContextoTema } from '../ProvedorTema';
+import { memo, type CSSProperties } from 'react';
 import { obterIcone, type NomeIcone } from './motor';
 
 export interface PropsIcone {
@@ -17,18 +16,15 @@ export const Icone = memo(function Icone({
   className,
   style,
 }: PropsIcone) {
-  const ctx = useContext(ContextoTema);
-  const pele = ctx?.tema.pele ?? '98';
-  const renderizacao: CSSProperties['imageRendering'] = pele === 'aero' ? 'auto' : 'pixelated';
   return (
     <img
-      src={obterIcone(nome, pele, tamanho)}
+      src={obterIcone(nome, 'aero', tamanho)}
       width={tamanho}
       height={tamanho}
       alt={alt ?? ''}
       className={className}
       draggable={false}
-      style={{ imageRendering: renderizacao, verticalAlign: 'middle', ...style }}
+      style={{ imageRendering: 'auto', verticalAlign: 'middle', ...style }}
     />
   );
 });

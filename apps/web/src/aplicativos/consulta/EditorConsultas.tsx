@@ -5,7 +5,6 @@ import { ErroApiError, useExecutarConsulta } from './ganchos';
 import { GradeResultado } from './GradeResultado';
 import { useDialogos } from '../../areaTrabalho/useDialogos';
 import { Icone } from '../../tema/icones/Icone';
-import { useTema } from '../../tema/ganchos';
 import { useSessao } from '../../autenticacao/ganchos';
 import { temaCodeMirror } from './temaCodeMirror';
 import './consulta.css';
@@ -17,7 +16,6 @@ export function EditorConsultas() {
   const [ms, setMs] = useState<number | null>(null);
   const executar = useExecutarConsulta();
   const abrirDialogo = useDialogos((s) => s.abrir);
-  const { pele } = useTema();
   const sessao = useSessao();
 
   function rodar() {
@@ -60,7 +58,7 @@ export function EditorConsultas() {
         <CodeMirror
           value={texto}
           height="160px"
-          extensions={[sql(), temaCodeMirror(pele)]}
+          extensions={[sql(), temaCodeMirror]}
           onChange={setTexto}
         />
       </div>

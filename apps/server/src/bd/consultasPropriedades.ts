@@ -3,7 +3,7 @@ import type { ConnectionPool } from 'mssql';
 import type { IndiceBanco, PropriedadesObjeto, RefObjeto, TipoObjeto } from '@dbos/shared';
 
 // Um Request roda uma query só; cada consulta recebe um request novo já com os
-// parâmetros @esquema/@tabela (cru, mas parametrizado — spec §2.2).
+// parâmetros @esquema/@tabela.
 function comParams(pool: ConnectionPool, ref: RefObjeto) {
   return pool
     .request()

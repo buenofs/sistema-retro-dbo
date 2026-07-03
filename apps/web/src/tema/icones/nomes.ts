@@ -1,4 +1,3 @@
-// Fonte da verdade dos nomes de ícone. NomeIcone deriva daqui.
 export const NOMES_ICONES = [
   'folder','folderOpen','sql','grid','props','search','network','terminal',
   'report','database','computer','table','view','column','key','run','save',

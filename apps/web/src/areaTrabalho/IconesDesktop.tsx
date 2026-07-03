@@ -6,7 +6,7 @@ import { Icone } from '../tema/icones/Icone';
 import { useIconesDesktop, useSelecaoIcones } from './lojaIconesDesktop';
 import type { TipoApp } from './tipos';
 
-const LIMIAR = 4; // px para começar a arrastar
+const LIMIAR = 4;
 
 export function IconesDesktop() {
   const abrirJanela = useLoja((s) => s.abrirJanela);

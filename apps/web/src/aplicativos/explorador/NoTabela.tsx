@@ -5,8 +5,6 @@ import { useLoja } from '../../areaTrabalho/loja';
 import { ColunasDaTabela } from './ColunasDaTabela';
 import { Icone } from '../../tema/icones/Icone';
 
-// Nó expansível: ao abrir, monta <ColunasDaTabela> — é o que dispara a busca lazy.
-// Memoizado: re-renderiza só quando o próprio `objeto` muda (spec §2.3).
 export const NoTabela = memo(function NoTabela({ objeto }: { objeto: ObjetoBanco }) {
   const [aberto, setAberto] = useState(false);
   const abrirMenu = useMenuContexto((s) => s.abrir);

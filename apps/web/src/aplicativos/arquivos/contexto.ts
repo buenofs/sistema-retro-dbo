@@ -1,7 +1,5 @@
 import { create } from 'zustand';
 
-// Onde o usuário está no SO: drive atual e usuário dono. Compartilhado entre
-// Explorador e Terminal (Fase 3).
 interface ContextoArquivos {
   driveId: number;
   donoId: number;

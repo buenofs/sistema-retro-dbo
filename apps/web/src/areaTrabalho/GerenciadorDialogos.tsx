@@ -11,12 +11,10 @@ const ICONE: Record<Dialogo['tipo'], NomeIcone> = {
   info: 'props',
 };
 
-// Portal único de diálogos modais 98.css (spec §6.4). Montado uma vez no desktop.
 export function GerenciadorDialogos() {
   const dialogos = useDialogos(useShallow((s) => s.dialogos));
   const fechar = useDialogos((s) => s.fechar);
 
-  // a11y: Esc fecha o diálogo do topo.
   useEffect(() => {
     if (dialogos.length === 0) return;
     function aoTecla(e: KeyboardEvent) {
@@ -42,7 +40,6 @@ export function GerenciadorDialogos() {
 function CaixaDialogo({ dialogo, aoFechar }: { dialogo: Dialogo; aoFechar: () => void }) {
   const okRef = useRef<HTMLButtonElement>(null);
 
-  // Bipe ao abrir (spec §6.4) + foco no OK (a11y).
   useEffect(() => {
     tocarSom('erro');
     okRef.current?.focus();

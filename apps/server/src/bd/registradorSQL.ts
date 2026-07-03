@@ -1,7 +1,6 @@
 import type { ConnectionPool, IRecordSet } from 'mssql';
 import type { ComandoSQL, TipoComando } from '@dbos/shared';
 
-// Classifica o SQL pela primeira palavra-chave de comando (ignora CTE `WITH`).
 export function tipoDoTexto(texto: string): TipoComando {
   const t = texto.trim().toUpperCase();
   const corpo = t.startsWith('WITH') ? t.slice(t.indexOf(')') + 1) : t;

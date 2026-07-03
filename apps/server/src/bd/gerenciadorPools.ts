@@ -3,7 +3,7 @@ import type { ConnectionPool } from 'mssql';
 export interface RegistroSessao {
   pool: ConnectionPool;
   login: string;
-  ultimoAcesso: number; // epoch ms
+  ultimoAcesso: number;
 }
 
 export interface OpcoesGerenciador {
@@ -20,7 +20,6 @@ export interface GerenciadorPools {
   tamanho(): number;
 }
 
-// Lançado quando o limite de sessões simultâneas é atingido.
 export class ErroLimiteSessoes extends Error {
   constructor() {
     super('Limite de sessões simultâneas atingido.');
@@ -28,7 +27,6 @@ export class ErroLimiteSessoes extends Error {
   }
 }
 
-// Mantém os ConnectionPools vivos em memória, um por sessão (spec §5.3, opção A).
 export function criarGerenciadorPools(opcoes: OpcoesGerenciador): GerenciadorPools {
   const registros = new Map<string, RegistroSessao>();
 

@@ -12,8 +12,6 @@ export interface OpcoesArrasto {
   aoFinalizar?: () => void;
 }
 
-// Devolve um handler de onPointerDown. Enquanto o ponteiro se move, chama
-// aoMover no máximo uma vez por frame (rAF) com o deslocamento total.
 export function usarArrasto({ aoIniciar, aoMover, aoFinalizar }: OpcoesArrasto) {
   const ref = useRef({ inicioX: 0, inicioY: 0, ultimoX: 0, ultimoY: 0, frame: 0, ativo: false });
 
@@ -30,7 +28,7 @@ export function usarArrasto({ aoIniciar, aoMover, aoFinalizar }: OpcoesArrasto) 
       function aoMoverPonteiro(ev: PointerEvent) {
         e.ultimoX = ev.clientX;
         e.ultimoY = ev.clientY;
-        if (e.frame) return; // já há um frame agendado
+        if (e.frame) return;
         e.frame = requestAnimationFrame(() => {
           e.frame = 0;
           if (!e.ativo) return;

@@ -4,7 +4,6 @@ export interface ItemTerminal {
   tipo: 'pasta' | 'arquivo';
 }
 
-// Interface desacoplada do React — o Terminal injeta a implementação real.
 export interface ContextoTerminal {
   letra: string;
   listar: (paiId: number | null) => Promise<ItemTerminal[]>;

@@ -1,7 +1,6 @@
 import { z } from 'zod';
 import type { Resposta } from './respostas';
 
-// ---- Modelos de leitura ----
 export type TipoItem = 'pasta' | 'arquivo';
 
 export interface Item {
@@ -42,7 +41,6 @@ export interface UsoDrive {
   livreBytes: number;
 }
 
-// ---- Log de SQL (compartilhado com o Monitor da Fase 4) ----
 export type TipoComando = 'INSERT' | 'UPDATE' | 'DELETE' | 'SELECT';
 
 export interface ComandoSQL {
@@ -55,10 +53,8 @@ export interface ComandoSQL {
   em: string; // ISO
 }
 
-// Envelope de mutação: dados + o SQL que rodou.
 export type RespostaArquivos<T> = Resposta<{ dados: T; sql: ComandoSQL[] }>;
 
-// ---- Schemas de entrada (Zod) ----
 const nome = z.string().min(1).max(255);
 const paiOpcional = z.number().int().positive().nullable();
 

@@ -64,7 +64,6 @@ export async function lerItem(
   return (r as unknown as { id: number; nome: string; conteudo: string | null }[])[0] ?? null;
 }
 
-// Lança Error('PaiInvalido') se paiId não existir ou não for pasta.
 async function validarPai(pool: ConnectionPool, reg: RegistradorSQL, paiId: number | null): Promise<void> {
   if (paiId === null) return;
   const r = await reg.executar<{ tipo: string }>(pool, 'SELECT tipo FROM dbo.Itens WHERE id = @pai', { pai: paiId });
@@ -94,7 +93,6 @@ export async function salvarConteudo(pool: ConnectionPool, reg: RegistradorSQL, 
   await reg.executar(pool, 'UPDATE dbo.Itens SET conteudo = @conteudo, modificadoEm = SYSDATETIME() WHERE id = @id', { conteudo, id });
 }
 
-// Retorna true se `destino` está dentro da subárvore de `id` (ou é o próprio id).
 async function criaCiclo(pool: ConnectionPool, reg: RegistradorSQL, id: number, destino: number | null): Promise<boolean> {
   if (destino === null) return false;
   if (destino === id) return true;
@@ -112,7 +110,6 @@ export async function mover(pool: ConnectionPool, reg: RegistradorSQL, id: numbe
   await reg.executar(pool, 'UPDATE dbo.Itens SET paiId = @pai, modificadoEm = SYSDATETIME() WHERE id = @id', { pai: paiId, id });
 }
 
-// Soft-delete (=1) ou restauração (=0) da subárvore inteira.
 async function marcarLixeira(pool: ConnectionPool, reg: RegistradorSQL, id: number, valor: 0 | 1): Promise<void> {
   await reg.executar(
     pool,
@@ -131,7 +128,6 @@ export async function esvaziarLixeira(pool: ConnectionPool, reg: RegistradorSQL)
   await reg.executar(pool, 'DELETE FROM dbo.Itens WHERE naLixeira = 1', {});
 }
 
-// Copia um item (e a subárvore, se pasta) para dentro de `destino`.
 export async function copiar(pool: ConnectionPool, reg: RegistradorSQL, id: number, destino: number | null, donoId: number): Promise<void> {
   if (await criaCiclo(pool, reg, id, destino)) throw new Error('MovimentoCiclico');
   await validarPai(pool, reg, destino);
@@ -147,7 +143,7 @@ export async function copiar(pool: ConnectionPool, reg: RegistradorSQL, id: numb
     ? nos[0]!.driveId
     : ((await reg.executar<{ driveId: number }>(pool, 'SELECT driveId FROM dbo.Itens WHERE id = @d', { d: destino })) as unknown as { driveId: number }[])[0]!.driveId;
 
-  const mapa = new Map<number, number>(); // idAntigo -> idNovo
+  const mapa = new Map<number, number>();
   for (const no of nos) {
     const ehRaiz = no.id === id;
     const novoPai = ehRaiz ? destino : mapa.get(no.paiId!)!;

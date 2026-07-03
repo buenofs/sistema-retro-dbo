@@ -3,7 +3,6 @@ import type { ComandoSQL, Drive, Item, ItemArvore, UsoDrive } from '@dbos/shared
 import { requisitar } from '../../api/cliente';
 import { ErroApiError } from '../consulta/ganchos';
 
-// Envelope da Fase 1: payload + o SQL que rodou.
 export type Envelope<T> = { dados: T; sql: ComandoSQL[] };
 
 async function pegar<T>(caminho: string): Promise<Envelope<T>> {

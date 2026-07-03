@@ -14,7 +14,6 @@ export interface MetadadosTabela {
   chavePrimaria: string[];
 }
 
-// Colunas + PK da tabela (reusa a consulta de catálogo da Fase 3).
 export async function obterMetadados(pool: ConnectionPool, ref: RefObjeto): Promise<MetadadosTabela> {
   const colunas = await listarColunas(pool, ref);
   const chavePrimaria = colunas.filter((c) => c.ehChavePrimaria).map((c) => c.nome);
@@ -25,7 +24,6 @@ function somaAfetadas(r: { rowsAffected?: number[] }): number {
   return (r.rowsAffected ?? []).reduce((a, b) => a + b, 0);
 }
 
-// Página de linhas via OFFSET/FETCH. Ordena pela PK (ou 1ª coluna).
 export async function listarLinhas(
   pool: ConnectionPool,
   ref: RefObjeto,

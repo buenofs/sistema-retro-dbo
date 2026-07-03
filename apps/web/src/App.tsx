@@ -4,7 +4,6 @@ import { TelaBoot } from './TelaBoot';
 import { TelaLogin } from './autenticacao/TelaLogin';
 import { AreaTrabalho } from './areaTrabalho/AreaTrabalho';
 
-// boot (recarregável via "Reiniciar sessão") → login → desktop.
 export function App() {
   const bootConcluido = useBoot((s) => s.concluido);
   const concluirBoot = useBoot((s) => s.concluir);

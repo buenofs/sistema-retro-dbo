@@ -2,11 +2,9 @@ import { ORDEM_APPS, registroApps } from './registroApps';
 import { useLoja } from './loja';
 import { useLogout } from '../autenticacao/ganchos';
 import { Icone } from '../tema/icones/Icone';
-import { usePainelTweaks } from '../tema/painel';
 
 export function MenuIniciar({ login, aoFechar }: { login: string; aoFechar: () => void }) {
   const abrirJanela = useLoja((s) => s.abrirJanela);
-  const abrirPainel = usePainelTweaks((s) => s.abrir);
   const sair = useLogout();
 
   return (
@@ -30,18 +28,6 @@ export function MenuIniciar({ login, aoFechar }: { login: string; aoFechar: () =
             </button>
           </li>
         ))}
-        <li className="menu-iniciar-separador" aria-hidden="true" />
-        <li>
-          <button
-            role="menuitem"
-            onClick={() => {
-              abrirPainel();
-              aoFechar();
-            }}
-          >
-            <Icone nome="props" tamanho={16} alt="" style={{ marginRight: 6 }} /> Configurações
-          </button>
-        </li>
         <li className="menu-iniciar-separador" aria-hidden="true" />
         <li>
           <button role="menuitem" disabled={sair.isPending} onClick={() => sair.mutate()}>

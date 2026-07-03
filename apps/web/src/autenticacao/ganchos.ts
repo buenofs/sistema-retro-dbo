@@ -4,7 +4,6 @@ import { requisitar } from '../api/cliente';
 
 const CHAVE_SESSAO = ['sessao'] as const;
 
-// Consulta a sessão atual: devolve o usuário ou null (não autenticado).
 export function useSessao() {
   return useQuery({
     queryKey: CHAVE_SESSAO,
@@ -15,7 +14,6 @@ export function useSessao() {
   });
 }
 
-// Login: em caso de erro lança com a mensagem em pt-BR para a tela exibir.
 export function useLogin() {
   const qc = useQueryClient();
   return useMutation({
@@ -31,7 +29,6 @@ export function useLogin() {
   });
 }
 
-// Logout: zera a sessão no cache ao concluir.
 export function useLogout() {
   const qc = useQueryClient();
   return useMutation({

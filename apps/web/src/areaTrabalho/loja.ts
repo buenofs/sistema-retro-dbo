@@ -3,7 +3,6 @@ import { persist } from 'zustand/middleware';
 import type { EstadoJanela, IdJanela, LojaAreaTrabalho, TipoApp } from './tipos';
 import { registroApps } from './registroApps';
 
-// Estado inicial isolado para reaproveitar no reset dos testes.
 export function estadoInicial() {
   return {
     janelas: [] as EstadoJanela[],
@@ -22,7 +21,7 @@ export const useLoja = create<LojaAreaTrabalho>()(
     set((s) => {
       const def = registroApps[tipoApp];
       const id = `j${s.proximoId}`;
-      const desloc = (s.janelas.length % 6) * 28; // cascata clássica
+      const desloc = (s.janelas.length % 6) * 28;
       const janela: EstadoJanela = {
         id,
         tipoApp,
@@ -102,7 +101,6 @@ export const useLoja = create<LojaAreaTrabalho>()(
     }),
     {
       name: 'dbos-area-trabalho',
-      // Só geometria/estado de janelas — funções não são serializadas pelo persist.
       partialize: (s) => ({
         janelas: s.janelas,
         idFocada: s.idFocada,

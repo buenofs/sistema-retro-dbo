@@ -30,7 +30,6 @@ export function Terminal() {
   const fimRef = useRef<HTMLDivElement>(null);
   const entradaRef = useRef<HTMLInputElement>(null);
 
-  // Descobre a letra do drive atual (para o prompt).
   useEffect(() => {
     let vivo = true;
     api<Drive[]>('/api/arquivos/drives').then((e) => {

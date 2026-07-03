@@ -2,7 +2,6 @@ import sql from 'mssql';
 import type { ConnectionPool } from 'mssql';
 import type { ColunaBanco, ObjetoBanco, RefObjeto } from '@dbos/shared';
 
-// Tabelas e views do banco atual (spec §5.5 — SQL cru no INFORMATION_SCHEMA).
 const SQL_OBJETOS = `
   SELECT TABLE_SCHEMA AS esquema,
          TABLE_NAME   AS nome,
@@ -17,7 +16,6 @@ export async function listarObjetos(pool: ConnectionPool): Promise<ObjetoBanco[]
   return resultado.recordset;
 }
 
-// Colunas de um objeto. Parametrizado (@esquema, @tabela) — cru mas seguro (spec §2.2).
 // O bit do SQL Server volta como boolean no driver mssql, então anulavel/ehChavePrimaria
 // já chegam como true/false ao cliente.
 const SQL_COLUNAS = `

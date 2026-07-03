@@ -8,8 +8,6 @@ import { CamadaJanelas } from './CamadaJanelas';
 import { BarraTarefas } from './BarraTarefas';
 import { GerenciadorDialogos } from './GerenciadorDialogos';
 import { MenuContexto } from './MenuContexto';
-import { PainelTweaks } from '../tema/PainelTweaks';
-import { usePainelTweaks } from '../tema/painel';
 import { IconesDesktop } from './IconesDesktop';
 import { useIconesDesktop, useSelecaoIcones, LARGURA_ICONE, ALTURA_ICONE } from './lojaIconesDesktop';
 import './areaTrabalho.css';
@@ -18,7 +16,6 @@ export function AreaTrabalho({ usuario }: { usuario: UsuarioSessao }) {
   usarSonsJanelas();
   const abrirJanela = useLoja((s) => s.abrirJanela);
   const abrirMenu = useMenuContexto((s) => s.abrir);
-  const abrirPainel = usePainelTweaks((s) => s.abrir);
   const limparSelecao = useSelecaoIcones((s) => s.limpar);
   const definirSelecao = useSelecaoIcones((s) => s.definir);
   const [marquee, setMarquee] = useState<{ x0: number; y0: number; x1: number; y1: number } | null>(null);
@@ -74,7 +71,6 @@ export function AreaTrabalho({ usuario }: { usuario: UsuarioSessao }) {
           rotulo: `Abrir ${registroApps[tipo].titulo}`,
           aoClicar: () => abrirJanela(tipo),
         }));
-        itens.push({ rotulo: 'Propriedades', aoClicar: () => abrirPainel() });
         abrirMenu(e.clientX, e.clientY, itens);
       }}
     >
@@ -102,7 +98,6 @@ export function AreaTrabalho({ usuario }: { usuario: UsuarioSessao }) {
       <BarraTarefas login={usuario.login} />
       <GerenciadorDialogos />
       <MenuContexto />
-      <PainelTweaks />
     </div>
   );
 }

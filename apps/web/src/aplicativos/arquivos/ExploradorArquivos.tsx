@@ -22,14 +22,12 @@ export function ExploradorArquivos(_props: PropsApp) {
 
   const [sqlAcao, setSqlAcao] = useState<ComandoSQL[] | null>(null);
 
-  // Pilha de navegação: o topo é a pasta atual (id null = raiz do drive).
   const [pilha, setPilha] = useState<Nivel[]>([{ id: null, nome: '' }]);
   const atual = pilha[pilha.length - 1]!;
   const [sel, setSel] = useState<number | null>(null);
   const [copiado, setCopiado] = useState<number | null>(null);
   const [alvo, setAlvo] = useState<number | null>(null);
 
-  // Edição inline
   const [edicao, setEdicao] = useState<{ id: number | 'novo'; tipo: 'pasta' | 'arquivo' } | null>(null);
   const [nomeEdit, setNomeEdit] = useState('');
   const ignorarBlur = useRef(false);
