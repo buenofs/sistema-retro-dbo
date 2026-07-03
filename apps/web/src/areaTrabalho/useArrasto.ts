@@ -12,7 +12,7 @@ export interface OpcoesArrasto {
   aoFinalizar?: () => void;
 }
 
-export function usarArrasto({ aoIniciar, aoMover, aoFinalizar }: OpcoesArrasto) {
+export function useArrasto({ aoIniciar, aoMover, aoFinalizar }: OpcoesArrasto) {
   const ref = useRef({ inicioX: 0, inicioY: 0, ultimoX: 0, ultimoY: 0, frame: 0, ativo: false });
 
   return useCallback(

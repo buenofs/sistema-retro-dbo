@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react';
 import { useLoja } from './loja';
 import { tocarSom } from './sons';
 
-export function usarSonsJanelas(): void {
+export function useSonsJanelas(): void {
   const total = useLoja((s) => s.janelas.length);
   const anterior = useRef(total);
   useEffect(() => {
