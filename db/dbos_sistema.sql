@@ -44,30 +44,44 @@ CREATE UNIQUE INDEX UQ_Itens_local ON dbo.Itens(driveId, paiId, nome) WHERE naLi
 GO
 
 -- Quanto cada usuário guarda, só contando o que não está na lixeira.
-CREATE VIEW dbo.vw_UsoPorUsuario AS
-  SELECT u.id AS usuarioId, u.nome AS usuario,
-    COUNT(i.id) AS itens,
-    ISNULL(SUM(i.tamanhoBytes), 0) AS bytes
+CREATE VIEW dbo.vw_UsoPorUsuario
+AS
+SELECT u.id usuarioId,
+       u.nome usuario,
+       COUNT(i.id) itens,
+       ISNULL(SUM(i.tamanhoBytes), 0) bytes
   FROM dbo.Usuarios u
   LEFT JOIN dbo.Itens i ON i.donoId = u.id AND i.naLixeira = 0
-  GROUP BY u.id, u.nome;
+ GROUP BY u.id, u.nome;
 GO
 
 -- Espaço usado e livre em cada drive.
-CREATE VIEW dbo.vw_UsoPorDrive AS
-  SELECT d.id AS driveId, d.letra, d.rotulo, d.capacidadeBytes,
-    ISNULL(SUM(i.tamanhoBytes), 0) AS usadoBytes,
-    d.capacidadeBytes - ISNULL(SUM(i.tamanhoBytes), 0) AS livreBytes
+CREATE VIEW dbo.vw_UsoPorDrive
+AS
+SELECT d.id driveId,
+       d.letra,
+       d.rotulo,
+       d.capacidadeBytes,
+       ISNULL(SUM(i.tamanhoBytes), 0) usadoBytes,
+       d.capacidadeBytes - ISNULL(SUM(i.tamanhoBytes), 0) livreBytes
   FROM dbo.Drives d
   LEFT JOIN dbo.Itens i ON i.driveId = d.id AND i.naLixeira = 0
-  GROUP BY d.id, d.letra, d.rotulo, d.capacidadeBytes;
+ GROUP BY d.id, d.letra, d.rotulo, d.capacidadeBytes;
 GO
 
 -- O que está na lixeira.
-CREATE VIEW dbo.vw_Lixeira AS
-  SELECT id, nome, tipo, paiId, driveId, donoId, tamanhoBytes, modificadoEm
+CREATE VIEW dbo.vw_Lixeira
+AS
+SELECT id,
+       nome,
+       tipo,
+       paiId,
+       driveId,
+       donoId,
+       tamanhoBytes,
+       modificadoEm
   FROM dbo.Itens
-  WHERE naLixeira = 1;
+ WHERE naLixeira = 1;
 GO
 
 -- Dados iniciais.
