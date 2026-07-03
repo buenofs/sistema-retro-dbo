@@ -5,7 +5,7 @@ import { App } from './App';
 import { ProvedorTema } from './tema/ProvedorTema';
 import './tema/tokens.css';
 import './tema/base.css';
-import './tema/pele-aero.css';
+import './tema/aero.css';
 
 const cliente = new QueryClient();
 

@@ -5,20 +5,10 @@ function prefereReduzirMovimento(): boolean {
   return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 }
 
+// Tema único (aero): as variáveis vivem em tokens.css. Aqui só o que é dinâmico:
+// o multiplicador de animação (respeita prefers-reduced-motion) e habilitar o som.
 export function aplicarTema(): void {
   if (typeof document === 'undefined') return;
-  const r = document.documentElement.style;
-  const corpo = document.body;
-
-  corpo.dataset.skin = 'aero';
-  r.setProperty('--motion', prefereReduzirMovimento() ? '0.001' : '1');
+  document.documentElement.style.setProperty('--motion', prefereReduzirMovimento() ? '0.001' : '1');
   definirSomHabilitado(true);
-
-  r.setProperty('--accent-h', '200');
-  r.setProperty('--round', '8px');
-  r.setProperty('--round-sm', '4px');
-  r.setProperty('--round-btn', '6px');
-  r.setProperty('--glass-blur', '14px');
-  corpo.dataset.corners = 'aero';
-  corpo.dataset.wp = 'aqua';
 }

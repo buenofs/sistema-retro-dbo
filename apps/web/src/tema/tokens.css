@@ -1,27 +1,29 @@
-/* tokens de design — skin padrão = Windows 98; peles sobrescrevem via [data-skin] */
+/* tokens de design — tema Frutiger-Aero (tema único) */
 :root {
-  /* superfícies */
-  --face: #c0c0c0;
-  --face-alta: #dfdfdf;
-  --face-baixa: #808080;
+  /* superfícies (prata fria) */
+  --face: #dde6ef;
+  --face-alta: #f3f7fb;
+  --face-baixa: #c2cedb;
   --janela-conteudo: #ffffff;
 
-  /* níveis de relevo (paleta clássica 98) */
+  /* níveis de relevo (usados pelo esqueleto em base.css: tree-view, tabela, fieldset) */
   --hi: #ffffff; /* realce */
   --light: #dfdfdf; /* realce interno */
   --sh: #808080; /* sombra */
   --dsh: #0a0a0a; /* sombra escura */
 
   /* tinta */
-  --ink: #222222;
-  --ink-suave: #3a3a3a;
+  --ink: #122231;
+  --ink-suave: #3a4d5e;
 
-  /* acento / barra de título (gradiente azul clássico) */
-  --titulo-1: #000080;
-  --titulo-2: #1084d0;
-  --titulo-ink: #ffffff;
-  --accent: #000080;
+  /* acento / barra de título (aqua via matiz --accent-h) */
+  --accent-h: 200;
+  --accent: oklch(0.72 0.16 var(--accent-h, 200));
+  --accent-d: oklch(0.55 0.17 var(--accent-h, 200));
   --accent-ink: #ffffff;
+  --titulo-1: oklch(0.78 0.12 var(--accent-h, 200));
+  --titulo-2: oklch(0.62 0.16 var(--accent-h, 200));
+  --titulo-ink: #ffffff;
 
   /* relevos compostos (box-shadow) */
   --relevo-out:
@@ -33,28 +35,26 @@
   --relevo-out-fino: inset -1px -1px var(--sh), inset 1px 1px var(--hi);
   --relevo-in-fino: inset 1px 1px var(--sh), inset -1px -1px var(--hi);
 
-  /* geometria (0 no 98; Aero usa px) */
-  --round: 0px;
-  --round-sm: 0px;
-  --round-btn: 0px;
+  /* geometria */
+  --round: 8px;
+  --round-sm: 4px;
+  --round-btn: 6px;
 
   /* fontes */
-  --ui: 'Pixelated MS Sans Serif', Arial, sans-serif;
+  --ui: Tahoma, 'Segoe UI', Geneva, Verdana, sans-serif;
   --mono: 'JetBrains Mono', 'Cascadia Code', Consolas, monospace;
 
-  /* multiplicador de animação (Tweaks na Fase 2) */
+  /* multiplicador de animação (tweaks reduz quando prefers-reduced-motion) */
   --motion: 1;
 
-  /* tokens de pele (defaults = 98) */
-  --wallpaper-bg: #008080; /* fundo da área de trabalho / logon */
+  /* área de trabalho / barra de tarefas / vidro */
+  --wallpaper-bg: #008080; /* fundo base; a área de trabalho aplica o gradiente aqua */
   --barra-bg: var(--face); /* fundo da barra de tarefas */
   --barra-borda-topo: var(--hi);
-  --glass-blur: 0px; /* só a pele Aero usa > 0 */
-  --crt: 0; /* opacidade das scanlines (pele 98) */
-  --accent-h: 210; /* matiz do acento — só a pele Aero usa */
-  --accent-d: var(--accent); /* acento escuro (Aero redefine via oklch) */
+  --glass-blur: 14px;
+  --crt: 0; /* opacidade das scanlines do terminal */
 
-  /* boot (defaults atuais; as peles sobrescrevem) */
+  /* boot (sobrescrito pelas regras do tema) */
   --boot-bg: #000000;
   --boot-marca: #00a4a4;
   --boot-marca-sombra: #004f4f;
@@ -65,20 +65,14 @@
   --boot-progresso-2: #007a7a;
   --boot-msg: #9a9a9a;
 
-  /* tokens de app (defaults = 98) */
+  /* tokens de app */
   --borda-painel: var(--sh); /* divisórias 1px "grey" */
   --borda-celula: #c0c0c0; /* bordas de célula de tabela */
   --cabecalho-tabela-bg: var(--face); /* fundo do cabeçalho de tabela */
-  --zebra: transparent; /* linhas zebra (Aero liga) */
+  --zebra: transparent; /* linhas zebra (o tema liga) */
   --aviso-bg: #ffffe1; /* fundo de aviso (truncado) */
   --erro-ink: #a00000; /* texto de erro/alerta */
   --term-bg: #000000; /* terminal: fundo */
   --term-fg: #33ff66; /* terminal: fósforo */
   --term-prompt: #33ff66; /* terminal: prompt */
-  --no-funcionario: var(--accent); /* grafo: cor por tipo */
-  --no-departamento: #f6c945;
-  --no-projeto: #2bc28d;
-  --no-folha: var(--sh);
-  --grafo-bg: var(--janela-conteudo); /* grafo: fundo do canvas */
-  --aresta: #808080; /* grafo: cor de aresta */
 }

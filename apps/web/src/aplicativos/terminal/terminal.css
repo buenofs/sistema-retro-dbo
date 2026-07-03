@@ -60,7 +60,7 @@
 }
 
 /* --- Pele Aero: fósforo com brilho e fundo verde-escuro --- */
-body[data-skin='aero'] .terminal {
+body .terminal {
   --term-bg: transparent;
   --term-fg: #79f2ad;
   --term-prompt: #ffe07a;
@@ -71,7 +71,7 @@ body[data-skin='aero'] .terminal {
     inset 0 0 6px rgba(120, 255, 180, 0.2);
   text-shadow: 0 0 6px rgba(90, 242, 160, 0.6);
 }
-body[data-skin='aero'] .terminal::after {
+body .terminal::after {
   background: repeating-linear-gradient(
     180deg,
     rgba(0, 0, 0, 0) 0 2px,
