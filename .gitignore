@@ -6,6 +6,8 @@ dist/
 bun.lockb
 .DS_Store
 
-# Configurações locais/pessoais do Claude Code
-.claude/settings.local.json
+# Arquivos locais de ferramentas de desenvolvimento
+.claude/
+.agents/
 .superpowers/
+skills-lock.json
