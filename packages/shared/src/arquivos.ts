@@ -22,16 +22,6 @@ export interface Drive {
   capacidadeBytes: number;
 }
 
-export interface ItemArvore {
-  id: number;
-  nome: string;
-  tipo: TipoItem;
-  paiId: number | null;
-  driveId: number;
-  caminho: string;
-  profundidade: number;
-}
-
 export interface UsoDrive {
   driveId: number;
   letra: string;

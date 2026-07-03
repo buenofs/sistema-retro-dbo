@@ -1,5 +1,5 @@
 import type { ConnectionPool } from 'mssql';
-import type { Drive, Item, ItemArvore, UsoDrive } from '@dbos/shared';
+import type { Drive, Item, UsoDrive } from '@dbos/shared';
 import { RegistradorSQL } from './registradorSQL';
 import { ordemDeInsercao, type NoCopia } from './copiaArvore';
 
@@ -38,19 +38,6 @@ export async function listarConteudo(
     params,
   );
   return r as unknown as Item[];
-}
-
-export async function arvoreDoDrive(
-  pool: ConnectionPool,
-  reg: RegistradorSQL,
-  driveId: number,
-): Promise<ItemArvore[]> {
-  const r = await reg.executar<ItemArvore>(
-    pool,
-    'SELECT id, nome, tipo, paiId, driveId, caminho, profundidade FROM dbo.vw_ArvoreItens WHERE driveId = @drive AND naLixeira = 0 ORDER BY caminho',
-    { drive: driveId },
-  );
-  return r as unknown as ItemArvore[];
 }
 
 export async function listarLixeira(pool: ConnectionPool, reg: RegistradorSQL): Promise<Item[]> {

@@ -15,7 +15,6 @@ import {
   listarDrives,
   usoPorDrive,
   listarConteudo,
-  arvoreDoDrive,
   listarLixeira,
   lerItem,
   criarItem,
@@ -95,15 +94,6 @@ export function registrarRotasArquivos(app: FastifyInstance, gerenciador: Gerenc
       analise.data.driveId,
       analise.data.paiId ?? null,
     );
-    return { ok: true, dados: { dados, sql: reg.comandos } };
-  });
-
-  app.get('/api/arquivos/arvore', { preHandler: autenticar }, async (req, reply) => {
-    const driveId = Number((req.query as { driveId?: string }).driveId);
-    if (!Number.isInteger(driveId) || driveId <= 0)
-      return erroValidacao(reply, 'driveId inválido.');
-    const reg = new RegistradorSQL('Árvore do drive');
-    const dados = await arvoreDoDrive(req.sessao!.pool, reg, driveId);
     return { ok: true, dados: { dados, sql: reg.comandos } };
   });
 

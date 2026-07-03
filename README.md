@@ -25,8 +25,7 @@ bun run dev:web             # desktop em http://localhost:5173
 O sistema opera sobre o banco **DBOS_SISTEMA**. O esquema (`db/dbos_sistema.sql`)
 define três tabelas — `Drives` (volumes: `C:`, `D:`), `Usuarios` e `Itens` (a
 árvore de pastas/arquivos, uma lista de adjacência com `paiId` auto-referenciado)
-— e as views `vw_ArvoreItens` (caminho completo + profundidade via CTE
-recursiva), `vw_UsoPorDrive`, `vw_UsoPorUsuario` e `vw_Lixeira`. O seed cria dois
+— e as views `vw_UsoPorDrive`, `vw_UsoPorUsuario` e `vw_Lixeira`. O seed cria dois
 drives, os usuários (felipe/ana/sistema) e uma pequena árvore inicial. Configure
 `SQL_BANCO=DBOS_SISTEMA` no `.env`.
 
