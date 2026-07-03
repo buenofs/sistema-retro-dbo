@@ -33,54 +33,70 @@ export function registrarRotasGrade(app: FastifyInstance, gerenciador: Gerenciad
   const autenticar = criarAutenticar(gerenciador);
 
   app.get('/api/grade/linhas', { preHandler: autenticar }, async (req, reply) => {
-    const a = esquemaPaginaGrade.safeParse(req.query);
-    if (!a.success) return erroValidacao(reply, a.error.issues[0]?.message ?? 'Parâmetros inválidos.');
-    const ref = { esquema: a.data.esquema, tabela: a.data.tabela };
+    const analise = esquemaPaginaGrade.safeParse(req.query);
+    if (!analise.success)
+      return erroValidacao(reply, analise.error.issues[0]?.message ?? 'Parâmetros inválidos.');
+    const ref = { esquema: analise.data.esquema, tabela: analise.data.tabela };
     const meta = await obterMetadados(req.sessao!.pool, ref);
     if (meta.colunas.length === 0) return erroValidacao(reply, 'Tabela não encontrada.', 404);
-    const dados = await listarLinhas(req.sessao!.pool, ref, meta, a.data.pagina, a.data.tamanho);
+    const dados = await listarLinhas(
+      req.sessao!.pool,
+      ref,
+      meta,
+      analise.data.pagina,
+      analise.data.tamanho,
+    );
     const resposta: RespostaGrade = { ok: true, dados };
     return resposta;
   });
 
   app.post('/api/grade/linha', { preHandler: autenticar }, async (req, reply) => {
-    const a = esquemaInsercao.safeParse(req.body);
-    if (!a.success) return erroValidacao(reply, 'Dados de inserção inválidos.');
-    const ref = { esquema: a.data.esquema, tabela: a.data.tabela };
+    const analise = esquemaInsercao.safeParse(req.body);
+    if (!analise.success) return erroValidacao(reply, 'Dados de inserção inválidos.');
+    const ref = { esquema: analise.data.esquema, tabela: analise.data.tabela };
     const meta = await obterMetadados(req.sessao!.pool, ref);
     if (meta.colunas.length === 0) return erroValidacao(reply, 'Tabela não encontrada.', 404);
-    const ruim = colunaInvalida(meta, Object.keys(a.data.valores));
+    const ruim = colunaInvalida(meta, Object.keys(analise.data.valores));
     if (ruim) return erroValidacao(reply, `Coluna inexistente: ${ruim}`);
-    const linhasAfetadas = await inserirLinha(req.sessao!.pool, ref, a.data.valores);
+    const linhasAfetadas = await inserirLinha(req.sessao!.pool, ref, analise.data.valores);
     const resposta: RespostaMutacaoGrade = { ok: true, dados: { linhasAfetadas } };
     return resposta;
   });
 
   app.put('/api/grade/linha', { preHandler: autenticar }, async (req, reply) => {
-    const a = esquemaAtualizacao.safeParse(req.body);
-    if (!a.success) return erroValidacao(reply, 'Dados de atualização inválidos.');
-    if (Object.keys(a.data.valores).length === 0) return erroValidacao(reply, 'Nada para atualizar.');
-    if (Object.keys(a.data.chave).length === 0) return erroValidacao(reply, 'Chave ausente.');
-    const ref = { esquema: a.data.esquema, tabela: a.data.tabela };
+    const analise = esquemaAtualizacao.safeParse(req.body);
+    if (!analise.success) return erroValidacao(reply, 'Dados de atualização inválidos.');
+    if (Object.keys(analise.data.valores).length === 0)
+      return erroValidacao(reply, 'Nada para atualizar.');
+    if (Object.keys(analise.data.chave).length === 0) return erroValidacao(reply, 'Chave ausente.');
+    const ref = { esquema: analise.data.esquema, tabela: analise.data.tabela };
     const meta = await obterMetadados(req.sessao!.pool, ref);
     if (meta.colunas.length === 0) return erroValidacao(reply, 'Tabela não encontrada.', 404);
-    const ruim = colunaInvalida(meta, [...Object.keys(a.data.valores), ...Object.keys(a.data.chave)]);
+    const ruim = colunaInvalida(meta, [
+      ...Object.keys(analise.data.valores),
+      ...Object.keys(analise.data.chave),
+    ]);
     if (ruim) return erroValidacao(reply, `Coluna inexistente: ${ruim}`);
-    const linhasAfetadas = await atualizarLinha(req.sessao!.pool, ref, a.data.chave, a.data.valores);
+    const linhasAfetadas = await atualizarLinha(
+      req.sessao!.pool,
+      ref,
+      analise.data.chave,
+      analise.data.valores,
+    );
     const resposta: RespostaMutacaoGrade = { ok: true, dados: { linhasAfetadas } };
     return resposta;
   });
 
   app.delete('/api/grade/linha', { preHandler: autenticar }, async (req, reply) => {
-    const a = esquemaRemocao.safeParse(req.body);
-    if (!a.success) return erroValidacao(reply, 'Dados de remoção inválidos.');
-    if (Object.keys(a.data.chave).length === 0) return erroValidacao(reply, 'Chave ausente.');
-    const ref = { esquema: a.data.esquema, tabela: a.data.tabela };
+    const analise = esquemaRemocao.safeParse(req.body);
+    if (!analise.success) return erroValidacao(reply, 'Dados de remoção inválidos.');
+    if (Object.keys(analise.data.chave).length === 0) return erroValidacao(reply, 'Chave ausente.');
+    const ref = { esquema: analise.data.esquema, tabela: analise.data.tabela };
     const meta = await obterMetadados(req.sessao!.pool, ref);
     if (meta.colunas.length === 0) return erroValidacao(reply, 'Tabela não encontrada.', 404);
-    const ruim = colunaInvalida(meta, Object.keys(a.data.chave));
+    const ruim = colunaInvalida(meta, Object.keys(analise.data.chave));
     if (ruim) return erroValidacao(reply, `Coluna inexistente: ${ruim}`);
-    const linhasAfetadas = await removerLinha(req.sessao!.pool, ref, a.data.chave);
+    const linhasAfetadas = await removerLinha(req.sessao!.pool, ref, analise.data.chave);
     const resposta: RespostaMutacaoGrade = { ok: true, dados: { linhasAfetadas } };
     return resposta;
   });

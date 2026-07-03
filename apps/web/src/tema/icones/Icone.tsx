@@ -18,7 +18,7 @@ export const Icone = memo(function Icone({
 }: PropsIcone) {
   return (
     <img
-      src={obterIcone(nome, 'aero', tamanho)}
+      src={obterIcone(nome)}
       width={tamanho}
       height={tamanho}
       alt={alt ?? ''}

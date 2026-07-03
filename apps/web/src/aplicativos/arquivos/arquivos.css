@@ -1,20 +1,110 @@
-.exp { display: flex; flex-direction: column; height: 100%; font-size: 12px; }
-.exp-barra { display: flex; gap: 4px; align-items: center; padding: 4px; border-bottom: 1px solid var(--borda, #888); flex-wrap: wrap; }
-.exp-endereco { flex: 1; min-width: 120px; padding: 2px 4px; background: var(--campo, #fff); border: 1px solid var(--borda, #888); }
-.exp-lista { flex: 1; overflow: auto; }
-.exp-item { display: flex; gap: 6px; align-items: center; padding: 3px 6px; cursor: default; user-select: none; }
-.exp-item:hover { background: var(--selecao-fraca, #e8eef6); }
-.exp-item.sel { background: var(--selecao, #1084d0); color: #fff; }
-.exp-item.alvo { outline: 1px dashed var(--primary, #1084d0); }
-.exp-sql { flex-shrink: 0; max-height: 150px; display: flex; flex-direction: column; border-top: 2px groove var(--borda, #888); background: var(--campo, #fff); }
-.exp-sql-cab { display: flex; align-items: center; justify-content: space-between; padding: 2px 6px; font-size: 11px; font-weight: bold; opacity: 0.8; border-bottom: 1px solid var(--borda, #ccc); }
-.exp-sql-corpo { overflow: auto; padding: 4px 6px; font-family: 'Consolas', monospace; font-size: 11px; }
-.exp-sql-vazia { opacity: 0.6; }
-.exp-sql-linha { display: flex; gap: 6px; align-items: baseline; padding: 1px 0; white-space: pre-wrap; word-break: break-word; }
-.exp-sql-linha code { white-space: pre-wrap; word-break: break-word; }
-.exp-sql-badge { flex-shrink: 0; padding: 0 5px; border-radius: 3px; color: #fff; font-size: 9px; font-family: sans-serif; }
-.sql-INSERT { background: #2e7d32; }
-.sql-UPDATE { background: #1565c0; }
-.sql-DELETE { background: #c62828; }
-.sql-SELECT { background: #6a1b9a; }
-.exp-edit-input { font: inherit; border: 1px solid var(--borda, #888); padding: 0 2px; min-width: 90px; background: var(--campo, #fff); color: inherit; }
+.exp {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  font-size: 12px;
+}
+.exp-barra {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  padding: 4px;
+  border-bottom: 1px solid var(--borda, #888);
+  flex-wrap: wrap;
+}
+.exp-endereco {
+  flex: 1;
+  min-width: 120px;
+  padding: 2px 4px;
+  background: var(--campo, #fff);
+  border: 1px solid var(--borda, #888);
+}
+.exp-lista {
+  flex: 1;
+  overflow: auto;
+}
+.exp-item {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  padding: 3px 6px;
+  cursor: default;
+  user-select: none;
+}
+.exp-item:hover {
+  background: var(--selecao-fraca, #e8eef6);
+}
+.exp-item.sel {
+  background: var(--selecao, #1084d0);
+  color: #fff;
+}
+.exp-item.alvo {
+  outline: 1px dashed var(--primary, #1084d0);
+}
+.exp-sql {
+  flex-shrink: 0;
+  max-height: 150px;
+  display: flex;
+  flex-direction: column;
+  border-top: 2px groove var(--borda, #888);
+  background: var(--campo, #fff);
+}
+.exp-sql-cab {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 2px 6px;
+  font-size: 11px;
+  font-weight: bold;
+  opacity: 0.8;
+  border-bottom: 1px solid var(--borda, #ccc);
+}
+.exp-sql-corpo {
+  overflow: auto;
+  padding: 4px 6px;
+  font-family: 'Consolas', monospace;
+  font-size: 11px;
+}
+.exp-sql-vazia {
+  opacity: 0.6;
+}
+.exp-sql-linha {
+  display: flex;
+  gap: 6px;
+  align-items: baseline;
+  padding: 1px 0;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+.exp-sql-linha code {
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+.exp-sql-badge {
+  flex-shrink: 0;
+  padding: 0 5px;
+  border-radius: 3px;
+  color: #fff;
+  font-size: 9px;
+  font-family: sans-serif;
+}
+.sql-INSERT {
+  background: #2e7d32;
+}
+.sql-UPDATE {
+  background: #1565c0;
+}
+.sql-DELETE {
+  background: #c62828;
+}
+.sql-SELECT {
+  background: #6a1b9a;
+}
+.exp-edit-input {
+  font: inherit;
+  border: 1px solid var(--borda, #888);
+  padding: 0 2px;
+  min-width: 90px;
+  background: var(--campo, #fff);
+  color: inherit;
+}

@@ -30,8 +30,7 @@ export function TelaLogin() {
               <Icone nome="key" tamanho={24} alt="" />
             </span>
             <p style={{ margin: 0 }}>
-              Digite seu login e senha do SQL Server para entrar no Database
-              Operating System.
+              Digite seu login e senha do SQL Server para entrar no Database Operating System.
             </p>
           </div>
           <form onSubmit={aoEnviar}>
@@ -52,7 +51,10 @@ export function TelaLogin() {
                 onChange={(e) => setSenha(e.target.value)}
               />
             </div>
-            <div className="field-row" style={{ justifyContent: 'flex-end', marginTop: 14, gap: 6 }}>
+            <div
+              className="field-row"
+              style={{ justifyContent: 'flex-end', marginTop: 14, gap: 6 }}
+            >
               <button type="submit" disabled={entrar.isPending}>
                 {entrar.isPending ? 'Entrando...' : 'OK'}
               </button>

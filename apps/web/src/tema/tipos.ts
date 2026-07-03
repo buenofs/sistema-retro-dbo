@@ -1,1 +1,1 @@
-export type Pele = 'aero' | '98';
+export type Pele = 'aero';

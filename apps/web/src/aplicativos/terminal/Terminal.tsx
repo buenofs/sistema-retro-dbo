@@ -32,43 +32,73 @@ export function Terminal() {
 
   useEffect(() => {
     let vivo = true;
-    api<Drive[]>('/api/arquivos/drives').then((e) => {
-      const d = e.dados.find((x) => x.id === driveId);
-      if (vivo && d) setLetra(d.letra);
-    }).catch(() => {});
-    return () => { vivo = false; };
+    api<Drive[]>('/api/arquivos/drives')
+      .then((e) => {
+        const d = e.dados.find((x) => x.id === driveId);
+        if (vivo && d) setLetra(d.letra);
+      })
+      .catch(() => {});
+    return () => {
+      vivo = false;
+    };
   }, [driveId]);
 
-  const ctx: ContextoTerminal = useMemo(() => ({
-    letra,
-    listar: async (paiId) => {
-      const q = new URLSearchParams({ driveId: String(driveId) });
-      if (paiId !== null) q.set('paiId', String(paiId));
-      const e = await api<Item[]>(`/api/arquivos/listar?${q.toString()}`);
-      return e.dados.map((i): ItemTerminal => ({ id: i.id, nome: i.nome, tipo: i.tipo }));
-    },
-    criarPasta: async (nome, paiId) => { await api('/api/arquivos/pasta', 'POST', { nome, paiId, driveId }); },
-    criarArquivo: async (nome, paiId, conteudo) => { await api('/api/arquivos/arquivo', 'POST', { nome, paiId, driveId, conteudo }); },
-    renomear: async (id, nome) => { await api(`/api/arquivos/${id}/renomear`, 'PUT', { nome }); },
-    mover: async (id, paiId) => { await api(`/api/arquivos/${id}/mover`, 'PUT', { paiId }); },
-    copiar: async (id, paiId) => { await api(`/api/arquivos/${id}/copiar`, 'POST', { paiId }); },
-    apagar: async (id) => { await api(`/api/arquivos/${id}`, 'DELETE'); },
-    restaurar: async (id) => { await api(`/api/arquivos/${id}/restaurar`, 'PUT'); },
-    esvaziar: async () => { await api('/api/arquivos/lixeira', 'DELETE'); },
-    lerConteudo: async (id) => (await api<{ conteudo: string }>(`/api/arquivos/${id}`)).dados.conteudo,
-    salvarConteudo: async (id, conteudo) => { await api(`/api/arquivos/${id}/conteudo`, 'PUT', { conteudo }); },
-    listarLixeira: async () => {
-      const e = await api<Item[]>('/api/arquivos/lixeira');
-      return e.dados.map((i): ItemTerminal => ({ id: i.id, nome: i.nome, tipo: i.tipo }));
-    },
-    limpar: () => setLinhas([]),
-  }), [letra, driveId]);
+  const ctx: ContextoTerminal = useMemo(
+    () => ({
+      letra,
+      listar: async (paiId) => {
+        const q = new URLSearchParams({ driveId: String(driveId) });
+        if (paiId !== null) q.set('paiId', String(paiId));
+        const e = await api<Item[]>(`/api/arquivos/listar?${q.toString()}`);
+        return e.dados.map((i): ItemTerminal => ({ id: i.id, nome: i.nome, tipo: i.tipo }));
+      },
+      criarPasta: async (nome, paiId) => {
+        await api('/api/arquivos/pasta', 'POST', { nome, paiId, driveId });
+      },
+      criarArquivo: async (nome, paiId, conteudo) => {
+        await api('/api/arquivos/arquivo', 'POST', { nome, paiId, driveId, conteudo });
+      },
+      renomear: async (id, nome) => {
+        await api(`/api/arquivos/${id}/renomear`, 'PUT', { nome });
+      },
+      mover: async (id, paiId) => {
+        await api(`/api/arquivos/${id}/mover`, 'PUT', { paiId });
+      },
+      copiar: async (id, paiId) => {
+        await api(`/api/arquivos/${id}/copiar`, 'POST', { paiId });
+      },
+      apagar: async (id) => {
+        await api(`/api/arquivos/${id}`, 'DELETE');
+      },
+      restaurar: async (id) => {
+        await api(`/api/arquivos/${id}/restaurar`, 'PUT');
+      },
+      esvaziar: async () => {
+        await api('/api/arquivos/lixeira', 'DELETE');
+      },
+      lerConteudo: async (id) =>
+        (await api<{ conteudo: string }>(`/api/arquivos/${id}`)).dados.conteudo,
+      salvarConteudo: async (id, conteudo) => {
+        await api(`/api/arquivos/${id}/conteudo`, 'PUT', { conteudo });
+      },
+      listarLixeira: async () => {
+        const e = await api<Item[]>('/api/arquivos/lixeira');
+        return e.dados.map((i): ItemTerminal => ({ id: i.id, nome: i.nome, tipo: i.tipo }));
+      },
+      limpar: () => setLinhas([]),
+    }),
+    [letra, driveId],
+  );
 
   // Shell estável por (driveId, letra): preserva o diretório atual entre comandos.
   const shellRef = useRef(criarShell(ctx));
-  useEffect(() => { shellRef.current = criarShell(ctx); }, [ctx]);
+  useEffect(() => {
+    shellRef.current = criarShell(ctx);
+  }, [ctx]);
 
-  useEffect(() => { entradaRef.current?.focus(); }, []);
+  useEffect(() => {
+    entradaRef.current?.focus();
+  }, []);
 
   function focarEntrada() {
     if (window.getSelection()?.toString()) return;
@@ -119,7 +149,9 @@ export function Terminal() {
     <div className="terminal" onClick={focarEntrada}>
       <div className="terminal-saida">
         {linhas.map((l, i) => (
-          <div key={i} className="terminal-linha">{l}</div>
+          <div key={i} className="terminal-linha">
+            {l}
+          </div>
         ))}
         <div className="terminal-prompt">
           <span className="terminal-ps">{shellRef.current.prompt()}</span>

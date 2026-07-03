@@ -87,11 +87,7 @@ test('teto de linhas marca truncado e corta as linhas', async () => {
   process.env.SQL_MAX_LINHAS = '2'; // lido por construirApp dentro de comServidor
   await comServidor(async (base) => {
     const cookie = await entrar(base);
-    const r = await consultar(
-      base,
-      cookie,
-      'SELECT n FROM (VALUES (1),(2),(3)) AS t(n)',
-    );
+    const r = await consultar(base, cookie, 'SELECT n FROM (VALUES (1),(2),(3)) AS t(n)');
     expect(r.status).toBe(200);
     const { dados } = await r.json();
     expect(dados.totalLinhas).toBe(3);

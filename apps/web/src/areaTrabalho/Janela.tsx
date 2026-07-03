@@ -3,7 +3,7 @@ import type { IdJanela, Retangulo } from './tipos';
 import { useLoja } from './loja';
 import { registroApps } from './registroApps';
 import { LimiteErroJanela } from './LimiteErroJanela';
-import { usarArrasto } from './usarArrasto';
+import { useArrasto } from './useArrasto';
 import { ALTURA_BARRA, limitarRetangulo } from './limites';
 import { Icone } from '../tema/icones/Icone';
 
@@ -54,8 +54,8 @@ export const Janela = memo(function Janela({ id }: { id: IdJanela }) {
     [id, redimensionar],
   );
 
-  const arrastarTitulo = usarArrasto({ aoIniciar, aoMover: aoMoverTitulo });
-  const arrastarAlca = usarArrasto({ aoIniciar, aoMover: aoMoverAlca });
+  const arrastarTitulo = useArrasto({ aoIniciar, aoMover: aoMoverTitulo });
+  const arrastarAlca = useArrasto({ aoIniciar, aoMover: aoMoverAlca });
 
   if (!janela) return null;
 
@@ -64,7 +64,14 @@ export const Janela = memo(function Janela({ id }: { id: IdJanela }) {
   const Componente = registroApps[janela.tipoApp].componente;
 
   const estilo: CSSProperties = maximizada
-    ? { position: 'absolute', left: 0, top: 0, right: 0, bottom: ALTURA_BARRA, zIndex: janela.zIndex }
+    ? {
+        position: 'absolute',
+        left: 0,
+        top: 0,
+        right: 0,
+        bottom: ALTURA_BARRA,
+        zIndex: janela.zIndex,
+      }
     : {
         position: 'absolute',
         left: janela.retangulo.x,

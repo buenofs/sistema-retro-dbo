@@ -3,22 +3,29 @@ import type { UsuarioSessao } from '@dbos/shared';
 import { ORDEM_APPS, registroApps } from './registroApps';
 import { useLoja } from './loja';
 import { type ItemMenu, useMenuContexto } from './useMenuContexto';
-import { usarSonsJanelas } from './usarSonsJanelas';
+import { useSonsJanelas } from './useSonsJanelas';
 import { CamadaJanelas } from './CamadaJanelas';
 import { BarraTarefas } from './BarraTarefas';
 import { GerenciadorDialogos } from './GerenciadorDialogos';
 import { MenuContexto } from './MenuContexto';
 import { IconesDesktop } from './IconesDesktop';
-import { useIconesDesktop, useSelecaoIcones, LARGURA_ICONE, ALTURA_ICONE } from './lojaIconesDesktop';
+import {
+  useIconesDesktop,
+  useSelecaoIcones,
+  LARGURA_ICONE,
+  ALTURA_ICONE,
+} from './lojaIconesDesktop';
 import './areaTrabalho.css';
 
 export function AreaTrabalho({ usuario }: { usuario: UsuarioSessao }) {
-  usarSonsJanelas();
+  useSonsJanelas();
   const abrirJanela = useLoja((s) => s.abrirJanela);
   const abrirMenu = useMenuContexto((s) => s.abrir);
   const limparSelecao = useSelecaoIcones((s) => s.limpar);
   const definirSelecao = useSelecaoIcones((s) => s.definir);
-  const [marquee, setMarquee] = useState<{ x0: number; y0: number; x1: number; y1: number } | null>(null);
+  const [marquee, setMarquee] = useState<{ x0: number; y0: number; x1: number; y1: number } | null>(
+    null,
+  );
   const marqueeRef = useRef<{ x0: number; y0: number } | null>(null);
 
   function ehFundo(e: React.PointerEvent) {
@@ -41,14 +48,17 @@ export function AreaTrabalho({ usuario }: { usuario: UsuarioSessao }) {
     const m = marqueeRef.current;
     if (!m) return;
     setMarquee({ x0: m.x0, y0: m.y0, x1: e.clientX, y1: e.clientY });
-    const minX = Math.min(m.x0, e.clientX), maxX = Math.max(m.x0, e.clientX);
-    const minY = Math.min(m.y0, e.clientY), maxY = Math.max(m.y0, e.clientY);
+    const minX = Math.min(m.x0, e.clientX),
+      maxX = Math.max(m.x0, e.clientX);
+    const minY = Math.min(m.y0, e.clientY),
+      maxY = Math.max(m.y0, e.clientY);
     const pos = useIconesDesktop.getState().posicoes;
     const dentro: string[] = [];
     for (const tipo of ORDEM_APPS) {
       const p = pos[tipo];
       if (!p) continue;
-      if (p.x < maxX && p.x + LARGURA_ICONE > minX && p.y < maxY && p.y + ALTURA_ICONE > minY) dentro.push(tipo);
+      if (p.x < maxX && p.x + LARGURA_ICONE > minX && p.y < maxY && p.y + ALTURA_ICONE > minY)
+        dentro.push(tipo);
     }
     definirSelecao(dentro);
   }

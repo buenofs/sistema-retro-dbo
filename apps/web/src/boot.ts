@@ -6,7 +6,7 @@ interface LojaBoot {
   reiniciar: () => void;
 }
 
-export const useBoot =create<LojaBoot>((set) => ({
+export const useBoot = create<LojaBoot>((set) => ({
   concluido: false,
   concluir: () => set({ concluido: true }),
   reiniciar: () => set({ concluido: false }),

@@ -18,7 +18,9 @@ export function IconesDesktop() {
   const alternar = useSelecaoIcones((s) => s.alternar);
 
   const arraste = useRef<{
-    x0: number; y0: number; movido: boolean;
+    x0: number;
+    y0: number;
+    movido: boolean;
     origens: Map<string, { x: number; y: number }>;
   } | null>(null);
 
@@ -79,7 +81,9 @@ export function IconesDesktop() {
               e.preventDefault();
               e.stopPropagation();
               if (!useSelecaoIcones.getState().selecionados.has(tipo)) selecionarUm(tipo);
-              abrirMenu(e.clientX, e.clientY, [{ rotulo: 'Abrir', aoClicar: () => abrirJanela(tipo) }]);
+              abrirMenu(e.clientX, e.clientY, [
+                { rotulo: 'Abrir', aoClicar: () => abrirJanela(tipo) },
+              ]);
             }}
           >
             <span className="icone-atalho-glifo" aria-hidden="true">

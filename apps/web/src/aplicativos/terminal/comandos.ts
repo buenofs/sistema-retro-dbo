@@ -50,7 +50,14 @@ export function criarShell(ctx: ContextoTerminal) {
   const atual = () => pilha[pilha.length - 1]!;
 
   function prompt(): string {
-    return `${ctx.letra}:\\` + pilha.slice(1).map((n) => n.nome).join('\\') + '>';
+    return (
+      `${ctx.letra}:\\` +
+      pilha
+        .slice(1)
+        .map((n) => n.nome)
+        .join('\\') +
+      '>'
+    );
   }
 
   async function acharNaPasta(nome: string): Promise<ItemTerminal | undefined> {

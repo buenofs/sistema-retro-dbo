@@ -36,7 +36,9 @@ function stubFetch(onMutacao?: (metodo: string) => void) {
 }
 
 function renderizar() {
-  const cliente = new QueryClient({ defaultOptions: { queries: { retry: false }, mutations: { retry: false } } });
+  const cliente = new QueryClient({
+    defaultOptions: { queries: { retry: false }, mutations: { retry: false } },
+  });
   return render(
     <QueryClientProvider client={cliente}>
       <TabelaGrade esquema="dbo" tabela="Clientes" />

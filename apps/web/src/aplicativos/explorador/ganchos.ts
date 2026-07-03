@@ -6,9 +6,9 @@ export function useObjetos() {
   return useQuery({
     queryKey: ['explorador', 'objetos'],
     queryFn: async (): Promise<ObjetoBanco[]> => {
-      const r = await requisitar<ObjetoBanco[]>('/api/explorador/objetos');
-      if (!r.ok) throw new Error(r.erro.mensagem);
-      return r.dados;
+      const resposta = await requisitar<ObjetoBanco[]>('/api/explorador/objetos');
+      if (!resposta.ok) throw new Error(resposta.erro.mensagem);
+      return resposta.dados;
     },
   });
 }
@@ -18,11 +18,11 @@ export function useColunas(esquema: string, tabela: string) {
     queryKey: ['explorador', 'colunas', esquema, tabela],
     queryFn: async (): Promise<ColunaBanco[]> => {
       const params = new URLSearchParams({ esquema, tabela });
-      const r = await requisitar<ColunaBanco[]>(
+      const resposta = await requisitar<ColunaBanco[]>(
         `/api/explorador/colunas?${params.toString()}`,
       );
-      if (!r.ok) throw new Error(r.erro.mensagem);
-      return r.dados;
+      if (!resposta.ok) throw new Error(resposta.erro.mensagem);
+      return resposta.dados;
     },
   });
 }

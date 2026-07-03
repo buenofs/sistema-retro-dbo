@@ -9,7 +9,9 @@ test('substitui parâmetros por literais', () => {
 });
 
 test('NULL e escapa aspas', () => {
-  expect(resolverSQL('SET x = @a, y = @b', { a: null, b: "O'Brien" })).toBe("SET x = NULL, y = 'O''Brien'");
+  expect(resolverSQL('SET x = @a, y = @b', { a: null, b: "O'Brien" })).toBe(
+    "SET x = NULL, y = 'O''Brien'",
+  );
 });
 
 test('mantém @param desconhecido', () => {

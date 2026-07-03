@@ -14,7 +14,10 @@ export interface MetadadosTabela {
   chavePrimaria: string[];
 }
 
-export async function obterMetadados(pool: ConnectionPool, ref: RefObjeto): Promise<MetadadosTabela> {
+export async function obterMetadados(
+  pool: ConnectionPool,
+  ref: RefObjeto,
+): Promise<MetadadosTabela> {
   const colunas = await listarColunas(pool, ref);
   const chavePrimaria = colunas.filter((c) => c.ehChavePrimaria).map((c) => c.nome);
   return { colunas, chavePrimaria };
@@ -36,7 +39,9 @@ export async function listarLinhas(
     .map(citarId)
     .join(', ');
 
-  const contagem = await pool.request().query<{ total: number }>(`SELECT COUNT(*) AS total FROM ${alvo}`);
+  const contagem = await pool
+    .request()
+    .query<{ total: number }>(`SELECT COUNT(*) AS total FROM ${alvo}`);
   const total = contagem.recordset[0]?.total ?? 0;
 
   const dados = await pool

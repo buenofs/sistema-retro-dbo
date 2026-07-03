@@ -19,16 +19,17 @@ function renderizar() {
 test('mostra as colunas com tipo, marca de PK e nulabilidade', async () => {
   vi.stubGlobal(
     'fetch',
-    vi.fn(async () =>
-      new Response(
-        JSON.stringify({
-          ok: true,
-          dados: [
-            { nome: 'id', tipoDado: 'int', anulavel: false, ehChavePrimaria: true },
-            { nome: 'nome', tipoDado: 'nvarchar(50)', anulavel: true, ehChavePrimaria: false },
-          ],
-        }),
-      ),
+    vi.fn(
+      async () =>
+        new Response(
+          JSON.stringify({
+            ok: true,
+            dados: [
+              { nome: 'id', tipoDado: 'int', anulavel: false, ehChavePrimaria: true },
+              { nome: 'nome', tipoDado: 'nvarchar(50)', anulavel: true, ehChavePrimaria: false },
+            ],
+          }),
+        ),
     ),
   );
   renderizar();
@@ -43,11 +44,12 @@ test('mostra as colunas com tipo, marca de PK e nulabilidade', async () => {
 test('mostra a mensagem de erro quando a consulta falha', async () => {
   vi.stubGlobal(
     'fetch',
-    vi.fn(async () =>
-      new Response(
-        JSON.stringify({ ok: false, erro: { tipo: 'sql', mensagem: 'Objeto inválido.' } }),
-        { status: 400 },
-      ),
+    vi.fn(
+      async () =>
+        new Response(
+          JSON.stringify({ ok: false, erro: { tipo: 'sql', mensagem: 'Objeto inválido.' } }),
+          { status: 400 },
+        ),
     ),
   );
   renderizar();

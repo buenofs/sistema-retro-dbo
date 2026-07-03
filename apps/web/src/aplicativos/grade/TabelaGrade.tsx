@@ -108,7 +108,11 @@ export function TabelaGrade({ esquema, tabela }: { esquema: string; tabela: stri
           </button>
         )}
         <span className="grade-paginacao">
-          <button disabled={pagina === 0} onClick={() => setPagina((p) => p - 1)} aria-label="Anterior">
+          <button
+            disabled={pagina === 0}
+            onClick={() => setPagina((p) => p - 1)}
+            aria-label="Anterior"
+          >
             ◀
           </button>
           Página {pagina + 1} de {totalPaginas} ({dados.total} linhas)
@@ -160,9 +164,7 @@ export function TabelaGrade({ esquema, tabela }: { esquema: string; tabela: stri
                     <input
                       aria-label={`novo ${c.nome}`}
                       value={rascunhoNovo[c.nome] ?? ''}
-                      onChange={(e) =>
-                        setRascunhoNovo((r) => ({ ...r, [c.nome]: e.target.value }))
-                      }
+                      onChange={(e) => setRascunhoNovo((r) => ({ ...r, [c.nome]: e.target.value }))}
                     />
                   </td>
                 ))}
@@ -176,7 +178,10 @@ export function TabelaGrade({ esquema, tabela }: { esquema: string; tabela: stri
                     <td className="grade-acoes">
                       {emEdicao ? (
                         <>
-                          <button onClick={() => salvarEdicao(indice)} disabled={atualizar.isPending}>
+                          <button
+                            onClick={() => salvarEdicao(indice)}
+                            disabled={atualizar.isPending}
+                          >
                             Salvar
                           </button>
                           <button onClick={() => setEditando(null)}>Cancelar</button>
@@ -203,9 +208,7 @@ export function TabelaGrade({ esquema, tabela }: { esquema: string; tabela: stri
                         <input
                           aria-label={`editar ${c.nome}`}
                           value={rascunho[c.nome] ?? ''}
-                          onChange={(e) =>
-                            setRascunho((r) => ({ ...r, [c.nome]: e.target.value }))
-                          }
+                          onChange={(e) => setRascunho((r) => ({ ...r, [c.nome]: e.target.value }))}
                         />
                       ) : ehTipoMoeda(c.tipoDado) ? (
                         formatarMoeda(linha[c.nome])

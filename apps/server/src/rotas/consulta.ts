@@ -4,10 +4,7 @@ import type { GerenciadorPools } from '../bd/gerenciadorPools';
 import { criarAutenticar } from '../plugins/sessao';
 import { executarConsulta } from '../bd/consultasUsuario';
 
-export function registrarRotasConsulta(
-  app: FastifyInstance,
-  gerenciador: GerenciadorPools,
-): void {
+export function registrarRotasConsulta(app: FastifyInstance, gerenciador: GerenciadorPools): void {
   const autenticar = criarAutenticar(gerenciador);
 
   app.post('/api/consulta', { preHandler: autenticar }, async (req, reply) => {

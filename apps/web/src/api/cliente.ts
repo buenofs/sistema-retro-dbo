@@ -13,7 +13,10 @@ export async function requisitar<T>(
       headers: { 'content-type': 'application/json', ...opcoes.headers },
     });
   } catch {
-    return { ok: false, erro: { tipo: 'rede', mensagem: 'Não foi possível falar com o servidor.' } };
+    return {
+      ok: false,
+      erro: { tipo: 'rede', mensagem: 'Não foi possível falar com o servidor.' },
+    };
   }
 
   let parsed: Resposta<T>;
@@ -23,7 +26,7 @@ export async function requisitar<T>(
     return { ok: false, erro: { tipo: 'interno', mensagem: 'Resposta inválida do servidor.' } };
   }
 
-  const corpo =(parsed as { dados?: { sql?: unknown }; sql?: unknown });
+  const corpo = parsed as { dados?: { sql?: unknown }; sql?: unknown };
   const sql = (corpo.dados && (corpo.dados as { sql?: unknown }).sql) ?? corpo.sql;
   if (Array.isArray(sql)) useLojaLogSQL.getState().registrar(sql as ComandoSQL[]);
 

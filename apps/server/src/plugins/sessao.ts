@@ -5,7 +5,7 @@ import type { GerenciadorPools } from '../bd/gerenciadorPools';
 export const NOME_COOKIE = 'dbos_sid';
 
 // Secure só em produção: o dev roda sobre http e o cookie Secure não seria enviado.
-function opcoesCookie() {
+function cookieBase() {
   return {
     httpOnly: true,
     sameSite: 'strict' as const,
@@ -15,24 +15,21 @@ function opcoesCookie() {
   };
 }
 
-// Registra o suporte a cookies assinados. Exige SESSAO_SEGREDO no ambiente.
 export async function registrarSessao(app: FastifyInstance): Promise<void> {
   const segredo = process.env.SESSAO_SEGREDO;
   if (!segredo) throw new Error('SESSAO_SEGREDO não definido no ambiente.');
   await app.register(fastifyCookie, { secret: segredo });
 }
 
-// Grava o cookie de sessão assinado na resposta.
 export function definirCookieSessao(reply: FastifyReply, idSessao: string): void {
-  reply.setCookie(NOME_COOKIE, idSessao, opcoesCookie());
+  reply.setCookie(NOME_COOKIE, idSessao, cookieBase());
 }
 
-// Remove o cookie de sessão.
 export function limparCookieSessao(reply: FastifyReply): void {
-  reply.clearCookie(NOME_COOKIE, { path: '/' });
+  reply.clearCookie(NOME_COOKIE, cookieBase());
 }
 
-// Lê e valida o id de sessão do cookie assinado. null se ausente/adulterado.
+// null se ausente ou assinatura inválida
 export function lerIdSessao(req: FastifyRequest): string | null {
   const bruto = req.cookies[NOME_COOKIE];
   if (!bruto) return null;
@@ -40,7 +37,6 @@ export function lerIdSessao(req: FastifyRequest): string | null {
   return resultado.valid ? resultado.value : null;
 }
 
-// preHandler que exige sessão válida e injeta o registro em req.sessao (spec §5.4).
 export function criarAutenticar(gerenciador: GerenciadorPools) {
   return async (req: FastifyRequest, reply: FastifyReply) => {
     const id = lerIdSessao(req);

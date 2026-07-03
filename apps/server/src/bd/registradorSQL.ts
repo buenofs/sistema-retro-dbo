@@ -27,7 +27,14 @@ export class RegistradorSQL {
     try {
       const r = await req.query<T>(texto);
       const linhasAfetadas = (r.rowsAffected ?? []).reduce((a, b) => a + b, 0);
-      this.comandos.push({ acao: this.acao, tipo: tipoDoTexto(texto), texto, parametros, linhasAfetadas, em });
+      this.comandos.push({
+        acao: this.acao,
+        tipo: tipoDoTexto(texto),
+        texto,
+        parametros,
+        linhasAfetadas,
+        em,
+      });
       return r.recordset;
     } catch (e) {
       this.comandos.push({

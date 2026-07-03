@@ -5,7 +5,11 @@ import { useLoja, estadoInicial } from './loja';
 import { useMenuContexto, estadoInicialMenuContexto } from './useMenuContexto';
 import { ProvedorTema } from '../tema/ProvedorTema';
 
-vi.mock('./sons', () => ({ tocarSom: vi.fn(), definirSomHabilitado: vi.fn(), somHabilitado: () => true }));
+vi.mock('./sons', () => ({
+  tocarSom: vi.fn(),
+  definirSomHabilitado: vi.fn(),
+  somHabilitado: () => true,
+}));
 
 beforeEach(() => {
   useLoja.setState(estadoInicial());
@@ -32,7 +36,9 @@ test('botão direito no fundo do desktop abre menu com os 8 apps', () => {
 
 test('botão direito num ícone abre menu "Abrir"', () => {
   const { getAllByText } = renderizar();
-  const botaoIcone = getAllByText('Explorador de Objetos')[0]!.closest('.icone-atalho') as HTMLElement;
+  const botaoIcone = getAllByText('Explorador de Objetos')[0]!.closest(
+    '.icone-atalho',
+  ) as HTMLElement;
   fireEvent.contextMenu(botaoIcone);
   expect(useMenuContexto.getState().itens.map((i) => i.rotulo)).toEqual(['Abrir']);
 });

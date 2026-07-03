@@ -32,8 +32,12 @@
   background: rgba(60, 130, 240, 0.35) !important;
   border-color: rgba(120, 170, 250, 0.9);
 }
-.icone-atalho:focus { outline: none; }
-.icone-atalho:focus-visible { outline: 1px dotted #fff; }
+.icone-atalho:focus {
+  outline: none;
+}
+.icone-atalho:focus-visible {
+  outline: 1px dotted #fff;
+}
 .marquee {
   position: absolute;
   z-index: 5;
@@ -106,7 +110,11 @@
   text-align: left;
 }
 .botao-janela.ativo {
-  box-shadow: inset -1px -1px #fff, inset 1px 1px grey, inset -2px -2px #dfdfdf, inset 2px 2px #0a0a0a;
+  box-shadow:
+    inset -1px -1px #fff,
+    inset 1px 1px grey,
+    inset -2px -2px #dfdfdf,
+    inset 2px 2px #0a0a0a;
 }
 .relogio {
   height: 24px;
@@ -114,7 +122,9 @@
   align-items: center;
   padding: 0 8px;
   font-size: 11px;
-  box-shadow: inset -1px -1px #fff, inset 1px 1px grey;
+  box-shadow:
+    inset -1px -1px #fff,
+    inset 1px 1px grey;
 }
 
 /* Menu Iniciar */
@@ -127,7 +137,11 @@
   padding: 3px;
   background: var(--face);
   z-index: 10001;
-  box-shadow: inset -1px -1px #0a0a0a, inset 1px 1px #fff, inset -2px -2px grey, inset 2px 2px #dfdfdf;
+  box-shadow:
+    inset -1px -1px #0a0a0a,
+    inset 1px 1px #fff,
+    inset -2px -2px grey,
+    inset 2px 2px #dfdfdf;
 }
 .menu-iniciar-faixa {
   width: 24px;
@@ -202,7 +216,11 @@
   flex-direction: column;
   padding: 2px;
   background: var(--face);
-  box-shadow: inset -1px -1px #0a0a0a, inset 1px 1px #fff, inset -2px -2px grey, inset 2px 2px #dfdfdf;
+  box-shadow:
+    inset -1px -1px #0a0a0a,
+    inset 1px 1px #fff,
+    inset -2px -2px grey,
+    inset 2px 2px #dfdfdf;
 }
 .menu-contexto button {
   display: block;

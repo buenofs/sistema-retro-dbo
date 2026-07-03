@@ -2,7 +2,10 @@ import { useEffect, useState } from 'react';
 import type { PropsApp } from '../../areaTrabalho/tipos';
 import { useItem, useSalvarConteudo } from '../arquivos/ganchos';
 
-interface DadosBloco { id: number; nome: string }
+interface DadosBloco {
+  id: number;
+  nome: string;
+}
 
 export function BlocoNotas({ janela }: PropsApp) {
   const dados = janela.dados as DadosBloco | null;
@@ -19,7 +22,9 @@ export function BlocoNotas({ janela }: PropsApp) {
     }
   }, [consulta.data, carregado]);
 
-  useEffect(() => { setCarregado(false); }, [id]);
+  useEffect(() => {
+    setCarregado(false);
+  }, [id]);
 
   if (!dados) return <div style={{ padding: 8 }}>Nenhum arquivo aberto.</div>;
 
@@ -27,7 +32,11 @@ export function BlocoNotas({ janela }: PropsApp) {
     <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
       <div style={{ padding: 4, borderBottom: '1px solid var(--borda, #888)' }}>
         <strong>{dados.nome}</strong>
-        <button style={{ marginLeft: 8 }} onClick={() => salvar.mutate({ id, conteudo: texto })} disabled={salvar.isPending}>
+        <button
+          style={{ marginLeft: 8 }}
+          onClick={() => salvar.mutate({ id, conteudo: texto })}
+          disabled={salvar.isPending}
+        >
           Salvar
         </button>
         {salvar.isSuccess && <span style={{ marginLeft: 8 }}>salvo ✓</span>}

@@ -37,15 +37,21 @@
 }
 /* Cursor piscando (caret nativo verde + bloco de acento opcional) */
 @keyframes terminal-piscar {
-  0%, 49% { opacity: 1; }
-  50%, 100% { opacity: 0; }
+  0%,
+  49% {
+    opacity: 1;
+  }
+  50%,
+  100% {
+    opacity: 0;
+  }
 }
 .terminal-ps::after {
   content: '_';
   animation: terminal-piscar 1s steps(1) infinite;
 }
 .terminal::after {
-  content: "";
+  content: '';
   position: absolute;
   inset: 0;
   pointer-events: none;
@@ -54,16 +60,22 @@
 }
 
 /* --- Pele Aero: fósforo com brilho e fundo verde-escuro --- */
-body[data-skin="aero"] .terminal {
+body[data-skin='aero'] .terminal {
   --term-bg: transparent;
   --term-fg: #79f2ad;
   --term-prompt: #ffe07a;
   background: radial-gradient(120% 120% at 50% 0%, #0c3a26, #061b12);
   border-radius: var(--round-sm);
-  box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.7), inset 0 0 6px rgba(120, 255, 180, 0.2);
+  box-shadow:
+    inset 0 0 40px rgba(0, 0, 0, 0.7),
+    inset 0 0 6px rgba(120, 255, 180, 0.2);
   text-shadow: 0 0 6px rgba(90, 242, 160, 0.6);
 }
-body[data-skin="aero"] .terminal::after {
-  background: repeating-linear-gradient(180deg, rgba(0, 0, 0, 0) 0 2px, rgba(0, 0, 0, 0.22) 2px 3px);
+body[data-skin='aero'] .terminal::after {
+  background: repeating-linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0) 0 2px,
+    rgba(0, 0, 0, 0.22) 2px 3px
+  );
   opacity: 1; /* o brilho/scanline do Aero é sempre leve */
 }

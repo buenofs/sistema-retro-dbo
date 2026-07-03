@@ -1,8 +1,4 @@
-/* ============================================================
-   DBOS // tema — tokens de design.
-   Fase 0: os valores padrão reproduzem o Windows 98 (pele "98").
-   As peles (Fases 3+) sobrescrevem estes tokens via [data-skin].
-   ============================================================ */
+/* tokens de design — skin padrão = Windows 98; peles sobrescrevem via [data-skin] */
 :root {
   /* superfícies */
   --face: #c0c0c0;
@@ -11,10 +7,10 @@
   --janela-conteudo: #ffffff;
 
   /* níveis de relevo (paleta clássica 98) */
-  --hi: #ffffff;     /* realce */
-  --light: #dfdfdf;  /* realce interno */
-  --sh: #808080;     /* sombra */
-  --dsh: #0a0a0a;    /* sombra escura */
+  --hi: #ffffff; /* realce */
+  --light: #dfdfdf; /* realce interno */
+  --sh: #808080; /* sombra */
+  --dsh: #0a0a0a; /* sombra escura */
 
   /* tinta */
   --ink: #222222;
@@ -28,10 +24,12 @@
   --accent-ink: #ffffff;
 
   /* relevos compostos (box-shadow) */
-  --relevo-out: inset -1px -1px var(--dsh), inset 1px 1px var(--hi),
-    inset -2px -2px var(--sh), inset 2px 2px var(--light);
-  --relevo-in: inset 1px 1px var(--dsh), inset -1px -1px var(--hi),
-    inset 2px 2px var(--sh), inset -2px -2px var(--light);
+  --relevo-out:
+    inset -1px -1px var(--dsh), inset 1px 1px var(--hi), inset -2px -2px var(--sh),
+    inset 2px 2px var(--light);
+  --relevo-in:
+    inset 1px 1px var(--dsh), inset -1px -1px var(--hi), inset 2px 2px var(--sh),
+    inset -2px -2px var(--light);
   --relevo-out-fino: inset -1px -1px var(--sh), inset 1px 1px var(--hi);
   --relevo-in-fino: inset 1px 1px var(--sh), inset -1px -1px var(--hi);
 
@@ -41,20 +39,20 @@
   --round-btn: 0px;
 
   /* fontes */
-  --ui: "Pixelated MS Sans Serif", Arial, sans-serif;
-  --mono: "JetBrains Mono", "Cascadia Code", Consolas, monospace;
+  --ui: 'Pixelated MS Sans Serif', Arial, sans-serif;
+  --mono: 'JetBrains Mono', 'Cascadia Code', Consolas, monospace;
 
   /* multiplicador de animação (Tweaks na Fase 2) */
   --motion: 1;
 
-  /* === Fase 3: tokens abstratos de pele (defaults = 98) === */
-  --wallpaper-bg: #008080;        /* fundo da área de trabalho / logon */
-  --barra-bg: var(--face);        /* fundo da barra de tarefas */
+  /* tokens de pele (defaults = 98) */
+  --wallpaper-bg: #008080; /* fundo da área de trabalho / logon */
+  --barra-bg: var(--face); /* fundo da barra de tarefas */
   --barra-borda-topo: var(--hi);
-  --glass-blur: 0px;              /* só a pele Aero usa > 0 */
-  --crt: 0;                       /* opacidade das scanlines (pele 98) */
-  --accent-h: 210;               /* matiz do acento — só a pele Aero usa */
-  --accent-d: var(--accent);      /* acento escuro (Aero redefine via oklch) */
+  --glass-blur: 0px; /* só a pele Aero usa > 0 */
+  --crt: 0; /* opacidade das scanlines (pele 98) */
+  --accent-h: 210; /* matiz do acento — só a pele Aero usa */
+  --accent-d: var(--accent); /* acento escuro (Aero redefine via oklch) */
 
   /* boot (defaults atuais; as peles sobrescrevem) */
   --boot-bg: #000000;
@@ -67,20 +65,20 @@
   --boot-progresso-2: #007a7a;
   --boot-msg: #9a9a9a;
 
-  /* === Fase 4: tokens de app (defaults = 98) === */
-  --borda-painel: var(--sh);          /* divisórias 1px "grey" */
-  --borda-celula: #c0c0c0;            /* bordas de célula de tabela */
+  /* tokens de app (defaults = 98) */
+  --borda-painel: var(--sh); /* divisórias 1px "grey" */
+  --borda-celula: #c0c0c0; /* bordas de célula de tabela */
   --cabecalho-tabela-bg: var(--face); /* fundo do cabeçalho de tabela */
-  --zebra: transparent;              /* linhas zebra (Aero liga) */
-  --aviso-bg: #ffffe1;               /* fundo de aviso (truncado) */
-  --erro-ink: #a00000;               /* texto de erro/alerta */
-  --term-bg: #000000;                /* terminal: fundo */
-  --term-fg: #33ff66;                /* terminal: fósforo */
-  --term-prompt: #33ff66;            /* terminal: prompt */
-  --no-funcionario: var(--accent);    /* grafo: cor por tipo */
+  --zebra: transparent; /* linhas zebra (Aero liga) */
+  --aviso-bg: #ffffe1; /* fundo de aviso (truncado) */
+  --erro-ink: #a00000; /* texto de erro/alerta */
+  --term-bg: #000000; /* terminal: fundo */
+  --term-fg: #33ff66; /* terminal: fósforo */
+  --term-prompt: #33ff66; /* terminal: prompt */
+  --no-funcionario: var(--accent); /* grafo: cor por tipo */
   --no-departamento: #f6c945;
   --no-projeto: #2bc28d;
   --no-folha: var(--sh);
   --grafo-bg: var(--janela-conteudo); /* grafo: fundo do canvas */
-  --aresta: #808080;                 /* grafo: cor de aresta */
+  --aresta: #808080; /* grafo: cor de aresta */
 }

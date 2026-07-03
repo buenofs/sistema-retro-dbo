@@ -2,7 +2,14 @@ import { test, expect, beforeEach } from 'vitest';
 import { useLojaLogSQL } from './lojaLog';
 import type { ComandoSQL } from '@dbos/shared';
 
-const cmd = (acao: string): ComandoSQL => ({ acao, tipo: 'INSERT', texto: 'INSERT ...', parametros: {}, linhasAfetadas: 1, em: '2026-06-13T00:00:00Z' });
+const cmd = (acao: string): ComandoSQL => ({
+  acao,
+  tipo: 'INSERT',
+  texto: 'INSERT ...',
+  parametros: {},
+  linhasAfetadas: 1,
+  em: '2026-06-13T00:00:00Z',
+});
 
 beforeEach(() => useLojaLogSQL.getState().limpar());
 

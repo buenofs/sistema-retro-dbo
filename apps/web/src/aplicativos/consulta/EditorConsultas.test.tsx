@@ -16,7 +16,9 @@ beforeEach(() => useDialogos.setState(estadoInicialDialogos()));
 afterEach(() => vi.unstubAllGlobals());
 
 function renderizar() {
-  const cliente = new QueryClient({ defaultOptions: { queries: { retry: false }, mutations: { retry: false } } });
+  const cliente = new QueryClient({
+    defaultOptions: { queries: { retry: false }, mutations: { retry: false } },
+  });
   return render(
     <QueryClientProvider client={cliente}>
       <ProvedorTema>
@@ -29,13 +31,20 @@ function renderizar() {
 test('executar com sucesso mostra a grade de resultado', async () => {
   vi.stubGlobal(
     'fetch',
-    vi.fn(async () =>
-      new Response(
-        JSON.stringify({
-          ok: true,
-          dados: { colunas: ['um'], linhas: [[1]], linhasAfetadas: 0, truncado: false, totalLinhas: 1 },
-        }),
-      ),
+    vi.fn(
+      async () =>
+        new Response(
+          JSON.stringify({
+            ok: true,
+            dados: {
+              colunas: ['um'],
+              linhas: [[1]],
+              linhasAfetadas: 0,
+              truncado: false,
+              totalLinhas: 1,
+            },
+          }),
+        ),
     ),
   );
   renderizar();
@@ -46,14 +55,20 @@ test('executar com sucesso mostra a grade de resultado', async () => {
 test('executar com erro abre um diálogo de erro', async () => {
   vi.stubGlobal(
     'fetch',
-    vi.fn(async () =>
-      new Response(
-        JSON.stringify({
-          ok: false,
-          erro: { tipo: 'sql', mensagem: 'Objeto inválido.', detalhe: 'Invalid object name', codigoSql: 208 },
-        }),
-        { status: 400 },
-      ),
+    vi.fn(
+      async () =>
+        new Response(
+          JSON.stringify({
+            ok: false,
+            erro: {
+              tipo: 'sql',
+              mensagem: 'Objeto inválido.',
+              detalhe: 'Invalid object name',
+              codigoSql: 208,
+            },
+          }),
+          { status: 400 },
+        ),
     ),
   );
   renderizar();

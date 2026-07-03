@@ -17,14 +17,15 @@ function renderizar() {
 test('mostra mensagem de erro quando o login falha', async () => {
   vi.stubGlobal(
     'fetch',
-    vi.fn(async () =>
-      new Response(
-        JSON.stringify({
-          ok: false,
-          erro: { tipo: 'autenticacao', mensagem: 'Falha no logon: login ou senha inválidos.' },
-        }),
-        { status: 401 },
-      ),
+    vi.fn(
+      async () =>
+        new Response(
+          JSON.stringify({
+            ok: false,
+            erro: { tipo: 'autenticacao', mensagem: 'Falha no logon: login ou senha inválidos.' },
+          }),
+          { status: 401 },
+        ),
     ),
   );
   renderizar();

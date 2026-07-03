@@ -7,9 +7,11 @@ export function usePropriedades(esquema: string, tabela: string) {
     queryKey: ['propriedades', esquema, tabela],
     queryFn: async (): Promise<PropriedadesObjeto> => {
       const params = new URLSearchParams({ esquema, tabela });
-      const r = await requisitar<PropriedadesObjeto>(`/api/propriedades?${params.toString()}`);
-      if (!r.ok) throw new Error(r.erro.mensagem);
-      return r.dados;
+      const resposta = await requisitar<PropriedadesObjeto>(
+        `/api/propriedades?${params.toString()}`,
+      );
+      if (!resposta.ok) throw new Error(resposta.erro.mensagem);
+      return resposta.dados;
     },
   });
 }

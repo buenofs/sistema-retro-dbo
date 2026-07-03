@@ -48,7 +48,12 @@ function SeletorTabela({ aoEscolher }: { aoEscolher: (r: RefTabela) => void }) {
         {objetos.map((o) => (
           <li key={`${o.esquema}.${o.nome}`}>
             <button onClick={() => aoEscolher({ esquema: o.esquema, tabela: o.nome })}>
-              <Icone nome={o.tipo === 'view' ? 'view' : 'grid'} tamanho={16} alt="" style={{ marginRight: 4 }} />
+              <Icone
+                nome={o.tipo === 'view' ? 'view' : 'grid'}
+                tamanho={16}
+                alt=""
+                style={{ marginRight: 4 }}
+              />
               {o.esquema}.{o.nome}
             </button>
           </li>

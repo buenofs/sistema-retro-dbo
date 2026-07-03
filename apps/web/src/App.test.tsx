@@ -37,11 +37,12 @@ function renderizar() {
 test('mostra a tela de login quando não há sessão', async () => {
   vi.stubGlobal(
     'fetch',
-    vi.fn(async () =>
-      new Response(
-        JSON.stringify({ ok: false, erro: { tipo: 'autenticacao', mensagem: 'sem sessão' } }),
-        { status: 401 },
-      ),
+    vi.fn(
+      async () =>
+        new Response(
+          JSON.stringify({ ok: false, erro: { tipo: 'autenticacao', mensagem: 'sem sessão' } }),
+          { status: 401 },
+        ),
     ),
   );
   renderizar();
@@ -51,8 +52,8 @@ test('mostra a tela de login quando não há sessão', async () => {
 test('mostra a área de trabalho quando há sessão', async () => {
   vi.stubGlobal(
     'fetch',
-    vi.fn(async () =>
-      new Response(JSON.stringify({ ok: true, dados: { login: 'sa', banco: 'DBOS' } })),
+    vi.fn(
+      async () => new Response(JSON.stringify({ ok: true, dados: { login: 'sa', banco: 'DBOS' } })),
     ),
   );
   renderizar();

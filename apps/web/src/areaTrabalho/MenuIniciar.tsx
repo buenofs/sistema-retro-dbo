@@ -24,14 +24,21 @@ export function MenuIniciar({ login, aoFechar }: { login: string; aoFechar: () =
                 aoFechar();
               }}
             >
-              <Icone nome={registroApps[tipo].icone} tamanho={16} alt="" style={{ marginRight: 6 }} /> {registroApps[tipo].titulo}
+              <Icone
+                nome={registroApps[tipo].icone}
+                tamanho={16}
+                alt=""
+                style={{ marginRight: 6 }}
+              />{' '}
+              {registroApps[tipo].titulo}
             </button>
           </li>
         ))}
         <li className="menu-iniciar-separador" aria-hidden="true" />
         <li>
           <button role="menuitem" disabled={sair.isPending} onClick={() => sair.mutate()}>
-            <Icone nome="logoff" tamanho={16} alt="" style={{ marginRight: 6 }} /> Encerrar sessão ({login})
+            <Icone nome="logoff" tamanho={16} alt="" style={{ marginRight: 6 }} /> Encerrar sessão (
+            {login})
           </button>
         </li>
       </ul>

@@ -27,24 +27,31 @@ test('sem objeto em dados, mostra instrução', () => {
 test('com objeto, mostra geral e índices', async () => {
   vi.stubGlobal(
     'fetch',
-    vi.fn(async () =>
-      new Response(
-        JSON.stringify({
-          ok: true,
-          dados: {
-            esquema: 'dbo',
-            nome: 'Clientes',
-            tipo: 'tabela',
-            totalColunas: 2,
-            totalLinhas: 5,
-            criadoEm: null,
-            modificadoEm: null,
-            indices: [
-              { nome: 'PK_Clientes', tipo: 'CLUSTERED', unico: true, chavePrimaria: true, colunas: ['id'] },
-            ],
-          },
-        }),
-      ),
+    vi.fn(
+      async () =>
+        new Response(
+          JSON.stringify({
+            ok: true,
+            dados: {
+              esquema: 'dbo',
+              nome: 'Clientes',
+              tipo: 'tabela',
+              totalColunas: 2,
+              totalLinhas: 5,
+              criadoEm: null,
+              modificadoEm: null,
+              indices: [
+                {
+                  nome: 'PK_Clientes',
+                  tipo: 'CLUSTERED',
+                  unico: true,
+                  chavePrimaria: true,
+                  colunas: ['id'],
+                },
+              ],
+            },
+          }),
+        ),
     ),
   );
   renderizar(janelaFake({ esquema: 'dbo', tabela: 'Clientes' }));

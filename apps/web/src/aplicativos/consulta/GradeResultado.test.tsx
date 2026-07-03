@@ -8,7 +8,11 @@ function resultado(p: Partial<ResultadoConsulta>): ResultadoConsulta {
 }
 
 test('mostra os cabeçalhos de coluna', () => {
-  render(<GradeResultado resultado={resultado({ colunas: ['id', 'nome'], linhas: [[1, 'Ana']], totalLinhas: 1 })} />);
+  render(
+    <GradeResultado
+      resultado={resultado({ colunas: ['id', 'nome'], linhas: [[1, 'Ana']], totalLinhas: 1 })}
+    />,
+  );
   expect(screen.getByText('id')).toBeInTheDocument();
   expect(screen.getByText('nome')).toBeInTheDocument();
 });

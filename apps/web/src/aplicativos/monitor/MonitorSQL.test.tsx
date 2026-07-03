@@ -5,7 +5,12 @@ import { useLojaLogSQL } from './lojaLog';
 import type { ComandoSQL } from '@dbos/shared';
 
 const cmd = (acao: string, tipo: ComandoSQL['tipo']): ComandoSQL => ({
-  acao, tipo, texto: 'INSERT INTO dbo.Itens (nome) VALUES (@nome)', parametros: { nome: 'Docs' }, linhasAfetadas: 1, em: '2026-06-13T10:00:00Z',
+  acao,
+  tipo,
+  texto: 'INSERT INTO dbo.Itens (nome) VALUES (@nome)',
+  parametros: { nome: 'Docs' },
+  linhasAfetadas: 1,
+  em: '2026-06-13T10:00:00Z',
 });
 
 beforeEach(() => useLojaLogSQL.getState().limpar());

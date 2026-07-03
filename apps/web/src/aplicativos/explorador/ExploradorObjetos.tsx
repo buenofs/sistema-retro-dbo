@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useObjetos } from './ganchos';
-import { usarValorDebounced } from './usarValorDebounced';
+import { useValorDebounced } from './useValorDebounced';
 import { NoTabela } from './NoTabela';
 import { Icone } from '../../tema/icones/Icone';
 import './explorador.css';
@@ -8,7 +8,7 @@ import './explorador.css';
 export function ExploradorObjetos() {
   const consulta = useObjetos();
   const [filtro, setFiltro] = useState('');
-  const termo = usarValorDebounced(filtro, 200).trim().toLowerCase();
+  const termo = useValorDebounced(filtro, 200).trim().toLowerCase();
 
   if (consulta.isPending) return <p style={{ padding: 8 }}>Carregando objetos…</p>;
   if (consulta.isError) {
@@ -16,9 +16,7 @@ export function ExploradorObjetos() {
   }
 
   const objetos = consulta.data ?? [];
-  const filtrados = termo
-    ? objetos.filter((o) => o.nome.toLowerCase().includes(termo))
-    : objetos;
+  const filtrados = termo ? objetos.filter((o) => o.nome.toLowerCase().includes(termo)) : objetos;
   const tabelas = filtrados.filter((o) => o.tipo === 'tabela');
   const views = filtrados.filter((o) => o.tipo === 'view');
 

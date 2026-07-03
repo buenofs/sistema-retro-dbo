@@ -5,27 +5,69 @@ import { ExploradorArquivos } from './ExploradorArquivos';
 import type { EstadoJanela } from '../../areaTrabalho/tipos';
 
 const janela: EstadoJanela = {
-  id: 'j1', tipoApp: 'arquivos', titulo: 'Arquivos', icone: 'folder',
+  id: 'j1',
+  tipoApp: 'arquivos',
+  titulo: 'Arquivos',
+  icone: 'folder',
   retangulo: { x: 0, y: 0, largura: 600, altura: 400 },
-  zIndex: 1, estado: 'normal', anterior: 'normal', dados: null,
+  zIndex: 1,
+  estado: 'normal',
+  anterior: 'normal',
+  dados: null,
 };
 
 const conteudo = [
-  { id: 10, nome: 'Documentos', tipo: 'pasta', paiId: null, driveId: 1, donoId: 1, tamanhoBytes: null, criadoEm: '', modificadoEm: null },
-  { id: 11, nome: 'a.txt', tipo: 'arquivo', paiId: null, driveId: 1, donoId: 1, tamanhoBytes: 12, criadoEm: '', modificadoEm: null },
+  {
+    id: 10,
+    nome: 'Documentos',
+    tipo: 'pasta',
+    paiId: null,
+    driveId: 1,
+    donoId: 1,
+    tamanhoBytes: null,
+    criadoEm: '',
+    modificadoEm: null,
+  },
+  {
+    id: 11,
+    nome: 'a.txt',
+    tipo: 'arquivo',
+    paiId: null,
+    driveId: 1,
+    donoId: 1,
+    tamanhoBytes: 12,
+    criadoEm: '',
+    modificadoEm: null,
+  },
 ];
 
 beforeEach(() => {
-  vi.stubGlobal('fetch', vi.fn(async (url: string) => {
-    const u = String(url);
-    if (u.includes('/api/arquivos/drives')) {
-      return new Response(JSON.stringify({ ok: true, dados: { dados: [{ id: 1, letra: 'C', rotulo: 'Sistema', capacidadeBytes: 1 }], sql: [] } }), { status: 200 });
-    }
-    if (u.includes('/api/arquivos/listar')) {
-      return new Response(JSON.stringify({ ok: true, dados: { dados: conteudo, sql: [] } }), { status: 200 });
-    }
-    return new Response(JSON.stringify({ ok: true, dados: { dados: { id: 99 }, sql: [] } }), { status: 200 });
-  }));
+  vi.stubGlobal(
+    'fetch',
+    vi.fn(async (url: string) => {
+      const u = String(url);
+      if (u.includes('/api/arquivos/drives')) {
+        return new Response(
+          JSON.stringify({
+            ok: true,
+            dados: {
+              dados: [{ id: 1, letra: 'C', rotulo: 'Sistema', capacidadeBytes: 1 }],
+              sql: [],
+            },
+          }),
+          { status: 200 },
+        );
+      }
+      if (u.includes('/api/arquivos/listar')) {
+        return new Response(JSON.stringify({ ok: true, dados: { dados: conteudo, sql: [] } }), {
+          status: 200,
+        });
+      }
+      return new Response(JSON.stringify({ ok: true, dados: { dados: { id: 99 }, sql: [] } }), {
+        status: 200,
+      });
+    }),
+  );
 });
 
 function montar() {
@@ -49,6 +91,9 @@ test('Nova Pasta dispara POST /api/arquivos/pasta', async () => {
   await screen.findByText('Documentos');
   fireEvent.click(screen.getByText('Nova Pasta'));
   await waitFor(() =>
-    expect(fetch).toHaveBeenCalledWith('/api/arquivos/pasta', expect.objectContaining({ method: 'POST' })),
+    expect(fetch).toHaveBeenCalledWith(
+      '/api/arquivos/pasta',
+      expect.objectContaining({ method: 'POST' }),
+    ),
   );
 });

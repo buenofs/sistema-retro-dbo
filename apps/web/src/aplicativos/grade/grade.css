@@ -77,13 +77,13 @@
 }
 
 /* --- Pele Aero: zebra + cabeçalho de vidro --- */
-body[data-skin="aero"] .grade-tabela {
+body[data-skin='aero'] .grade-tabela {
   --zebra: #f3f8fc;
 }
-body[data-skin="aero"] .grade-tabela thead th {
+body[data-skin='aero'] .grade-tabela thead th {
   background: linear-gradient(180deg, #f6f9fc, #d9e3ec);
   box-shadow: inset 0 1px 0 #fff;
 }
-body[data-skin="aero"] .grade-tabela tbody tr:hover td {
+body[data-skin='aero'] .grade-tabela tbody tr:hover td {
   background: var(--accent-l, #e8f3ff);
 }

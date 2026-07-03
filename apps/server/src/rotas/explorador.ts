@@ -1,9 +1,5 @@
 import type { FastifyInstance } from 'fastify';
-import {
-  esquemaRefObjeto,
-  type RespostaColunas,
-  type RespostaObjetos,
-} from '@dbos/shared';
+import { esquemaRefObjeto, type RespostaColunas, type RespostaObjetos } from '@dbos/shared';
 import type { GerenciadorPools } from '../bd/gerenciadorPools';
 import { criarAutenticar } from '../plugins/sessao';
 import { listarColunas, listarObjetos } from '../bd/consultasSistema';
@@ -12,20 +8,18 @@ export function registrarRotasExplorador(
   app: FastifyInstance,
   gerenciador: GerenciadorPools,
 ): void {
-  const autenticar = criarAutenticar(gerenciador);
+  const guard = criarAutenticar(gerenciador);
 
-  // Lista tabelas e views do banco da sessão.
   app.get(
     '/api/explorador/objetos',
-    { preHandler: autenticar },
+    { preHandler: guard },
     async (req): Promise<RespostaObjetos> => {
       const dados = await listarObjetos(req.sessao!.pool);
       return { ok: true, dados };
     },
   );
 
-  // Colunas de um objeto específico (esquema + tabela via query string).
-  app.get('/api/explorador/colunas', { preHandler: autenticar }, async (req, reply) => {
+  app.get('/api/explorador/colunas', { preHandler: guard }, async (req, reply) => {
     const analise = esquemaRefObjeto.safeParse(req.query);
     if (!analise.success) {
       return reply.status(400).send({

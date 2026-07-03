@@ -7,21 +7,25 @@
 
 /* ---- fonte vendorizada (substitui a do pacote 98.css) ---- */
 @font-face {
-  font-family: "Pixelated MS Sans Serif";
+  font-family: 'Pixelated MS Sans Serif';
   font-style: normal;
   font-weight: 400;
-  src: url("./fontes/ms_sans_serif.woff2") format("woff2"),
-       url("./fontes/ms_sans_serif.woff") format("woff");
+  src:
+    url('./fontes/ms_sans_serif.woff2') format('woff2'),
+    url('./fontes/ms_sans_serif.woff') format('woff');
 }
 @font-face {
-  font-family: "Pixelated MS Sans Serif";
+  font-family: 'Pixelated MS Sans Serif';
   font-style: normal;
   font-weight: 700;
-  src: url("./fontes/ms_sans_serif_bold.woff2") format("woff2"),
-       url("./fontes/ms_sans_serif_bold.woff") format("woff");
+  src:
+    url('./fontes/ms_sans_serif_bold.woff2') format('woff2'),
+    url('./fontes/ms_sans_serif_bold.woff') format('woff');
 }
 
-* { box-sizing: border-box; }
+* {
+  box-sizing: border-box;
+}
 
 body {
   color: var(--ink);
@@ -31,8 +35,17 @@ body {
 }
 
 /* o 98.css fixa font em vários seletores; replicamos para fidelidade */
-.title-bar, .window, button, input, label, legend, option, select,
-table, textarea, ul.tree-view {
+.title-bar,
+.window,
+button,
+input,
+label,
+legend,
+option,
+select,
+table,
+textarea,
+ul.tree-view {
   -webkit-font-smoothing: none;
   font-family: var(--ui);
   font-size: 11px;
@@ -82,28 +95,59 @@ table, textarea, ul.tree-view {
   position: relative;
 }
 /* glifos (pseudo-elementos) por aria-label — botões têm conteúdo vazio */
-.title-bar-controls button[aria-label="Minimize"]::before {
-  content: ""; width: 6px; height: 2px; background: #000;
-  position: absolute; bottom: 3px; left: 4px;
+.title-bar-controls button[aria-label='Minimize']::before {
+  content: '';
+  width: 6px;
+  height: 2px;
+  background: #000;
+  position: absolute;
+  bottom: 3px;
+  left: 4px;
 }
-.title-bar-controls button[aria-label="Maximize"]::before {
-  content: ""; width: 9px; height: 8px; border: 1px solid #000; border-top-width: 2px;
+.title-bar-controls button[aria-label='Maximize']::before {
+  content: '';
+  width: 9px;
+  height: 8px;
+  border: 1px solid #000;
+  border-top-width: 2px;
 }
-.title-bar-controls button[aria-label="Restore"]::before {
-  content: ""; width: 6px; height: 5px; border: 1px solid #000; border-top-width: 2px;
-  position: absolute; left: 6px; top: 5px;
+.title-bar-controls button[aria-label='Restore']::before {
+  content: '';
+  width: 6px;
+  height: 5px;
+  border: 1px solid #000;
+  border-top-width: 2px;
+  position: absolute;
+  left: 6px;
+  top: 5px;
 }
-.title-bar-controls button[aria-label="Restore"]::after {
-  content: ""; width: 6px; height: 5px; border: 1px solid #000; border-top-width: 2px;
-  background: var(--face); position: absolute; left: 4px; top: 3px;
+.title-bar-controls button[aria-label='Restore']::after {
+  content: '';
+  width: 6px;
+  height: 5px;
+  border: 1px solid #000;
+  border-top-width: 2px;
+  background: var(--face);
+  position: absolute;
+  left: 4px;
+  top: 3px;
 }
-.title-bar-controls button[aria-label="Close"]::before,
-.title-bar-controls button[aria-label="Close"]::after {
-  content: ""; position: absolute; left: 50%; top: 50%;
-  width: 9px; height: 2px; background: #000;
+.title-bar-controls button[aria-label='Close']::before,
+.title-bar-controls button[aria-label='Close']::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 9px;
+  height: 2px;
+  background: #000;
 }
-.title-bar-controls button[aria-label="Close"]::before { transform: translate(-50%, -50%) rotate(45deg); }
-.title-bar-controls button[aria-label="Close"]::after  { transform: translate(-50%, -50%) rotate(-45deg); }
+.title-bar-controls button[aria-label='Close']::before {
+  transform: translate(-50%, -50%) rotate(45deg);
+}
+.title-bar-controls button[aria-label='Close']::after {
+  transform: translate(-50%, -50%) rotate(-45deg);
+}
 
 .window-body {
   margin: 3px 0 0;
@@ -113,8 +157,8 @@ table, textarea, ul.tree-view {
    BOTÕES + CAMPOS
    ============================================================ */
 button,
-input[type="reset"],
-input[type="submit"] {
+input[type='reset'],
+input[type='submit'] {
   background: var(--face);
   border: none;
   border-radius: var(--round-btn);
@@ -125,21 +169,28 @@ input[type="submit"] {
   padding: 0 12px;
 }
 button:not(:disabled):active,
-input[type="reset"]:not(:disabled):active,
-input[type="submit"]:not(:disabled):active {
+input[type='reset']:not(:disabled):active,
+input[type='submit']:not(:disabled):active {
   box-shadow: var(--relevo-in);
   padding: 1px 11px 0 13px;
 }
 button:focus-visible,
-input[type="reset"]:focus-visible,
-input[type="submit"]:focus-visible {
+input[type='reset']:focus-visible,
+input[type='submit']:focus-visible {
   outline: 1px dotted #000;
   outline-offset: -4px;
 }
-button:disabled { color: var(--sh); text-shadow: 1px 1px 0 var(--hi); }
+button:disabled {
+  color: var(--sh);
+  text-shadow: 1px 1px 0 var(--hi);
+}
 
-input[type="text"], input[type="password"], input[type="number"],
-input:not([type]), textarea, select {
+input[type='text'],
+input[type='password'],
+input[type='number'],
+input:not([type]),
+textarea,
+select {
   background: var(--janela-conteudo);
   border: none;
   border-radius: 0;
@@ -148,7 +199,9 @@ input:not([type]), textarea, select {
   padding: 3px 4px;
   outline: none;
 }
-input:focus, textarea:focus, select:focus {
+input:focus,
+textarea:focus,
+select:focus {
   outline: 1px dotted #000;
   outline-offset: -3px;
 }
@@ -168,10 +221,22 @@ legend {
 }
 
 /* layouts de formulário (utilitários do 98.css) */
-.field-row { display: flex; align-items: center; gap: 8px; }
-.field-row > * + * { margin-left: 0; }
-.field-row-stacked { display: flex; flex-direction: column; gap: 4px; }
-.field-row-stacked + .field-row-stacked { margin-top: 6px; }
+.field-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.field-row > * + * {
+  margin-left: 0;
+}
+.field-row-stacked {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.field-row-stacked + .field-row-stacked {
+  margin-top: 6px;
+}
 
 /* ============================================================
    TABELA
@@ -180,7 +245,8 @@ table {
   border-collapse: collapse;
   background: var(--janela-conteudo);
 }
-th, td {
+th,
+td {
   padding: 2px 6px;
   text-align: left;
 }
@@ -196,17 +262,31 @@ ul.tree-view {
   padding: 6px;
   list-style: none;
 }
-ul.tree-view li { line-height: 1.5; }
+ul.tree-view li {
+  line-height: 1.5;
+}
 ul.tree-view ul {
   margin: 0 0 0 16px;
   padding: 0;
   list-style: none;
 }
-ul.tree-view ul > li { position: relative; }
-ul.tree-view details > summary { list-style: none; cursor: default; }
-ul.tree-view details > summary::-webkit-details-marker { display: none; }
-ul.tree-view details > summary::before {
-  content: "+"; display: inline-block; width: 12px;
-  text-align: center; margin-right: 2px;
+ul.tree-view ul > li {
+  position: relative;
 }
-ul.tree-view details[open] > summary::before { content: "−"; }
+ul.tree-view details > summary {
+  list-style: none;
+  cursor: default;
+}
+ul.tree-view details > summary::-webkit-details-marker {
+  display: none;
+}
+ul.tree-view details > summary::before {
+  content: '+';
+  display: inline-block;
+  width: 12px;
+  text-align: center;
+  margin-right: 2px;
+}
+ul.tree-view details[open] > summary::before {
+  content: '−';
+}

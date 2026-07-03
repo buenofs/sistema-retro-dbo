@@ -1,11 +1,19 @@
 {
   "name": "dbos",
   "private": true,
-  "workspaces": ["apps/*", "packages/*"],
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
   "scripts": {
     "dev:server": "bun --filter @dbos/server dev",
     "dev:web": "bun --filter @dbos/web dev",
     "db:setup": "bun --env-file=.env apps/server/src/scripts/configurarBanco.ts",
-    "test": "bun --filter '*' test"
+    "test": "bun --filter '*' test",
+    "format": "prettier --write \"apps/**/*.{ts,tsx,css}\" \"packages/**/*.ts\" \"*.{json,md}\"",
+    "format:check": "prettier --check \"apps/**/*.{ts,tsx,css}\" \"packages/**/*.ts\" \"*.{json,md}\""
+  },
+  "devDependencies": {
+    "prettier": "^3.4.2"
   }
 }

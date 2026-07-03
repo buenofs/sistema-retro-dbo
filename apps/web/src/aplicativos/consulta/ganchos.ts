@@ -12,12 +12,12 @@ export class ErroApiError extends Error {
 export function useExecutarConsulta() {
   return useMutation({
     mutationFn: async (sqlTexto: string): Promise<ResultadoConsulta> => {
-      const r = await requisitar<ResultadoConsulta>('/api/consulta', {
+      const resposta = await requisitar<ResultadoConsulta>('/api/consulta', {
         method: 'POST',
         body: JSON.stringify({ sql: sqlTexto }),
       });
-      if (!r.ok) throw new ErroApiError(r.erro);
-      return r.dados;
+      if (!resposta.ok) throw new ErroApiError(resposta.erro);
+      return resposta.dados;
     },
   });
 }

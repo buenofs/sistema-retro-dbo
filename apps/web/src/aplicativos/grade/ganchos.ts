@@ -16,63 +16,63 @@ export function useLinhas(esquema: string, tabela: string, pagina: number, taman
         pagina: String(pagina),
         tamanho: String(tamanho),
       });
-      const r = await requisitar<ResultadoGrade>(`/api/grade/linhas?${params.toString()}`);
-      if (!r.ok) throw new ErroApiError(r.erro);
-      return r.dados;
+      const resposta = await requisitar<ResultadoGrade>(`/api/grade/linhas?${params.toString()}`);
+      if (!resposta.ok) throw new ErroApiError(resposta.erro);
+      return resposta.dados;
     },
   });
 }
 
 type Mutacao = { linhasAfetadas: number };
 
-function usarInvalidacao(esquema: string, tabela: string) {
+function useInvalidacao(esquema: string, tabela: string) {
   const qc = useQueryClient();
   return () => qc.invalidateQueries({ queryKey: chaveTabela(esquema, tabela) });
 }
 
 export function useInserirLinha(esquema: string, tabela: string) {
-  const invalidar = usarInvalidacao(esquema, tabela);
+  const invalidar = useInvalidacao(esquema, tabela);
   return useMutation({
     mutationFn: async (valores: Record<string, ValorCelula>): Promise<Mutacao> => {
-      const r = await requisitar<Mutacao>('/api/grade/linha', {
+      const resposta = await requisitar<Mutacao>('/api/grade/linha', {
         method: 'POST',
         body: JSON.stringify({ esquema, tabela, valores }),
       });
-      if (!r.ok) throw new ErroApiError(r.erro);
-      return r.dados;
+      if (!resposta.ok) throw new ErroApiError(resposta.erro);
+      return resposta.dados;
     },
     onSuccess: invalidar,
   });
 }
 
 export function useAtualizarLinha(esquema: string, tabela: string) {
-  const invalidar = usarInvalidacao(esquema, tabela);
+  const invalidar = useInvalidacao(esquema, tabela);
   return useMutation({
     mutationFn: async (entrada: {
       chave: Record<string, ValorCelula>;
       valores: Record<string, ValorCelula>;
     }): Promise<Mutacao> => {
-      const r = await requisitar<Mutacao>('/api/grade/linha', {
+      const resposta = await requisitar<Mutacao>('/api/grade/linha', {
         method: 'PUT',
         body: JSON.stringify({ esquema, tabela, ...entrada }),
       });
-      if (!r.ok) throw new ErroApiError(r.erro);
-      return r.dados;
+      if (!resposta.ok) throw new ErroApiError(resposta.erro);
+      return resposta.dados;
     },
     onSuccess: invalidar,
   });
 }
 
 export function useRemoverLinha(esquema: string, tabela: string) {
-  const invalidar = usarInvalidacao(esquema, tabela);
+  const invalidar = useInvalidacao(esquema, tabela);
   return useMutation({
     mutationFn: async (chave: Record<string, ValorCelula>): Promise<Mutacao> => {
-      const r = await requisitar<Mutacao>('/api/grade/linha', {
+      const resposta = await requisitar<Mutacao>('/api/grade/linha', {
         method: 'DELETE',
         body: JSON.stringify({ esquema, tabela, chave }),
       });
-      if (!r.ok) throw new ErroApiError(r.erro);
-      return r.dados;
+      if (!resposta.ok) throw new ErroApiError(resposta.erro);
+      return resposta.dados;
     },
     onSuccess: invalidar,
   });

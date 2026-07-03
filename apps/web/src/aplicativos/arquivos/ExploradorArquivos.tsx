@@ -5,14 +5,23 @@ import { useLoja } from '../../areaTrabalho/loja';
 import { Icone } from '../../tema/icones/Icone';
 import { useContextoArquivos } from './contexto';
 import {
-  useDrives, useConteudo, useCriarPasta, useCriarArquivo, useRenomear,
-  useApagar, useMover, useCopiar,
+  useDrives,
+  useConteudo,
+  useCriarPasta,
+  useCriarArquivo,
+  useRenomear,
+  useApagar,
+  useMover,
+  useCopiar,
 } from './ganchos';
 import { useLojaLogSQL } from '../monitor/lojaLog';
 import { resolverSQL } from '../monitor/resolver';
 import './arquivos.css';
 
-interface Nivel { id: number | null; nome: string }
+interface Nivel {
+  id: number | null;
+  nome: string;
+}
 
 export function ExploradorArquivos(_props: PropsApp) {
   const driveId = useContextoArquivos((s) => s.driveId);
@@ -28,7 +37,9 @@ export function ExploradorArquivos(_props: PropsApp) {
   const [copiado, setCopiado] = useState<number | null>(null);
   const [alvo, setAlvo] = useState<number | null>(null);
 
-  const [edicao, setEdicao] = useState<{ id: number | 'novo'; tipo: 'pasta' | 'arquivo' } | null>(null);
+  const [edicao, setEdicao] = useState<{ id: number | 'novo'; tipo: 'pasta' | 'arquivo' } | null>(
+    null,
+  );
   const [nomeEdit, setNomeEdit] = useState('');
   const ignorarBlur = useRef(false);
 
@@ -42,7 +53,12 @@ export function ExploradorArquivos(_props: PropsApp) {
   const copiar = useCopiar();
 
   const letra = drives.data?.find((d) => d.id === driveId)?.letra ?? 'C';
-  const caminho = `${letra}:\\` + pilha.slice(1).map((n) => n.nome).join('\\');
+  const caminho =
+    `${letra}:\\` +
+    pilha
+      .slice(1)
+      .map((n) => n.nome)
+      .join('\\');
 
   function entrar(item: Item) {
     setSqlAcao(null);
@@ -75,7 +91,8 @@ export function ExploradorArquivos(_props: PropsApp) {
     setSel(null);
   }
   function colar() {
-    if (copiado !== null) copiar.mutate({ id: copiado, paiId: atual.id }, { onSuccess: (env) => setSqlAcao(env.sql) });
+    if (copiado !== null)
+      copiar.mutate({ id: copiado, paiId: atual.id }, { onSuccess: (env) => setSqlAcao(env.sql) });
   }
 
   function cancelarEdicao() {
@@ -86,15 +103,27 @@ export function ExploradorArquivos(_props: PropsApp) {
     // Enter chama isto e zera `edicao`; o blur do desmonte chama de novo, mas o guard acima já barra (edicao === null).
     if (!edicao) return;
     const nome = nomeEdit.trim();
-    if (!nome) { cancelarEdicao(); return; }
+    if (!nome) {
+      cancelarEdicao();
+      return;
+    }
     if (edicao.id === 'novo') {
       if (edicao.tipo === 'pasta') {
-        criarPasta.mutate({ nome, paiId: atual.id, driveId }, { onSuccess: (env) => setSqlAcao(env.sql) });
+        criarPasta.mutate(
+          { nome, paiId: atual.id, driveId },
+          { onSuccess: (env) => setSqlAcao(env.sql) },
+        );
       } else {
-        criarArquivo.mutate({ nome, paiId: atual.id, driveId, conteudo: '' }, { onSuccess: (env) => setSqlAcao(env.sql) });
+        criarArquivo.mutate(
+          { nome, paiId: atual.id, driveId, conteudo: '' },
+          { onSuccess: (env) => setSqlAcao(env.sql) },
+        );
       }
     } else {
-      renomear.mutate({ id: edicao.id as number, nome }, { onSuccess: (env) => setSqlAcao(env.sql) });
+      renomear.mutate(
+        { id: edicao.id as number, nome },
+        { onSuccess: (env) => setSqlAcao(env.sql) },
+      );
     }
     cancelarEdicao();
   }
@@ -108,10 +137,22 @@ export function ExploradorArquivos(_props: PropsApp) {
       onClick={(e) => e.stopPropagation()}
       onDoubleClick={(e) => e.stopPropagation()}
       onKeyDown={(e) => {
-        if (e.key === 'Enter') { e.preventDefault(); confirmarEdicao(); }
-        else if (e.key === 'Escape') { e.preventDefault(); ignorarBlur.current = true; cancelarEdicao(); }
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          confirmarEdicao();
+        } else if (e.key === 'Escape') {
+          e.preventDefault();
+          ignorarBlur.current = true;
+          cancelarEdicao();
+        }
       }}
-      onBlur={() => { if (ignorarBlur.current) { ignorarBlur.current = false; return; } confirmarEdicao(); }}
+      onBlur={() => {
+        if (ignorarBlur.current) {
+          ignorarBlur.current = false;
+          return;
+        }
+        confirmarEdicao();
+      }}
     />
   );
 
@@ -121,22 +162,51 @@ export function ExploradorArquivos(_props: PropsApp) {
     <div
       className="exp"
       onKeyDown={(e) => {
-        if (e.key === 'F2' && sel !== null && !edicao) { e.preventDefault(); renomearSel(); }
+        if (e.key === 'F2' && sel !== null && !edicao) {
+          e.preventDefault();
+          renomearSel();
+        }
       }}
       tabIndex={-1}
     >
       <div className="exp-barra">
-        <select aria-label="Drive" value={driveId} onChange={(e) => { definirDrive(Number(e.target.value)); setPilha([{ id: null, nome: '' }]); setSqlAcao(null); }}>
-          {drives.data?.map((d) => <option key={d.id} value={d.id}>{d.letra}: {d.rotulo}</option>)}
+        <select
+          aria-label="Drive"
+          value={driveId}
+          onChange={(e) => {
+            definirDrive(Number(e.target.value));
+            setPilha([{ id: null, nome: '' }]);
+            setSqlAcao(null);
+          }}
+        >
+          {drives.data?.map((d) => (
+            <option key={d.id} value={d.id}>
+              {d.letra}: {d.rotulo}
+            </option>
+          ))}
         </select>
-        <button onClick={subir} disabled={pilha.length === 1}>Acima</button>
+        <button onClick={subir} disabled={pilha.length === 1}>
+          Acima
+        </button>
         <span className="exp-endereco">{caminho}</span>
-        <button onClick={novaPasta} disabled={!!edicao}>Nova Pasta</button>
-        <button onClick={novoArquivo} disabled={!!edicao}>Novo Arquivo</button>
-        <button onClick={renomearSel} disabled={sel === null || !!edicao}>Renomear</button>
-        <button onClick={() => setCopiado(sel)} disabled={sel === null}>Copiar</button>
-        <button onClick={colar} disabled={copiado === null}>Colar</button>
-        <button onClick={apagarSel} disabled={sel === null || !!edicao}>Apagar</button>
+        <button onClick={novaPasta} disabled={!!edicao}>
+          Nova Pasta
+        </button>
+        <button onClick={novoArquivo} disabled={!!edicao}>
+          Novo Arquivo
+        </button>
+        <button onClick={renomearSel} disabled={sel === null || !!edicao}>
+          Renomear
+        </button>
+        <button onClick={() => setCopiado(sel)} disabled={sel === null}>
+          Copiar
+        </button>
+        <button onClick={colar} disabled={copiado === null}>
+          Colar
+        </button>
+        <button onClick={apagarSel} disabled={sel === null || !!edicao}>
+          Apagar
+        </button>
       </div>
       <div className="exp-lista">
         {conteudo.isLoading && <div style={{ padding: 8 }}>Carregando…</div>}
@@ -154,27 +224,33 @@ export function ExploradorArquivos(_props: PropsApp) {
             onDoubleClick={() => entrar(item)}
             draggable
             onDragStart={(e) => e.dataTransfer.setData('text/id', String(item.id))}
-            onDragOver={(e) => { if (item.tipo === 'pasta') { e.preventDefault(); setAlvo(item.id); } }}
+            onDragOver={(e) => {
+              if (item.tipo === 'pasta') {
+                e.preventDefault();
+                setAlvo(item.id);
+              }
+            }}
             onDragLeave={() => setAlvo((a) => (a === item.id ? null : a))}
             onDrop={(e) => {
               e.preventDefault();
               setAlvo(null);
               const arrastado = Number(e.dataTransfer.getData('text/id'));
               if (item.tipo === 'pasta' && arrastado && arrastado !== item.id) {
-                mover.mutate({ id: arrastado, paiId: item.id }, { onSuccess: (env) => setSqlAcao(env.sql) });
+                mover.mutate(
+                  { id: arrastado, paiId: item.id },
+                  { onSuccess: (env) => setSqlAcao(env.sql) },
+                );
                 setSel(null);
               }
             }}
           >
             <Icone nome={item.tipo === 'pasta' ? 'folder' : 'newdoc'} tamanho={16} />
-            {edicao?.id === item.id ? (
-              editInput
-            ) : (
-              <span>{item.nome}</span>
-            )}
+            {edicao?.id === item.id ? editInput : <span>{item.nome}</span>}
           </div>
         ))}
-        {conteudo.data?.length === 0 && !edicao && <div style={{ padding: 8, opacity: 0.7 }}>(pasta vazia)</div>}
+        {conteudo.data?.length === 0 && !edicao && (
+          <div style={{ padding: 8, opacity: 0.7 }}>(pasta vazia)</div>
+        )}
       </div>
       <div className="exp-sql">
         <div className="exp-sql-cab">

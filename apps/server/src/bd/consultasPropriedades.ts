@@ -90,7 +90,7 @@ export async function obterPropriedades(
     tipo: i.tipo,
     unico: i.unico,
     chavePrimaria: i.chavePrimaria,
-    colunas: i.nome ? colunasPorIndice.get(i.nome) ?? [] : [],
+    colunas: i.nome ? (colunasPorIndice.get(i.nome) ?? []) : [],
   }));
 
   return {

@@ -2,7 +2,6 @@ import type { FastifyInstance } from 'fastify';
 import sql from 'mssql';
 import type { ErroApi } from '@dbos/shared';
 
-// Converte um erro do driver mssql/Tedious (ou qualquer erro) no formato padronizado.
 export function mapearErroSql(erro: unknown): ErroApi {
   if (erro instanceof sql.RequestError) {
     if ((erro as { code?: string }).code === 'ETIMEOUT') {
@@ -34,7 +33,6 @@ export function mapearErroSql(erro: unknown): ErroApi {
   };
 }
 
-// Erros não tratados nas rotas caem aqui e viram RespostaErro com status coerente.
 export function registrarTratadorErros(app: FastifyInstance): void {
   app.setErrorHandler((erro, _req, reply) => {
     const apiErro = mapearErroSql(erro);

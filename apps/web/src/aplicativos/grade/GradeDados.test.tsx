@@ -22,16 +22,17 @@ function renderizar(janela: EstadoJanela) {
 test('sem tabela pré-selecionada, mostra o seletor com as tabelas', async () => {
   vi.stubGlobal(
     'fetch',
-    vi.fn(async () =>
-      new Response(
-        JSON.stringify({
-          ok: true,
-          dados: [
-            { esquema: 'dbo', nome: 'Clientes', tipo: 'tabela' },
-            { esquema: 'dbo', nome: 'vw_FolhaResumo', tipo: 'view' },
-          ],
-        }),
-      ),
+    vi.fn(
+      async () =>
+        new Response(
+          JSON.stringify({
+            ok: true,
+            dados: [
+              { esquema: 'dbo', nome: 'Clientes', tipo: 'tabela' },
+              { esquema: 'dbo', nome: 'vw_FolhaResumo', tipo: 'view' },
+            ],
+          }),
+        ),
     ),
   );
   renderizar(janelaFake(null));
@@ -42,20 +43,21 @@ test('sem tabela pré-selecionada, mostra o seletor com as tabelas', async () =>
 test('com tabela em dados, abre a grade direto', async () => {
   vi.stubGlobal(
     'fetch',
-    vi.fn(async () =>
-      new Response(
-        JSON.stringify({
-          ok: true,
-          dados: {
-            colunas: [{ nome: 'id', tipoDado: 'int', anulavel: false, ehChavePrimaria: true }],
-            chavePrimaria: ['id'],
-            linhas: [{ id: 1 }],
-            total: 1,
-            pagina: 0,
-            tamanho: 100,
-          },
-        }),
-      ),
+    vi.fn(
+      async () =>
+        new Response(
+          JSON.stringify({
+            ok: true,
+            dados: {
+              colunas: [{ nome: 'id', tipoDado: 'int', anulavel: false, ehChavePrimaria: true }],
+              chavePrimaria: ['id'],
+              linhas: [{ id: 1 }],
+              total: 1,
+              pagina: 0,
+              tamanho: 100,
+            },
+          }),
+        ),
     ),
   );
   renderizar(janelaFake({ esquema: 'dbo', tabela: 'Clientes' }));

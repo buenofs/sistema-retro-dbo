@@ -7,7 +7,7 @@
    abaixo (o runtime faz removeProperty('--accent') na pele Aero).
    ============================================================ */
 
-body[data-skin="aero"] {
+body[data-skin='aero'] {
   --ink: #122231;
   --ink-suave: #3a4d5e;
 
@@ -26,20 +26,22 @@ body[data-skin="aero"] {
   --titulo-2: oklch(0.62 0.16 var(--accent-h, 200));
   --titulo-ink: #ffffff;
 
-  --ui: Tahoma, "Segoe UI", Geneva, Verdana, sans-serif;
+  --ui: Tahoma, 'Segoe UI', Geneva, Verdana, sans-serif;
 }
 
 /* JANELA — chrome prata, cantos, sombra suave, moldura de vidro */
-body[data-skin="aero"] .window {
+body[data-skin='aero'] .window {
   background: linear-gradient(180deg, #f3f7fb, #dde6ef 12%, #c2cedb);
   border: 1px solid #5d6b7a;
-  box-shadow: 0 14px 40px -8px rgba(12, 28, 44, 0.55), 0 3px 10px rgba(12, 28, 44, 0.3);
+  box-shadow:
+    0 14px 40px -8px rgba(12, 28, 44, 0.55),
+    0 3px 10px rgba(12, 28, 44, 0.3);
   outline: 1px solid rgba(255, 255, 255, 0.7);
   outline-offset: -2px;
 }
 
 /* BARRA DE TÍTULO — gradiente aqua de 3 paradas + brilho superior */
-body[data-skin="aero"] .title-bar {
+body[data-skin='aero'] .title-bar {
   position: relative;
   overflow: hidden;
   border-radius: calc(var(--round) - 2px) calc(var(--round) - 2px) 3px 3px;
@@ -50,10 +52,12 @@ body[data-skin="aero"] .title-bar {
     var(--titulo-2) 52%,
     oklch(0.5 0.16 var(--accent-h, 200)) 100%
   );
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7), inset 0 -1px 0 rgba(0, 0, 0, 0.18);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.7),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.18);
 }
-body[data-skin="aero"] .title-bar::after {
-  content: "";
+body[data-skin='aero'] .title-bar::after {
+  content: '';
   position: absolute;
   left: 0;
   right: 0;
@@ -62,16 +66,18 @@ body[data-skin="aero"] .title-bar::after {
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.45), rgba(255, 255, 255, 0));
   pointer-events: none;
 }
-body[data-skin="aero"] .title-bar-text {
+body[data-skin='aero'] .title-bar-text {
   position: relative; /* acima do brilho ::after */
 }
-body[data-skin="aero"] .title-bar.inactive {
+body[data-skin='aero'] .title-bar.inactive {
   background: linear-gradient(180deg, #eef2f6, #cdd7e1 50%, #b7c3ce);
   color: #5c6b78;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8), inset 0 -1px 0 rgba(0, 0, 0, 0.08);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.8),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.08);
 }
 /* glifos dos controles ficam pretos por base.css; no Aero use tinta suave */
-body[data-skin="aero"] .title-bar-controls button {
+body[data-skin='aero'] .title-bar-controls button {
   background: rgba(255, 255, 255, 0.35);
   border: 1px solid rgba(255, 255, 255, 0.6);
   border-radius: var(--round-sm);
@@ -79,27 +85,29 @@ body[data-skin="aero"] .title-bar-controls button {
 }
 
 /* BOTÕES + CAMPOS — vidro suave */
-body[data-skin="aero"] button,
-body[data-skin="aero"] input[type="reset"],
-body[data-skin="aero"] input[type="submit"] {
+body[data-skin='aero'] button,
+body[data-skin='aero'] input[type='reset'],
+body[data-skin='aero'] input[type='submit'] {
   background: linear-gradient(180deg, #ffffff, #e6eef6 60%, #d3deea);
   border: 1px solid #9aa9b8;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9), 0 1px 2px rgba(20, 50, 80, 0.18);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    0 1px 2px rgba(20, 50, 80, 0.18);
   color: var(--ink);
 }
-body[data-skin="aero"] button:not(:disabled):active,
-body[data-skin="aero"] input[type="reset"]:not(:disabled):active,
-body[data-skin="aero"] input[type="submit"]:not(:disabled):active {
+body[data-skin='aero'] button:not(:disabled):active,
+body[data-skin='aero'] input[type='reset']:not(:disabled):active,
+body[data-skin='aero'] input[type='submit']:not(:disabled):active {
   background: linear-gradient(180deg, #d3deea, #e6eef6);
   box-shadow: inset 0 1px 3px rgba(20, 50, 80, 0.3);
   padding: 0 12px;
 }
-body[data-skin="aero"] input[type="text"],
-body[data-skin="aero"] input[type="password"],
-body[data-skin="aero"] input[type="number"],
-body[data-skin="aero"] input:not([type]),
-body[data-skin="aero"] textarea,
-body[data-skin="aero"] select {
+body[data-skin='aero'] input[type='text'],
+body[data-skin='aero'] input[type='password'],
+body[data-skin='aero'] input[type='number'],
+body[data-skin='aero'] input:not([type]),
+body[data-skin='aero'] textarea,
+body[data-skin='aero'] select {
   background: rgba(255, 255, 255, 0.92);
   border: 1px solid #9aa9b8;
   box-shadow: inset 0 1px 2px rgba(20, 50, 80, 0.18);
@@ -108,40 +116,40 @@ body[data-skin="aero"] select {
 
 /* Afordâncias de chrome (atalhos da área e itens do Iniciar) são chapadas:
    sem a face de vidro/borda/sombra de botão — só o ícone e o rótulo. */
-body[data-skin="aero"] .icone-atalho,
-body[data-skin="aero"] .icone-atalho:not(:disabled):active,
-body[data-skin="aero"] .menu-iniciar-itens > li > button,
-body[data-skin="aero"] .menu-iniciar-itens > li > button:not(:disabled):active {
+body[data-skin='aero'] .icone-atalho,
+body[data-skin='aero'] .icone-atalho:not(:disabled):active,
+body[data-skin='aero'] .menu-iniciar-itens > li > button,
+body[data-skin='aero'] .menu-iniciar-itens > li > button:not(:disabled):active {
   background: transparent;
   border: 1px solid transparent;
   box-shadow: none;
 }
 
 /* ÁREA DE TRABALHO — wallpaper Aqua (default) e variantes (data-wp) */
-body[data-skin="aero"] .area-trabalho {
+body[data-skin='aero'] .area-trabalho {
   background:
     radial-gradient(120% 90% at 50% -10%, #bfeaff 0%, transparent 55%),
     radial-gradient(80% 70% at 78% 8%, #e9fbff 0%, transparent 40%),
     linear-gradient(180deg, #7fc4f2 0%, #4f9fe0 38%, #2f7fc7 64%, #1f6fb6 100%);
 }
-body[data-skin="aero"][data-wp="sunset"] .area-trabalho {
+body[data-skin='aero'][data-wp='sunset'] .area-trabalho {
   background:
     radial-gradient(120% 90% at 50% -10%, #ffe1b0 0%, transparent 55%),
     radial-gradient(80% 70% at 78% 12%, #fff3d6 0%, transparent 42%),
     linear-gradient(180deg, #ffb16b 0%, #f4824f 36%, #d9577a 66%, #7d3f8e 100%);
 }
-body[data-skin="aero"][data-wp="verde"] .area-trabalho {
+body[data-skin='aero'][data-wp='verde'] .area-trabalho {
   background:
     radial-gradient(120% 90% at 50% -10%, #e6ffd6 0%, transparent 55%),
     linear-gradient(180deg, #aee36b 0%, #6dbf4e 38%, #3f9e6a 66%, #2f7f86 100%);
 }
-body[data-skin="aero"][data-wp="noite"] .area-trabalho {
+body[data-skin='aero'][data-wp='noite'] .area-trabalho {
   background:
     radial-gradient(110% 80% at 50% -10%, #2a4a7a 0%, transparent 55%),
     radial-gradient(60% 50% at 80% 16%, #3a6aa8 0%, transparent 45%),
     linear-gradient(180deg, #1a2c4e 0%, #0d1c36 50%, #070f1f 100%);
 }
-body[data-skin="aero"] .icone-atalho-rotulo {
+body[data-skin='aero'] .icone-atalho-rotulo {
   text-shadow: 0 1px 3px rgba(0, 20, 40, 0.6);
 }
 
@@ -149,7 +157,7 @@ body[data-skin="aero"] .icone-atalho-rotulo {
 .camada-bolhas {
   display: none;
 }
-body[data-skin="aero"] .camada-bolhas {
+body[data-skin='aero'] .camada-bolhas {
   display: block;
   position: absolute;
   inset: 0;
@@ -157,39 +165,89 @@ body[data-skin="aero"] .camada-bolhas {
   pointer-events: none;
   z-index: 0;
 }
-body[data-skin="aero"] .bolha {
+body[data-skin='aero'] .bolha {
   position: absolute;
   border-radius: 50%;
   background:
     radial-gradient(40% 35% at 32% 28%, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0) 60%),
     radial-gradient(120% 120% at 70% 75%, rgba(120, 200, 255, 0.35), rgba(255, 255, 255, 0.06));
-  box-shadow: inset 0 0 8px rgba(255, 255, 255, 0.5), 0 2px 10px rgba(20, 60, 90, 0.18);
+  box-shadow:
+    inset 0 0 8px rgba(255, 255, 255, 0.5),
+    0 2px 10px rgba(20, 60, 90, 0.18);
   border: 1px solid rgba(255, 255, 255, 0.4);
   animation: bolha-flutua calc(18s / var(--motion, 1)) ease-in-out infinite;
 }
-body[data-skin="aero"] .bolha-1 { width: 90px; height: 90px; left: 12%; top: 60%; animation-delay: 0s; }
-body[data-skin="aero"] .bolha-2 { width: 54px; height: 54px; left: 28%; top: 30%; animation-delay: -3s; }
-body[data-skin="aero"] .bolha-3 { width: 120px; height: 120px; left: 62%; top: 55%; animation-delay: -6s; }
-body[data-skin="aero"] .bolha-4 { width: 40px; height: 40px; left: 78%; top: 25%; animation-delay: -2s; }
-body[data-skin="aero"] .bolha-5 { width: 70px; height: 70px; left: 45%; top: 72%; animation-delay: -8s; }
-body[data-skin="aero"] .bolha-6 { width: 30px; height: 30px; left: 88%; top: 62%; animation-delay: -5s; }
+body[data-skin='aero'] .bolha-1 {
+  width: 90px;
+  height: 90px;
+  left: 12%;
+  top: 60%;
+  animation-delay: 0s;
+}
+body[data-skin='aero'] .bolha-2 {
+  width: 54px;
+  height: 54px;
+  left: 28%;
+  top: 30%;
+  animation-delay: -3s;
+}
+body[data-skin='aero'] .bolha-3 {
+  width: 120px;
+  height: 120px;
+  left: 62%;
+  top: 55%;
+  animation-delay: -6s;
+}
+body[data-skin='aero'] .bolha-4 {
+  width: 40px;
+  height: 40px;
+  left: 78%;
+  top: 25%;
+  animation-delay: -2s;
+}
+body[data-skin='aero'] .bolha-5 {
+  width: 70px;
+  height: 70px;
+  left: 45%;
+  top: 72%;
+  animation-delay: -8s;
+}
+body[data-skin='aero'] .bolha-6 {
+  width: 30px;
+  height: 30px;
+  left: 88%;
+  top: 62%;
+  animation-delay: -5s;
+}
 @keyframes bolha-flutua {
-  0%, 100% { transform: translateY(0) translateX(0); }
-  50% { transform: translateY(-22px) translateX(10px); }
+  0%,
+  100% {
+    transform: translateY(0) translateX(0);
+  }
+  50% {
+    transform: translateY(-22px) translateX(10px);
+  }
 }
 
 /* BARRA DE TAREFAS — vidro */
-body[data-skin="aero"] .barra-tarefas {
+body[data-skin='aero'] .barra-tarefas {
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.5), rgba(214, 230, 245, 0.32) 22%, rgba(60, 120, 180, 0.28) 100%),
+    linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.5),
+      rgba(214, 230, 245, 0.32) 22%,
+      rgba(60, 120, 180, 0.28) 100%
+    ),
     rgba(238, 246, 252, 0.62);
   -webkit-backdrop-filter: blur(var(--glass-blur, 14px)) saturate(1.3);
   backdrop-filter: blur(var(--glass-blur, 14px)) saturate(1.3);
   border-top: 1px solid rgba(255, 255, 255, 0.85);
-  box-shadow: 0 -2px 12px rgba(10, 30, 50, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  box-shadow:
+    0 -2px 12px rgba(10, 30, 50, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6);
 }
 /* botão Iniciar — pílula aqua glossy */
-body[data-skin="aero"] .botao-iniciar {
+body[data-skin='aero'] .botao-iniciar {
   border: 1px solid var(--accent-d);
   border-radius: 20px;
   color: #fff;
@@ -200,30 +258,40 @@ body[data-skin="aero"] .botao-iniciar {
     var(--accent-d) 54%,
     var(--accent-d) 100%
   );
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.85), inset 0 -3px 6px rgba(0, 30, 60, 0.35), 0 2px 6px rgba(10, 40, 70, 0.35);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.85),
+    inset 0 -3px 6px rgba(0, 30, 60, 0.35),
+    0 2px 6px rgba(10, 40, 70, 0.35);
   text-shadow: 0 1px 1px rgba(0, 30, 60, 0.5);
 }
 /* botões de tarefa */
-body[data-skin="aero"] .botao-janela {
+body[data-skin='aero'] .botao-janela {
   border: 1px solid #9aa9b8;
   border-radius: var(--round-btn);
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.7), rgba(220, 232, 244, 0.5));
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7);
 }
-body[data-skin="aero"] .botao-janela.ativo {
+body[data-skin='aero'] .botao-janela.ativo {
   border-color: var(--accent-d);
   color: #fff;
-  background: linear-gradient(180deg, color-mix(in oklab, var(--accent), white 30%), var(--accent) 55%, var(--accent-d));
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6), inset 0 -2px 5px rgba(0, 30, 60, 0.3);
+  background: linear-gradient(
+    180deg,
+    color-mix(in oklab, var(--accent), white 30%),
+    var(--accent) 55%,
+    var(--accent-d)
+  );
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.6),
+    inset 0 -2px 5px rgba(0, 30, 60, 0.3);
 }
-body[data-skin="aero"] .relogio {
+body[data-skin='aero'] .relogio {
   border: 1px solid rgba(255, 255, 255, 0.5);
   border-radius: var(--round-sm);
   background: rgba(255, 255, 255, 0.18);
   box-shadow: none;
   color: var(--ink);
 }
-body[data-skin="aero"] .bandeja-engrenagem {
+body[data-skin='aero'] .bandeja-engrenagem {
   background: transparent;
   border: none;
   box-shadow: none;
@@ -233,64 +301,70 @@ body[data-skin="aero"] .bandeja-engrenagem {
 }
 
 /* MENU INICIAR — vidro */
-body[data-skin="aero"] .menu-iniciar {
+body[data-skin='aero'] .menu-iniciar {
   background: rgba(238, 246, 252, 0.72);
   -webkit-backdrop-filter: blur(var(--glass-blur, 14px)) saturate(1.2);
   backdrop-filter: blur(var(--glass-blur, 14px)) saturate(1.2);
   border: 1px solid rgba(255, 255, 255, 0.85);
   border-radius: var(--round);
-  box-shadow: 0 14px 40px -8px rgba(12, 28, 44, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  box-shadow:
+    0 14px 40px -8px rgba(12, 28, 44, 0.55),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
 }
-body[data-skin="aero"] .menu-iniciar-faixa {
+body[data-skin='aero'] .menu-iniciar-faixa {
   background: linear-gradient(180deg, var(--titulo-1), oklch(0.5 0.16 var(--accent-h, 200)));
 }
-body[data-skin="aero"] .menu-iniciar-itens > li > button:hover:not(:disabled) {
+body[data-skin='aero'] .menu-iniciar-itens > li > button:hover:not(:disabled) {
   background: linear-gradient(180deg, color-mix(in oklab, var(--accent), white 22%), var(--accent));
   color: #fff;
   border-radius: var(--round-sm);
 }
 
 /* MENU DE CONTEXTO + DIÁLOGOS — vidro */
-body[data-skin="aero"] .menu-contexto {
+body[data-skin='aero'] .menu-contexto {
   background: rgba(238, 246, 252, 0.72);
   -webkit-backdrop-filter: blur(var(--glass-blur, 14px));
   backdrop-filter: blur(var(--glass-blur, 14px));
   border: 1px solid rgba(255, 255, 255, 0.85);
   border-radius: var(--round);
-  box-shadow: 0 14px 40px -8px rgba(12, 28, 44, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  box-shadow:
+    0 14px 40px -8px rgba(12, 28, 44, 0.55),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
 }
-body[data-skin="aero"] .menu-contexto button:hover {
+body[data-skin='aero'] .menu-contexto button:hover {
   background: linear-gradient(180deg, color-mix(in oklab, var(--accent), white 22%), var(--accent));
   color: #fff;
   border-radius: var(--round-sm);
 }
 
 /* BOOT — Aero (fundo navy, marca com brilho aqua) */
-body[data-skin="aero"] .tela-boot {
+body[data-skin='aero'] .tela-boot {
   background: #06121c;
   color: #cfeaff;
 }
-body[data-skin="aero"] .boot-marca {
+body[data-skin='aero'] .boot-marca {
   color: #ffffff;
-  text-shadow: 0 0 18px oklch(0.75 0.18 var(--accent-h, 200) / 0.55), 0 3px 0 var(--accent-d);
+  text-shadow:
+    0 0 18px oklch(0.75 0.18 var(--accent-h, 200) / 0.55),
+    0 3px 0 var(--accent-d);
 }
-body[data-skin="aero"] .boot-sub {
+body[data-skin='aero'] .boot-sub {
   color: #8fb6d4;
 }
-body[data-skin="aero"] .boot-barra {
+body[data-skin='aero'] .boot-barra {
   border: 1px solid #2a4a63;
   border-radius: 4px;
   background: #0a1c2a;
 }
-body[data-skin="aero"] .boot-progresso {
+body[data-skin='aero'] .boot-progresso {
   background: linear-gradient(90deg, var(--accent-d), var(--accent), #7ec94a);
   box-shadow: 0 0 10px oklch(0.75 0.18 var(--accent-h, 200) / 0.55);
 }
-body[data-skin="aero"] .boot-msg {
+body[data-skin='aero'] .boot-msg {
   color: #5e89a6;
 }
 
 /* LOGIN — Aero (véu aqua radial) */
-body[data-skin="aero"] .tela-logon {
+body[data-skin='aero'] .tela-logon {
   background: radial-gradient(120% 90% at 50% 0%, #2f7fc7, #0d2740);
 }

@@ -17,17 +17,18 @@ function renderizar() {
 test('agrupa objetos em Tabelas e Views com contagem', async () => {
   vi.stubGlobal(
     'fetch',
-    vi.fn(async () =>
-      new Response(
-        JSON.stringify({
-          ok: true,
-          dados: [
-            { esquema: 'dbo', nome: 'Clientes', tipo: 'tabela' },
-            { esquema: 'dbo', nome: 'Pedidos', tipo: 'tabela' },
-            { esquema: 'dbo', nome: 'vw_Resumo', tipo: 'view' },
-          ],
-        }),
-      ),
+    vi.fn(
+      async () =>
+        new Response(
+          JSON.stringify({
+            ok: true,
+            dados: [
+              { esquema: 'dbo', nome: 'Clientes', tipo: 'tabela' },
+              { esquema: 'dbo', nome: 'Pedidos', tipo: 'tabela' },
+              { esquema: 'dbo', nome: 'vw_Resumo', tipo: 'view' },
+            ],
+          }),
+        ),
     ),
   );
   renderizar();
@@ -40,11 +41,12 @@ test('agrupa objetos em Tabelas e Views com contagem', async () => {
 test('mostra erro quando a listagem falha', async () => {
   vi.stubGlobal(
     'fetch',
-    vi.fn(async () =>
-      new Response(
-        JSON.stringify({ ok: false, erro: { tipo: 'rede', mensagem: 'Sem conexão.' } }),
-        { status: 503 },
-      ),
+    vi.fn(
+      async () =>
+        new Response(
+          JSON.stringify({ ok: false, erro: { tipo: 'rede', mensagem: 'Sem conexão.' } }),
+          { status: 503 },
+        ),
     ),
   );
   renderizar();

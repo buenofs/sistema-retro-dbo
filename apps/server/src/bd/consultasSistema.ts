@@ -48,10 +48,7 @@ const SQL_COLUNAS = `
   ORDER BY c.ORDINAL_POSITION
 `;
 
-export async function listarColunas(
-  pool: ConnectionPool,
-  ref: RefObjeto,
-): Promise<ColunaBanco[]> {
+export async function listarColunas(pool: ConnectionPool, ref: RefObjeto): Promise<ColunaBanco[]> {
   const resultado = await pool
     .request()
     .input('esquema', sql.NVarChar, ref.esquema)

@@ -6,18 +6,18 @@ import { ErroApiError } from '../consulta/ganchos';
 export type Envelope<T> = { dados: T; sql: ComandoSQL[] };
 
 async function pegar<T>(caminho: string): Promise<Envelope<T>> {
-  const r = await requisitar<Envelope<T>>(caminho);
-  if (!r.ok) throw new ErroApiError(r.erro);
-  return r.dados;
+  const resposta = await requisitar<Envelope<T>>(caminho);
+  if (!resposta.ok) throw new ErroApiError(resposta.erro);
+  return resposta.dados;
 }
 
 async function mandar<T>(caminho: string, method: string, corpo?: unknown): Promise<Envelope<T>> {
-  const r = await requisitar<Envelope<T>>(caminho, {
+  const resposta = await requisitar<Envelope<T>>(caminho, {
     method,
     body: corpo === undefined ? undefined : JSON.stringify(corpo),
   });
-  if (!r.ok) throw new ErroApiError(r.erro);
-  return r.dados;
+  if (!resposta.ok) throw new ErroApiError(resposta.erro);
+  return resposta.dados;
 }
 
 export function useDrives() {
@@ -39,7 +39,8 @@ export function useConteudo(driveId: number, paiId: number | null) {
 export function useArvore(driveId: number) {
   return useQuery({
     queryKey: ['arquivos', 'arvore', driveId],
-    queryFn: () => pegar<ItemArvore[]>(`/api/arquivos/arvore?driveId=${driveId}`).then((e) => e.dados),
+    queryFn: () =>
+      pegar<ItemArvore[]>(`/api/arquivos/arvore?driveId=${driveId}`).then((e) => e.dados),
   });
 }
 
@@ -60,7 +61,10 @@ export function useUso() {
 export function useItem(id: number) {
   return useQuery({
     queryKey: ['arquivos', 'item', id],
-    queryFn: () => pegar<{ id: number; nome: string; conteudo: string }>(`/api/arquivos/${id}`).then((e) => e.dados),
+    queryFn: () =>
+      pegar<{ id: number; nome: string; conteudo: string }>(`/api/arquivos/${id}`).then(
+        (e) => e.dados,
+      ),
     enabled: id > 0,
   });
 }

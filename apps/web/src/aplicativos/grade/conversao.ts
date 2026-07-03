@@ -1,7 +1,16 @@
 import type { ColunaBanco, ValorCelula } from '@dbos/shared';
 
 const TIPOS_NUMERICOS = [
-  'int', 'bigint', 'smallint', 'tinyint', 'decimal', 'numeric', 'float', 'real', 'money', 'smallmoney',
+  'int',
+  'bigint',
+  'smallint',
+  'tinyint',
+  'decimal',
+  'numeric',
+  'float',
+  'real',
+  'money',
+  'smallmoney',
 ];
 
 export function converterValor(coluna: ColunaBanco, texto: string): ValorCelula {

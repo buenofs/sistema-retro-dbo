@@ -5,7 +5,11 @@ import type { ConnectionPool } from 'mssql';
 // Pool falso: o gerenciador só usa close(); o resto não importa para estes testes.
 function poolFalso() {
   const estado = { fechado: false };
-  const pool = { close: async () => { estado.fechado = true; } };
+  const pool = {
+    close: async () => {
+      estado.fechado = true;
+    },
+  };
   return { pool: pool as unknown as ConnectionPool, estado };
 }
 

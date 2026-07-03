@@ -53,10 +53,22 @@ function DetalhePropriedades({ esquema, tabela }: RefObj) {
       </div>
 
       <div className="prop-kv">
-        <div className="prop-linha"><span className="prop-chave">Colunas</span><strong>{p.totalColunas}</strong></div>
-        <div className="prop-linha"><span className="prop-chave">Linhas (aprox.)</span><strong>{p.totalLinhas}</strong></div>
-        <div className="prop-linha"><span className="prop-chave">Criado em</span><strong>{formatarData(p.criadoEm)}</strong></div>
-        <div className="prop-linha"><span className="prop-chave">Modificado em</span><strong>{formatarData(p.modificadoEm)}</strong></div>
+        <div className="prop-linha">
+          <span className="prop-chave">Colunas</span>
+          <strong>{p.totalColunas}</strong>
+        </div>
+        <div className="prop-linha">
+          <span className="prop-chave">Linhas (aprox.)</span>
+          <strong>{p.totalLinhas}</strong>
+        </div>
+        <div className="prop-linha">
+          <span className="prop-chave">Criado em</span>
+          <strong>{formatarData(p.criadoEm)}</strong>
+        </div>
+        <div className="prop-linha">
+          <span className="prop-chave">Modificado em</span>
+          <strong>{formatarData(p.modificadoEm)}</strong>
+        </div>
       </div>
 
       <fieldset>

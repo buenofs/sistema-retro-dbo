@@ -42,10 +42,16 @@ export function MonitorSQL() {
               <span className={`mon-badge mon-${c.tipo}`}>{c.tipo}</span>
               <strong>{c.acao}</strong>
               <span style={{ opacity: 0.6 }}>{c.em.slice(11, 19)}</span>
-              {c.erro ? <span className="mon-erro">erro: {c.erro}</span> : <span style={{ opacity: 0.6 }}>{c.linhasAfetadas} linha(s)</span>}
+              {c.erro ? (
+                <span className="mon-erro">erro: {c.erro}</span>
+              ) : (
+                <span style={{ opacity: 0.6 }}>{c.linhasAfetadas} linha(s)</span>
+              )}
               <button
                 style={{ marginLeft: 'auto' }}
-                onClick={() => void navigator.clipboard?.writeText(resolverSQL(c.texto, c.parametros))}
+                onClick={() =>
+                  void navigator.clipboard?.writeText(resolverSQL(c.texto, c.parametros))
+                }
               >
                 Copiar SQL
               </button>
@@ -53,7 +59,9 @@ export function MonitorSQL() {
             <div className="mon-sql">{resolverSQL(c.texto, c.parametros)}</div>
           </div>
         ))}
-        {visiveis.length === 0 && <div style={{ padding: 8, opacity: 0.7 }}>(sem comandos — faça uma ação no SO)</div>}
+        {visiveis.length === 0 && (
+          <div style={{ padding: 8, opacity: 0.7 }}>(sem comandos — faça uma ação no SO)</div>
+        )}
       </div>
     </div>
   );
