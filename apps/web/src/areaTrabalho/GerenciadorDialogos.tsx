@@ -3,7 +3,7 @@ import { useShallow } from 'zustand/react/shallow';
 import { type Dialogo, useDialogos } from './useDialogos';
 import { tocarSom } from './sons';
 import { Icone } from '../tema/icones/Icone';
-import type { NomeIcone } from '../tema/icones/motor';
+import type { NomeIcone } from '../tema/icones/icones';
 
 const ICONE: Record<Dialogo['tipo'], NomeIcone> = {
   erro: 'stop',

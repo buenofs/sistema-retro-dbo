@@ -1,5 +1,5 @@
 import { memo, type CSSProperties } from 'react';
-import { obterIcone, type NomeIcone } from './motor';
+import { obterIcone, type NomeIcone } from './icones';
 
 export interface PropsIcone {
   nome: NomeIcone;

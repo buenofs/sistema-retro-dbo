@@ -1,5 +1,5 @@
 import type { ComponentType } from 'react';
-import type { NomeIcone } from '../tema/icones/motor';
+import type { NomeIcone } from '../tema/icones/icones';
 
 export type IdJanela = string;
 export type TipoApp =
