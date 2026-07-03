@@ -90,7 +90,6 @@ async function marcarLixeira(banco: Banco, id: number, valor: 0 | 1): Promise<vo
 export const enviarParaLixeira = (banco: Banco, id: number) => marcarLixeira(banco, id, 1);
 export const restaurar = (banco: Banco, id: number) => marcarLixeira(banco, id, 0);
 
-/** DELETE único e seguro: itens com naLixeira=1 formam um conjunto fechado pela FK paiId. */
 export async function esvaziarLixeira(banco: Banco): Promise<void> {
   await banco.executar('DELETE FROM dbo.Itens WHERE naLixeira = 1');
 }

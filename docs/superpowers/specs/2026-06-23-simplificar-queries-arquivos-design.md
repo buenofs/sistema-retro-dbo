@@ -58,8 +58,6 @@ Explorador. Mantemos **apenas views simples**.
 - Rota e hook mortos relacionados à árvore
 
 **Fora do escopo (intocado):**
-- **Banco `DBOS_RH`** — legado, não será apresentado. A `vw_FolhaResumo`
-  (`OUTER APPLY` + `TOP 1`) fica como está.
 - **DDL "niceties"** — coluna computada `tamanhoBytes AS DATALENGTH(conteudo)` e
   o índice único filtrado `WHERE naLixeira=0`. São explicáveis em uma frase e são
   estruturais (alimentam as views de uso / garantem nome único por pasta).

@@ -487,4 +487,4 @@ Se algum ajuste foi necessário na verificação, commitar; caso contrário, nad
 ## Notas
 
 - **`tipoDoTexto` em `registradorSQL.ts`** continua tratando `WITH` (e seus testes seguem válidos) — não geramos mais esse SQL, mas a função permanece robusta. Sem mudança.
-- **Fora do escopo (intocado):** banco `DBOS_RH`, coluna computada `tamanhoBytes`, índice filtrado `UQ_Itens_local`, grade genérica (`citarId`), Propriedades (`sys.*`) e paginação `OFFSET/FETCH`.
+- **Fora do escopo (intocado):** coluna computada `tamanhoBytes`, índice filtrado `UQ_Itens_local`, grade genérica (`citarId`), Propriedades (`sys.*`) e paginação `OFFSET/FETCH`.

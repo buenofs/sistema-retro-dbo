@@ -12,14 +12,15 @@ SQL database management disguised as a retro Win98 desktop OS.
 ```bash
 bun install
 cp .env.example .env        # configure SQL_SENHA (senha do sa) e SESSAO_SEGREDO
-bun run db:setup            # cria e semeia o banco DBOS_RH no SQL Server
+bun run db:setup            # cria e semeia o banco DBOS_SISTEMA no SQL Server
 bun run dev:server          # API em http://localhost:3001
 bun run dev:web             # desktop em http://localhost:5173
 ```
 
-O sistema agora opera sobre o banco **DBOS_RH** (RH/folha): tabelas `Departamentos`,
-`Funcionarios`, `Projetos` e `FolhaPagamento`, mais as views `vw_FolhaResumo` e
-`vw_AnomaliasFolha`. Configure `SQL_BANCO=DBOS_RH` no `.env`.
+O sistema opera sobre o banco **DBOS_SISTEMA**: um sistema de arquivos simulado
+sobre SQL, com as tabelas `Drives`, `Usuarios` e `Itens` (pastas e arquivos, com
+auto-FK `paiId`), mais as views `vw_ArvoreItens`, `vw_UsoPorUsuario`,
+`vw_UsoPorDrive` e `vw_Lixeira`. Configure `SQL_BANCO=DBOS_SISTEMA` no `.env`.
 
 Acesse `http://localhost:5173`, faça login com um login do SQL Server (ex.: `sa`).
 A sessão vive num cookie httpOnly; o pool de conexão do login fica em memória no
@@ -57,19 +58,24 @@ contexto: **Propriedades** abre uma janela com tipo, contagem de colunas/linhas,
 datas e os **índices** (lidos de `sys.*`); **Abrir na grade** abre a tabela na
 Grade de Dados.
 
-O app **Buscar** (estilo Search Companion) pesquisa funcionários por nome,
-departamento, salário, projeto e por relacionamento (colegas de depto/projeto);
-cada resultado tem **Abrir na grade**.
+O **Explorador de Arquivos** é a GUI principal do sistema de arquivos: árvore de
+pastas à esquerda, conteúdo da pasta atual à direita. Criar/renomear/mover/copiar/
+apagar pastas e arquivos, com menu de contexto e arrastar-soltar; cada ação
+dispara um INSERT/UPDATE/DELETE real. Duplo clique num arquivo abre o **Bloco de
+Notas**, que edita o conteúdo e salva com `UPDATE`.
 
-O app **Relacionamentos** mostra um grafo navegável de um funcionário
-(departamento, projetos, folha); clicar num nó re-centraliza o grafo nele e
-"◀ Voltar" desfaz. Abre pelo atalho, pelo botão "Ver relacionamentos" na Busca,
-ou (em breve) pelo Terminal.
+O **Monitor SQL** mostra em tempo real cada comando disparado pelas ações da GUI
+e do Terminal: hora, ação, SQL parametrizado com os valores resolvidos, e linhas
+afetadas.
 
-O app **Terminal** é um prompt DOS (`C:\DBOS>`): `ajuda`, `limpar`,
-`listar funcionarios`, `buscar salario > 10000`, `mostrar anomalias_folha`,
-`abrir Felipe.func` (abre os Relacionamentos) e `sql` (abre o Editor). Histórico
-com ↑/↓. `listar`/`mostrar` usam um mapa de aliases fixo (sem SQL livre).
+A **Lixeira** lista os itens apagados (soft-delete, `naLixeira=1`), com
+**Restaurar** e **Esvaziar** (delete físico).
+
+O app **Terminal** é um prompt DOS (`C:\Docs>`) sobre o mesmo sistema de
+arquivos: `ajuda`, `limpar`, `ls`/`dir`, `cd <pasta>`, `mkdir <nome>`,
+`touch <nome>`, `ren <nome> <novo>`, `mv`/`cp <nome> <pasta>`, `rm <nome>`
+(manda para a Lixeira), `cat <arquivo>`, `echo <texto> > <arquivo>`, `lixeira`,
+`restaurar <id>` e `empty`. Histórico com ↑/↓.
 
 Toques de polimento: sons curtos ao abrir/fechar janelas e nos erros; clique com
 o botão direito no **fundo do desktop** (abrir qualquer app) ou num **ícone**
@@ -77,9 +83,8 @@ o botão direito no **fundo do desktop** (abrir qualquer app) ou num **ícone**
 é lembrado entre sessões (localStorage).
 
 Ao abrir, o sistema mostra uma **tela de boot** e depois o diálogo **"Log On to
-DBOS"**. O desktop exibe o nome do banco conectado e um atalho **Relatório (Folha)**
-que abre a view `vw_FolhaResumo`. A Grade lista tabelas e views (views em modo
-somente-leitura).
+DBOS"**. O desktop exibe o nome do banco conectado. A Grade lista tabelas e
+views (views em modo somente-leitura).
 
 ## Testes
 ```bash

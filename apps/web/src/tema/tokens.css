@@ -77,10 +77,4 @@
   --term-bg: #000000;                /* terminal: fundo */
   --term-fg: #33ff66;                /* terminal: fósforo */
   --term-prompt: #33ff66;            /* terminal: prompt */
-  --no-funcionario: var(--accent);    /* grafo: cor por tipo */
-  --no-departamento: #f6c945;
-  --no-projeto: #2bc28d;
-  --no-folha: var(--sh);
-  --grafo-bg: var(--janela-conteudo); /* grafo: fundo do canvas */
-  --aresta: #808080;                 /* grafo: cor de aresta */
 }
