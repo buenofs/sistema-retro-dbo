@@ -5,7 +5,6 @@ declare module 'fastify' {
     pools: GerenciadorPools;
   }
   interface FastifyRequest {
-    // Preenchido pelo preHandler 'autenticar' em rotas protegidas.
     sessao?: RegistroSessao & { id: string };
   }
 }

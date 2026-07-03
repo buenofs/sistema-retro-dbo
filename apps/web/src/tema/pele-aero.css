@@ -1,12 +1,3 @@
-/* ============================================================
-   DBOS // tema — pele-aero.css
-   Pele Frutiger-Aero: prata fria, vidro, brilho, acento OKLCH.
-   Escopo: body[data-skin="aero"]. Portado de aeroIdea.
-   NÃO redefine --round* nem --accent fora destes tokens:
-   --round* vem do runtime (tweak de cantos); --accent é oklch
-   abaixo (o runtime faz removeProperty('--accent') na pele Aero).
-   ============================================================ */
-
 body[data-skin="aero"] {
   --ink: #122231;
   --ink-suave: #3a4d5e;

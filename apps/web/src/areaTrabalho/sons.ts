@@ -25,7 +25,6 @@ export function somHabilitado(): boolean {
   return habilitado;
 }
 
-// AudioContext compartilhado e lazy. null onde não há Web Audio (ex.: jsdom).
 function obterContexto(): AudioContext | null {
   try {
     const Ctx =
@@ -39,7 +38,6 @@ function obterContexto(): AudioContext | null {
   }
 }
 
-// Toca um som curto sintetizado. Silencioso (sem lançar) onde não há áudio.
 export function tocarSom(tipo: TipoSom): void {
   if (!habilitado) return;
   const ctx = obterContexto();
@@ -56,6 +54,5 @@ export function tocarSom(tipo: TipoSom): void {
     osc.start();
     osc.stop(ctx.currentTime + perfil.ms / 1000);
   } catch {
-    // sem áudio disponível — ignore
   }
 }

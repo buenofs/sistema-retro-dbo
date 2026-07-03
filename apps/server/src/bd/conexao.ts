@@ -1,7 +1,7 @@
 import sql from 'mssql';
 import type { Credenciais } from '@dbos/shared';
 
-// Monta a configuração de conexão a partir das variáveis de ambiente.
+/** Monta a configuração de conexão a partir das variáveis de ambiente. */
 export function configDoAmbiente(): sql.config {
   return {
     server: process.env.SQL_SERVIDOR ?? 'localhost',
@@ -11,14 +11,12 @@ export function configDoAmbiente(): sql.config {
     database: process.env.SQL_BANCO ?? 'master',
     requestTimeout: Number(process.env.SQL_TIMEOUT_MS ?? 30_000),
     options: {
-      // Em ambiente local o certificado é autoassinado.
       encrypt: true,
       trustServerCertificate: true,
     },
   };
 }
 
-// Abre uma conexão, roda um SELECT cru e devolve o valor — prova de vida.
 export async function testarConexao(config: sql.config): Promise<number> {
   const pool = await sql.connect(config);
   try {
@@ -29,8 +27,7 @@ export async function testarConexao(config: sql.config): Promise<number> {
   }
 }
 
-// Config de conexão para um login específico: servidor/porta/banco vêm do
-// ambiente; usuário e senha vêm das credenciais informadas no login.
+/** Monta config de conexão para um login específico; servidor/porta/banco vêm do ambiente. */
 export function configParaLogin(credenciais: Credenciais): sql.config {
   return {
     ...configDoAmbiente(),
@@ -39,7 +36,7 @@ export function configParaLogin(credenciais: Credenciais): sql.config {
   };
 }
 
-// Abre e conecta um pool dedicado. Lança em caso de falha (ex.: ELOGIN).
+/** Abre e conecta um pool dedicado; lança em caso de falha (ex.: ELOGIN). */
 export async function abrirPool(config: sql.config): Promise<sql.ConnectionPool> {
   const pool = new sql.ConnectionPool(config);
   await pool.connect();

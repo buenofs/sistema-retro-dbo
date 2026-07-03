@@ -1,34 +1,35 @@
 import { useState } from 'react';
 import { useObjetos } from './ganchos';
-import { usarValorDebounced } from './usarValorDebounced';
+import { useValorDebounced } from './useValorDebounced';
 import { NoTabela } from './NoTabela';
 import { Icone } from '../../tema/icones/Icone';
+import { Estado } from '../comuns/Estado';
 import './explorador.css';
 
 export function ExploradorObjetos() {
   const consulta = useObjetos();
   const [filtro, setFiltro] = useState('');
-  const termo = usarValorDebounced(filtro, 200).trim().toLowerCase();
+  const termo = useValorDebounced(filtro, 200).trim().toLowerCase();
 
-  if (consulta.isPending) return <p style={{ padding: 8 }}>Carregando objetos…</p>;
+  if (consulta.isPending) return <Estado>Carregando objetos…</Estado>;
   if (consulta.isError) {
-    return <p style={{ padding: 8, color: 'red' }}>{consulta.error.message}</p>;
+    return <Estado variante="erro">{consulta.error.message}</Estado>;
   }
 
   const objetos = consulta.data ?? [];
   const filtrados = termo
-    ? objetos.filter((o) => o.nome.toLowerCase().includes(termo))
+    ? objetos.filter((objeto) => objeto.nome.toLowerCase().includes(termo))
     : objetos;
-  const tabelas = filtrados.filter((o) => o.tipo === 'tabela');
-  const views = filtrados.filter((o) => o.tipo === 'view');
+  const tabelas = filtrados.filter((objeto) => objeto.tipo === 'tabela');
+  const views = filtrados.filter((objeto) => objeto.tipo === 'view');
 
   return (
-    <div style={{ padding: 8 }}>
+    <div className="painel">
       <input
         aria-label="Filtrar objetos"
         placeholder="Filtrar…"
         value={filtro}
-        onChange={(e) => setFiltro(e.target.value)}
+        onChange={(evento) => setFiltro(evento.target.value)}
         style={{ width: '100%', marginBottom: 8, boxSizing: 'border-box' }}
       />
       <ul className="tree-view">
@@ -39,8 +40,8 @@ export function ExploradorObjetos() {
               Tabelas ({tabelas.length})
             </summary>
             <ul>
-              {tabelas.map((o) => (
-                <NoTabela key={`${o.esquema}.${o.nome}`} objeto={o} />
+              {tabelas.map((objeto) => (
+                <NoTabela key={`${objeto.esquema}.${objeto.nome}`} objeto={objeto} />
               ))}
             </ul>
           </details>
@@ -52,8 +53,8 @@ export function ExploradorObjetos() {
               Views ({views.length})
             </summary>
             <ul>
-              {views.map((o) => (
-                <NoTabela key={`${o.esquema}.${o.nome}`} objeto={o} />
+              {views.map((objeto) => (
+                <NoTabela key={`${objeto.esquema}.${objeto.nome}`} objeto={objeto} />
               ))}
             </ul>
           </details>

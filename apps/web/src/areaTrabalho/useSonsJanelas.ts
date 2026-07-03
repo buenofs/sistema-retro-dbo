@@ -2,9 +2,8 @@ import { useEffect, useRef } from 'react';
 import { useLoja } from './loja';
 import { tocarSom } from './sons';
 
-// Toca sons quando a quantidade de janelas aumenta (abrir) ou diminui (fechar).
-export function usarSonsJanelas(): void {
-  const total = useLoja((s) => s.janelas.length);
+export function useSonsJanelas(): void {
+  const total = useLoja((loja) => loja.janelas.length);
   const anterior = useRef(total);
   useEffect(() => {
     if (total > anterior.current) tocarSom('abrir');

@@ -3,7 +3,7 @@ import type { ConnectionPool } from 'mssql';
 export interface RegistroSessao {
   pool: ConnectionPool;
   login: string;
-  ultimoAcesso: number; // epoch ms
+  ultimoAcesso: number;
 }
 
 export interface OpcoesGerenciador {
@@ -12,7 +12,6 @@ export interface OpcoesGerenciador {
 }
 
 export interface GerenciadorPools {
-  // 'agora' é injetado (epoch ms) para manter a lógica testável sem relógio real.
   criar(idSessao: string, pool: ConnectionPool, login: string, agora: number): void;
   obter(idSessao: string, agora: number): RegistroSessao | undefined;
   remover(idSessao: string): Promise<void>;
@@ -20,7 +19,7 @@ export interface GerenciadorPools {
   tamanho(): number;
 }
 
-// Lançado quando o limite de sessões simultâneas é atingido.
+/** Lançado quando o limite de sessões simultâneas é atingido. */
 export class ErroLimiteSessoes extends Error {
   constructor() {
     super('Limite de sessões simultâneas atingido.');
@@ -28,7 +27,7 @@ export class ErroLimiteSessoes extends Error {
   }
 }
 
-// Mantém os ConnectionPools vivos em memória, um por sessão (spec §5.3, opção A).
+/** Mantém os ConnectionPools vivos em memória, um por sessão. */
 export function criarGerenciadorPools(opcoes: OpcoesGerenciador): GerenciadorPools {
   const registros = new Map<string, RegistroSessao>();
 
@@ -43,7 +42,7 @@ export function criarGerenciadorPools(opcoes: OpcoesGerenciador): GerenciadorPoo
     obter(idSessao, agora) {
       const registro = registros.get(idSessao);
       if (!registro) return undefined;
-      registro.ultimoAcesso = agora; // TTL deslizante
+      registro.ultimoAcesso = agora;
       return registro;
     },
 

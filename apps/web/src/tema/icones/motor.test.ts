@@ -13,7 +13,6 @@ test('98: tamanho <= 16 usa o tier 16; > 16 usa o tier 32', () => {
   const g = obterIcone('folder', '98', 32);
   expect(p).toBeTruthy();
   expect(g).toBeTruthy();
-  // urls de tiers diferentes não colidem (a menos que falte um tier nativo)
   expect(typeof p).toBe('string');
 });
 

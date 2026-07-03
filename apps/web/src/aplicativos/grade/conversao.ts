@@ -4,15 +4,14 @@ const TIPOS_NUMERICOS = [
   'int', 'bigint', 'smallint', 'tinyint', 'decimal', 'numeric', 'float', 'real', 'money', 'smallmoney',
 ];
 
-// Converte o texto digitado para o tipo adequado da coluna. O resto vai como
-// string e o SQL Server converte implicitamente (spec: parametrizado e seguro).
+/** Converte o texto digitado para o tipo da coluna; o resto vai como string e o SQL Server converte implicitamente. */
 export function converterValor(coluna: ColunaBanco, texto: string): ValorCelula {
   if (texto === '') return coluna.anulavel ? null : '';
-  const base = coluna.tipoDado.split('(')[0]!.trim().toLowerCase();
+  const base = baseTipo(coluna.tipoDado);
   if (base === 'bit') return texto === '1' || texto.toLowerCase() === 'true';
   if (TIPOS_NUMERICOS.includes(base)) {
-    const n = Number(texto);
-    return Number.isNaN(n) ? texto : n;
+    const numero = Number(texto);
+    return Number.isNaN(numero) ? texto : numero;
   }
   return texto;
 }
@@ -35,7 +34,7 @@ const FMT_MOEDA = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 
 
 export function formatarMoeda(valor: unknown): string {
   if (valor === null || valor === undefined || valor === '') return '';
-  const n = typeof valor === 'number' ? valor : Number(valor);
-  if (Number.isNaN(n)) return String(valor);
-  return FMT_MOEDA.format(n);
+  const numero = typeof valor === 'number' ? valor : Number(valor);
+  if (Number.isNaN(numero)) return String(valor);
+  return FMT_MOEDA.format(numero);
 }

@@ -24,9 +24,9 @@ export function estadoInicialDialogos() {
 export const useDialogos = create<LojaDialogos>((set) => ({
   ...estadoInicialDialogos(),
   abrir: (dialogo) =>
-    set((s) => ({
-      dialogos: [...s.dialogos, { ...dialogo, id: s.proximoId }],
-      proximoId: s.proximoId + 1,
+    set((estado) => ({
+      dialogos: [...estado.dialogos, { ...dialogo, id: estado.proximoId }],
+      proximoId: estado.proximoId + 1,
     })),
-  fechar: (id) => set((s) => ({ dialogos: s.dialogos.filter((d) => d.id !== id) })),
+  fechar: (id) => set((estado) => ({ dialogos: estado.dialogos.filter((dialogo) => dialogo.id !== id) })),
 }));

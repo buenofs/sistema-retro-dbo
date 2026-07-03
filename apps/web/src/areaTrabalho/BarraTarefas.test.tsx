@@ -24,7 +24,7 @@ test('mostra um botão por janela aberta', () => {
 });
 
 test('clicar no botão da janela focada a minimiza', () => {
-  useLoja.getState().abrirJanela('consulta'); // fica focada
+  useLoja.getState().abrirJanela('consulta');
   const id = useLoja.getState().janelas[0]!.id;
   renderizar();
   fireEvent.click(screen.getByRole('button', { name: /Editor de Consultas/ }));

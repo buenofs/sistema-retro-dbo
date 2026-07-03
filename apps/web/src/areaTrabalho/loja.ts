@@ -3,7 +3,6 @@ import { persist } from 'zustand/middleware';
 import type { EstadoJanela, IdJanela, LojaAreaTrabalho, TipoApp } from './tipos';
 import { registroApps } from './registroApps';
 
-// Estado inicial isolado para reaproveitar no reset dos testes.
 export function estadoInicial() {
   return {
     janelas: [] as EstadoJanela[],
@@ -19,10 +18,10 @@ export const useLoja = create<LojaAreaTrabalho>()(
   ...estadoInicial(),
 
   abrirJanela: (tipoApp: TipoApp, dados?: unknown) =>
-    set((s) => {
+    set((estado) => {
       const def = registroApps[tipoApp];
-      const id = `j${s.proximoId}`;
-      const desloc = (s.janelas.length % 6) * 28; // cascata clássica
+      const id = `j${estado.proximoId}`;
+      const desloc = (estado.janelas.length % 6) * 28;
       const janela: EstadoJanela = {
         id,
         tipoApp,
@@ -34,80 +33,79 @@ export const useLoja = create<LojaAreaTrabalho>()(
           largura: def.tamanhoInicial.largura,
           altura: def.tamanhoInicial.altura,
         },
-        zIndex: s.proximoZ,
+        zIndex: estado.proximoZ,
         estado: 'normal',
         anterior: 'normal',
         dados: dados ?? null,
       };
       return {
-        janelas: [...s.janelas, janela],
+        janelas: [...estado.janelas, janela],
         idFocada: id,
-        proximoZ: s.proximoZ + 1,
-        proximoId: s.proximoId + 1,
+        proximoZ: estado.proximoZ + 1,
+        proximoId: estado.proximoId + 1,
       };
     }),
 
   fecharJanela: (id) =>
-    set((s) => ({
-      janelas: s.janelas.filter((j) => j.id !== id),
-      idFocada: s.idFocada === id ? null : s.idFocada,
+    set((estado) => ({
+      janelas: estado.janelas.filter((janela) => janela.id !== id),
+      idFocada: estado.idFocada === id ? null : estado.idFocada,
     })),
 
   focar: (id) =>
-    set((s) => ({
-      janelas: s.janelas.map((j) =>
-        j.id === id ? { ...j, zIndex: s.proximoZ } : j,
+    set((estado) => ({
+      janelas: estado.janelas.map((janela) =>
+        janela.id === id ? { ...janela, zIndex: estado.proximoZ } : janela,
       ),
       idFocada: id,
-      proximoZ: s.proximoZ + 1,
+      proximoZ: estado.proximoZ + 1,
     })),
 
-  mover: (id, x, y) =>
-    set((s) => ({
-      janelas: s.janelas.map((j) =>
-        j.id === id ? { ...j, retangulo: { ...j.retangulo, x, y } } : j,
+  mover: (id, eixoX, eixoY) =>
+    set((estado) => ({
+      janelas: estado.janelas.map((janela) =>
+        janela.id === id ? { ...janela, retangulo: { ...janela.retangulo, x: eixoX, y: eixoY } } : janela,
       ),
     })),
 
   redimensionar: (id, largura, altura) =>
-    set((s) => ({
-      janelas: s.janelas.map((j) =>
-        j.id === id ? { ...j, retangulo: { ...j.retangulo, largura, altura } } : j,
+    set((estado) => ({
+      janelas: estado.janelas.map((janela) =>
+        janela.id === id ? { ...janela, retangulo: { ...janela.retangulo, largura, altura } } : janela,
       ),
     })),
 
   minimizar: (id) =>
-    set((s) => ({
-      janelas: s.janelas.map((j) =>
-        j.id === id
-          ? { ...j, estado: 'minimizada', anterior: j.estado === 'maximizada' ? 'maximizada' : 'normal' }
-          : j,
+    set((estado) => ({
+      janelas: estado.janelas.map((janela) =>
+        janela.id === id
+          ? { ...janela, estado: 'minimizada', anterior: janela.estado === 'maximizada' ? 'maximizada' : 'normal' }
+          : janela,
       ),
-      idFocada: s.idFocada === id ? null : s.idFocada,
+      idFocada: estado.idFocada === id ? null : estado.idFocada,
     })),
 
   maximizar: (id) =>
-    set((s) => ({
-      janelas: s.janelas.map((j) => (j.id === id ? { ...j, estado: 'maximizada' } : j)),
+    set((estado) => ({
+      janelas: estado.janelas.map((janela) => (janela.id === id ? { ...janela, estado: 'maximizada' } : janela)),
     })),
 
   restaurar: (id) =>
-    set((s) => ({
-      janelas: s.janelas.map((j) =>
-        j.id === id
-          ? { ...j, estado: j.estado === 'minimizada' ? j.anterior : 'normal' }
-          : j,
+    set((estado) => ({
+      janelas: estado.janelas.map((janela) =>
+        janela.id === id
+          ? { ...janela, estado: janela.estado === 'minimizada' ? janela.anterior : 'normal' }
+          : janela,
       ),
     })),
     }),
     {
       name: 'dbos-area-trabalho',
-      // Só geometria/estado de janelas — funções não são serializadas pelo persist.
-      partialize: (s) => ({
-        janelas: s.janelas,
-        idFocada: s.idFocada,
-        proximoZ: s.proximoZ,
-        proximoId: s.proximoId,
+      partialize: (estado) => ({
+        janelas: estado.janelas,
+        idFocada: estado.idFocada,
+        proximoZ: estado.proximoZ,
+        proximoId: estado.proximoId,
       }),
     },
   ),

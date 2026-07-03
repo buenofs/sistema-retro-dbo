@@ -5,19 +5,20 @@ import { ErroApiError } from '../consulta/ganchos';
 import { Icone } from '../../tema/icones/Icone';
 import { converterValor, ehTipoNumerico, ehTipoMoeda, formatarMoeda } from './conversao';
 import { useAtualizarLinha, useInserirLinha, useLinhas, useRemoverLinha } from './ganchos';
+import { Estado } from '../comuns/Estado';
 
 const TAMANHO_PAGINA = 100;
 
-function formatar(v: unknown): string {
-  if (v === null || v === undefined) return 'NULL';
-  if (typeof v === 'object') return JSON.stringify(v);
-  return String(v);
+function formatar(valor: unknown): string {
+  if (valor === null || valor === undefined) return 'NULL';
+  if (typeof valor === 'object') return JSON.stringify(valor);
+  return String(valor);
 }
 
 export function TabelaGrade({ esquema, tabela }: { esquema: string; tabela: string }) {
   const [pagina, setPagina] = useState(0);
   const consulta = useLinhas(esquema, tabela, pagina, TAMANHO_PAGINA);
-  const abrirDialogo = useDialogos((s) => s.abrir);
+  const abrirDialogo = useDialogos((loja) => loja.abrir);
   const inserir = useInserirLinha(esquema, tabela);
   const atualizar = useAtualizarLinha(esquema, tabela);
   const remover = useRemoverLinha(esquema, tabela);
@@ -28,8 +29,8 @@ export function TabelaGrade({ esquema, tabela }: { esquema: string; tabela: stri
   const [rascunhoNovo, setRascunhoNovo] = useState<Record<string, string>>({});
   const [confirmando, setConfirmando] = useState<number | null>(null);
 
-  function mostrarErro(e: unknown) {
-    const erro = e instanceof ErroApiError ? e.erro : undefined;
+  function mostrarErro(erroBruto: unknown) {
+    const erro = erroBruto instanceof ErroApiError ? erroBruto.erro : undefined;
     const detalhe = [erro?.detalhe, erro?.codigoSql ? `Erro SQL ${erro.codigoSql}` : undefined]
       .filter(Boolean)
       .join('\n');
@@ -41,8 +42,8 @@ export function TabelaGrade({ esquema, tabela }: { esquema: string; tabela: stri
     });
   }
 
-  if (consulta.isPending) return <p style={{ padding: 8 }}>Carregando linhas…</p>;
-  if (consulta.isError) return <p style={{ padding: 8, color: 'red' }}>{consulta.error.message}</p>;
+  if (consulta.isPending) return <Estado>Carregando linhas…</Estado>;
+  if (consulta.isError) return <Estado variante="erro">{consulta.error.message}</Estado>;
 
   const dados = consulta.data;
   const editavel = dados.chavePrimaria.length > 0;
@@ -50,25 +51,25 @@ export function TabelaGrade({ esquema, tabela }: { esquema: string; tabela: stri
 
   function chaveDaLinha(linha: Record<string, unknown>): Record<string, ValorCelula> {
     const chave: Record<string, ValorCelula> = {};
-    for (const k of dados.chavePrimaria) chave[k] = linha[k] as ValorCelula;
+    for (const nomeColuna of dados.chavePrimaria) chave[nomeColuna] = linha[nomeColuna] as ValorCelula;
     return chave;
   }
 
   function iniciarEdicao(indice: number) {
     const linha = dados.linhas[indice]!;
-    const r: Record<string, string> = {};
-    for (const c of dados.colunas) {
-      if (!c.ehChavePrimaria) r[c.nome] = linha[c.nome] == null ? '' : String(linha[c.nome]);
+    const rascunhoInicial: Record<string, string> = {};
+    for (const coluna of dados.colunas) {
+      if (!coluna.ehChavePrimaria) rascunhoInicial[coluna.nome] = linha[coluna.nome] == null ? '' : String(linha[coluna.nome]);
     }
-    setRascunho(r);
+    setRascunho(rascunhoInicial);
     setEditando(indice);
   }
 
   function salvarEdicao(indice: number) {
     const linha = dados.linhas[indice]!;
     const valores: Record<string, ValorCelula> = {};
-    for (const c of dados.colunas) {
-      if (!c.ehChavePrimaria) valores[c.nome] = converterValor(c, rascunho[c.nome] ?? '');
+    for (const coluna of dados.colunas) {
+      if (!coluna.ehChavePrimaria) valores[coluna.nome] = converterValor(coluna, rascunho[coluna.nome] ?? '');
     }
     atualizar.mutate(
       { chave: chaveDaLinha(linha), valores },
@@ -78,9 +79,9 @@ export function TabelaGrade({ esquema, tabela }: { esquema: string; tabela: stri
 
   function salvarInsercao() {
     const valores: Record<string, ValorCelula> = {};
-    for (const c of dados.colunas) {
-      const texto = rascunhoNovo[c.nome];
-      if (texto !== undefined && texto !== '') valores[c.nome] = converterValor(c, texto);
+    for (const coluna of dados.colunas) {
+      const texto = rascunhoNovo[coluna.nome];
+      if (texto !== undefined && texto !== '') valores[coluna.nome] = converterValor(coluna, texto);
     }
     inserir.mutate(valores, {
       onSuccess: () => {
@@ -103,18 +104,18 @@ export function TabelaGrade({ esquema, tabela }: { esquema: string; tabela: stri
     <div className="grade-dados">
       <div className="grade-barra">
         {editavel && (
-          <button onClick={() => setInserindo((v) => !v)}>
+          <button onClick={() => setInserindo((anterior) => !anterior)}>
             <Icone nome="insert" tamanho={14} alt="" style={{ marginRight: 4 }} /> Nova linha
           </button>
         )}
         <span className="grade-paginacao">
-          <button disabled={pagina === 0} onClick={() => setPagina((p) => p - 1)} aria-label="Anterior">
+          <button disabled={pagina === 0} onClick={() => setPagina((anterior) => anterior - 1)} aria-label="Anterior">
             ◀
           </button>
           Página {pagina + 1} de {totalPaginas} ({dados.total} linhas)
           <button
             disabled={pagina + 1 >= totalPaginas}
-            onClick={() => setPagina((p) => p + 1)}
+            onClick={() => setPagina((anterior) => anterior + 1)}
             aria-label="Próxima"
           >
             ▶
@@ -132,15 +133,15 @@ export function TabelaGrade({ esquema, tabela }: { esquema: string; tabela: stri
           <thead>
             <tr>
               {editavel && <th>Ações</th>}
-              {dados.colunas.map((c) => (
-                <th key={c.nome} className={ehTipoNumerico(c.tipoDado) ? 'num' : undefined}>
-                  {c.ehChavePrimaria ? (
+              {dados.colunas.map((coluna) => (
+                <th key={coluna.nome} className={ehTipoNumerico(coluna.tipoDado) ? 'num' : undefined}>
+                  {coluna.ehChavePrimaria ? (
                     <span className="grade-th-pk">
                       <Icone nome="key" tamanho={12} alt="chave primária" />
-                      {c.nome}
+                      {coluna.nome}
                     </span>
                   ) : (
-                    c.nome
+                    coluna.nome
                   )}
                 </th>
               ))}
@@ -155,13 +156,13 @@ export function TabelaGrade({ esquema, tabela }: { esquema: string; tabela: stri
                   </button>
                   <button onClick={() => setInserindo(false)}>Cancelar</button>
                 </td>
-                {dados.colunas.map((c) => (
-                  <td key={c.nome}>
+                {dados.colunas.map((coluna) => (
+                  <td key={coluna.nome}>
                     <input
-                      aria-label={`novo ${c.nome}`}
-                      value={rascunhoNovo[c.nome] ?? ''}
-                      onChange={(e) =>
-                        setRascunhoNovo((r) => ({ ...r, [c.nome]: e.target.value }))
+                      aria-label={`novo ${coluna.nome}`}
+                      value={rascunhoNovo[coluna.nome] ?? ''}
+                      onChange={(evento) =>
+                        setRascunhoNovo((anterior) => ({ ...anterior, [coluna.nome]: evento.target.value }))
                       }
                     />
                   </td>
@@ -197,20 +198,20 @@ export function TabelaGrade({ esquema, tabela }: { esquema: string; tabela: stri
                       )}
                     </td>
                   )}
-                  {dados.colunas.map((c) => (
-                    <td key={c.nome} className={ehTipoNumerico(c.tipoDado) ? 'num' : undefined}>
-                      {emEdicao && !c.ehChavePrimaria ? (
+                  {dados.colunas.map((coluna) => (
+                    <td key={coluna.nome} className={ehTipoNumerico(coluna.tipoDado) ? 'num' : undefined}>
+                      {emEdicao && !coluna.ehChavePrimaria ? (
                         <input
-                          aria-label={`editar ${c.nome}`}
-                          value={rascunho[c.nome] ?? ''}
-                          onChange={(e) =>
-                            setRascunho((r) => ({ ...r, [c.nome]: e.target.value }))
+                          aria-label={`editar ${coluna.nome}`}
+                          value={rascunho[coluna.nome] ?? ''}
+                          onChange={(evento) =>
+                            setRascunho((anterior) => ({ ...anterior, [coluna.nome]: evento.target.value }))
                           }
                         />
-                      ) : ehTipoMoeda(c.tipoDado) ? (
-                        formatarMoeda(linha[c.nome])
+                      ) : ehTipoMoeda(coluna.tipoDado) ? (
+                        formatarMoeda(linha[coluna.nome])
                       ) : (
-                        formatar(linha[c.nome])
+                        formatar(linha[coluna.nome])
                       )}
                     </td>
                   ))}

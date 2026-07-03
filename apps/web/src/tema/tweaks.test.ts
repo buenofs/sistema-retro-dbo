@@ -27,7 +27,6 @@ test('aplicarTema na pele 98 escreve acento, crt, padrão, densidade e nada de a
   expect(raiz.getPropertyValue('--crt')).toBe('0.5');
   expect(document.body.dataset.pat).toBe('grid');
   expect(document.body.style.fontSize).toBe('11px');
-  // overrides de aero foram limpos
   expect(raiz.getPropertyValue('--glass-blur')).toBe('');
   expect(document.body.dataset.wp).toBeUndefined();
 });
@@ -40,7 +39,7 @@ test('aplicarTema na pele aero escreve matiz, cantos, vidro, wallpaper e nada de
   expect(document.body.dataset.skin).toBe('aero');
   expect(raiz.getPropertyValue('--accent-h')).toBe('280');
   expect(raiz.getPropertyValue('--glass-blur')).toBe('0px');
-  expect(raiz.getPropertyValue('--round')).toBe('0px'); // corners reto
+  expect(raiz.getPropertyValue('--round')).toBe('0px');
   expect(document.body.dataset.corners).toBe('reto');
   expect(document.body.dataset.wp).toBe('noite');
   expect(document.body.dataset.pat).toBeUndefined();

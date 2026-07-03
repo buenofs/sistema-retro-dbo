@@ -7,6 +7,7 @@ import {
 import type { GerenciadorPools } from '../bd/gerenciadorPools';
 import { criarAutenticar } from '../plugins/sessao';
 import { listarColunas, listarObjetos } from '../bd/consultasSistema';
+import { criarBanco } from '../bd/banco';
 
 export function registrarRotasExplorador(
   app: FastifyInstance,
@@ -14,17 +15,15 @@ export function registrarRotasExplorador(
 ): void {
   const autenticar = criarAutenticar(gerenciador);
 
-  // Lista tabelas e views do banco da sessão.
   app.get(
     '/api/explorador/objetos',
     { preHandler: autenticar },
     async (req): Promise<RespostaObjetos> => {
-      const dados = await listarObjetos(req.sessao!.pool);
+      const dados = await listarObjetos(criarBanco(req.sessao!.pool));
       return { ok: true, dados };
     },
   );
 
-  // Colunas de um objeto específico (esquema + tabela via query string).
   app.get('/api/explorador/colunas', { preHandler: autenticar }, async (req, reply) => {
     const analise = esquemaRefObjeto.safeParse(req.query);
     if (!analise.success) {
@@ -37,7 +36,7 @@ export function registrarRotasExplorador(
         },
       });
     }
-    const dados = await listarColunas(req.sessao!.pool, analise.data);
+    const dados = await listarColunas(criarBanco(req.sessao!.pool), analise.data);
     const resposta: RespostaColunas = { ok: true, dados };
     return resposta;
   });

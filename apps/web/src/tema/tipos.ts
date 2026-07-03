@@ -6,14 +6,14 @@ export type Padrao98 = 'dither' | 'solid' | 'brand' | 'grid';
 export type Densidade = 'compacto' | 'normal';
 
 export interface TweaksAero {
-  accentHue: number; // 150–320
+  accentHue: number;
   glass: boolean;
   corners: Cantos;
   wallpaper: Wallpaper;
 }
 
 export interface Tweaks98 {
-  accent: string; // hex curado
+  accent: string;
   pattern: Padrao98;
   density: Densidade;
   crt: boolean;
@@ -29,8 +29,6 @@ export interface EstadoTema {
 
 export const CHAVE_TEMA = 'dbos_tema';
 
-// Fase 3: padrão "aero" em máquina nova (decisão travada). A última pele
-// escolhida é restaurada do localStorage; só cai aqui sem persistência.
 export const TEMA_PADRAO: EstadoTema = {
   pele: 'aero',
   aero: { accentHue: 200, glass: true, corners: 'aero', wallpaper: 'aqua' },
@@ -39,7 +37,6 @@ export const TEMA_PADRAO: EstadoTema = {
   sound: true,
 };
 
-// Listas de opção (verbatim dos protótipos) — usadas pelo painel e pela validação.
 export const WALLPAPERS: ReadonlyArray<{ valor: Wallpaper; rotulo: string }> = [
   { valor: 'aqua', rotulo: 'Aqua' },
   { valor: 'sunset', rotulo: 'Pôr do sol' },

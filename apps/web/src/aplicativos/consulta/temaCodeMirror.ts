@@ -1,7 +1,6 @@
 import { EditorView, type Extension } from '@uiw/react-codemirror';
 import type { Pele } from '../../tema/tipos';
 
-// Tema mínimo por pele: Aero = claro/arejado; 98 = clássico chapado.
 const aero = EditorView.theme({
   '&': { backgroundColor: 'rgba(255,255,255,0.92)', color: '#0e2a14' },
   '.cm-content': { fontFamily: 'var(--mono)' },

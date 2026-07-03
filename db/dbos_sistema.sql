@@ -53,26 +53,6 @@ CREATE INDEX IX_Itens_paiId ON dbo.Itens(paiId);
 CREATE INDEX IX_Itens_driveId ON dbo.Itens(driveId);
 GO
 
--- Caminho completo + profundidade via CTE recursiva.
-CREATE VIEW dbo.vw_ArvoreItens AS
-WITH arvore AS (
-  SELECT i.id, i.nome, i.tipo, i.paiId, i.driveId, i.donoId, i.naLixeira,
-         CAST(d.letra + ':\' + i.nome AS NVARCHAR(4000)) AS caminho,
-         0 AS profundidade
-  FROM dbo.Itens i
-  JOIN dbo.Drives d ON d.id = i.driveId
-  WHERE i.paiId IS NULL AND i.naLixeira = 0
-  UNION ALL
-  SELECT f.id, f.nome, f.tipo, f.paiId, f.driveId, f.donoId, f.naLixeira,
-         CAST(a.caminho + '\' + f.nome AS NVARCHAR(4000)),
-         a.profundidade + 1
-  FROM dbo.Itens f
-  JOIN arvore a ON f.paiId = a.id WHERE f.naLixeira = 0
-)
-SELECT id, nome, tipo, paiId, driveId, donoId, naLixeira, caminho, profundidade
-FROM arvore;
-GO
-
 CREATE VIEW dbo.vw_UsoPorUsuario AS
   SELECT u.id AS usuarioId, u.nome AS usuario,
          COUNT(i.id) AS itens,

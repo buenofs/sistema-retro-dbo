@@ -5,21 +5,19 @@ import { useLoja } from '../../areaTrabalho/loja';
 import { ColunasDaTabela } from './ColunasDaTabela';
 import { Icone } from '../../tema/icones/Icone';
 
-// Nó expansível: ao abrir, monta <ColunasDaTabela> — é o que dispara a busca lazy.
-// Memoizado: re-renderiza só quando o próprio `objeto` muda (spec §2.3).
 export const NoTabela = memo(function NoTabela({ objeto }: { objeto: ObjetoBanco }) {
   const [aberto, setAberto] = useState(false);
-  const abrirMenu = useMenuContexto((s) => s.abrir);
-  const abrirJanela = useLoja((s) => s.abrirJanela);
+  const abrirMenu = useMenuContexto((loja) => loja.abrir);
+  const abrirJanela = useLoja((loja) => loja.abrirJanela);
 
   return (
     <li>
-      <details onToggle={(e) => setAberto(e.currentTarget.open)}>
+      <details onToggle={(evento) => setAberto(evento.currentTarget.open)}>
         <summary
-          onContextMenu={(e) => {
-            e.preventDefault();
+          onContextMenu={(evento) => {
+            evento.preventDefault();
             const ref = { esquema: objeto.esquema, tabela: objeto.nome };
-            abrirMenu(e.clientX, e.clientY, [
+            abrirMenu(evento.clientX, evento.clientY, [
               { rotulo: 'Propriedades', aoClicar: () => abrirJanela('propriedades', ref) },
               { rotulo: 'Abrir na grade', aoClicar: () => abrirJanela('grade', ref) },
             ]);

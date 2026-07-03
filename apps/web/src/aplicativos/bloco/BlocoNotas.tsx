@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import type { PropsApp } from '../../areaTrabalho/tipos';
 import { useItem, useSalvarConteudo } from '../arquivos/ganchos';
+import { Estado } from '../comuns/Estado';
 
 interface DadosBloco { id: number; nome: string }
 
@@ -12,7 +13,6 @@ export function BlocoNotas({ janela }: PropsApp) {
   const [texto, setTexto] = useState('');
   const [carregado, setCarregado] = useState(false);
 
-  // Sincroniza o textarea quando o conteúdo chega.
   useEffect(() => {
     if (consulta.data && !carregado) {
       setTexto(consulta.data.conteudo);
@@ -20,10 +20,9 @@ export function BlocoNotas({ janela }: PropsApp) {
     }
   }, [consulta.data, carregado]);
 
-  // Se a janela passar a apontar para outro arquivo, recarrega.
   useEffect(() => { setCarregado(false); }, [id]);
 
-  if (!dados) return <div style={{ padding: 8 }}>Nenhum arquivo aberto.</div>;
+  if (!dados) return <Estado>Nenhum arquivo aberto.</Estado>;
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
@@ -37,7 +36,7 @@ export function BlocoNotas({ janela }: PropsApp) {
       <textarea
         aria-label="Conteúdo"
         value={texto}
-        onChange={(e) => setTexto(e.target.value)}
+        onChange={(evento) => setTexto(evento.target.value)}
         style={{ flex: 1, resize: 'none', border: 'none', padding: 8, fontFamily: 'monospace' }}
       />
     </div>

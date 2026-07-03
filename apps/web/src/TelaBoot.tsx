@@ -4,12 +4,11 @@ import './TelaBoot.css';
 
 export const DURACAO_BOOT_MS = 1800;
 
-// Tela de inicialização do "SO": logo + barra de progresso + som de boot.
 export function TelaBoot({ onConcluir }: { onConcluir: () => void }) {
   useEffect(() => {
     tocarSom('iniciar');
-    const t = setTimeout(onConcluir, DURACAO_BOOT_MS);
-    return () => clearTimeout(t);
+    const timer = setTimeout(onConcluir, DURACAO_BOOT_MS);
+    return () => clearTimeout(timer);
   }, [onConcluir]);
 
   return (

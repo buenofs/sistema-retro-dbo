@@ -1,7 +1,6 @@
 import { z } from 'zod';
 import type { Resposta } from './respostas';
 
-// ---- Modelos de leitura ----
 export type TipoItem = 'pasta' | 'arquivo';
 
 export interface Item {
@@ -23,16 +22,6 @@ export interface Drive {
   capacidadeBytes: number;
 }
 
-export interface ItemArvore {
-  id: number;
-  nome: string;
-  tipo: TipoItem;
-  paiId: number | null;
-  driveId: number;
-  caminho: string;
-  profundidade: number;
-}
-
 export interface UsoDrive {
   driveId: number;
   letra: string;
@@ -42,7 +31,6 @@ export interface UsoDrive {
   livreBytes: number;
 }
 
-// ---- Log de SQL (compartilhado com o Monitor da Fase 4) ----
 export type TipoComando = 'INSERT' | 'UPDATE' | 'DELETE' | 'SELECT';
 
 export interface ComandoSQL {
@@ -52,13 +40,12 @@ export interface ComandoSQL {
   parametros: Record<string, unknown>;
   linhasAfetadas: number;
   erro?: string;
-  em: string; // ISO
+  em: string;
 }
 
-// Envelope de mutação: dados + o SQL que rodou.
+/** Envelope de mutação: encapsula os dados retornados e o log de SQL executado. */
 export type RespostaArquivos<T> = Resposta<{ dados: T; sql: ComandoSQL[] }>;
 
-// ---- Schemas de entrada (Zod) ----
 const nome = z.string().min(1).max(255);
 const paiOpcional = z.number().int().positive().nullable();
 
@@ -89,8 +76,9 @@ export type Conteudo = z.infer<typeof esquemaConteudo>;
 export const esquemaCopiar = z.object({ paiId: paiOpcional });
 export type Copiar = z.infer<typeof esquemaCopiar>;
 
+/** Parâmetros de listagem; paiId ausente significa raiz do drive. */
 export const esquemaListar = z.object({
   driveId: z.coerce.number().int().positive(),
-  paiId: z.coerce.number().int().positive().optional(), // ausente = raiz do drive
+  paiId: z.coerce.number().int().positive().optional(),
 });
 export type Listar = z.infer<typeof esquemaListar>;

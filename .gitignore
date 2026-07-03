@@ -6,6 +6,11 @@ dist/
 bun.lockb
 .DS_Store
 
+# Artefatos de build do TypeScript (o projeto roda .ts direto via Bun)
+*.tsbuildinfo
+apps/*/src/**/*.js
+packages/*/src/**/*.js
+
 # Configurações locais/pessoais do Claude Code
 .claude/settings.local.json
 .superpowers/

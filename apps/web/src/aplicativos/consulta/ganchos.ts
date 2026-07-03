@@ -1,24 +1,11 @@
 import { useMutation } from '@tanstack/react-query';
-import type { ErroApi, ResultadoConsulta } from '@dbos/shared';
-import { requisitar } from '../../api/cliente';
+import type { ResultadoConsulta } from '@dbos/shared';
+import { mandar } from '../../api/cliente';
 
-// Erro que preserva o ErroApi inteiro (mensagem + detalhe + codigoSql) para o diálogo.
-export class ErroApiError extends Error {
-  constructor(public readonly erro: ErroApi) {
-    super(erro.mensagem);
-    this.name = 'ErroApiError';
-  }
-}
+export { ErroApiError } from '../../api/cliente';
 
 export function useExecutarConsulta() {
   return useMutation({
-    mutationFn: async (sqlTexto: string): Promise<ResultadoConsulta> => {
-      const r = await requisitar<ResultadoConsulta>('/api/consulta', {
-        method: 'POST',
-        body: JSON.stringify({ sql: sqlTexto }),
-      });
-      if (!r.ok) throw new ErroApiError(r.erro);
-      return r.dados;
-    },
+    mutationFn: (sqlTexto: string) => mandar<ResultadoConsulta>('/api/consulta', 'POST', { sql: sqlTexto }),
   });
 }

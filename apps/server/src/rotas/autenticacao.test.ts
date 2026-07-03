@@ -1,7 +1,6 @@
 import { test, expect } from 'bun:test';
 import { construirApp } from '../app';
 
-// Sobe o app numa porta efêmera e testa pela rota HTTP real.
 async function comServidor(fn: (base: string) => Promise<void>) {
   const app = construirApp();
   await app.listen({ port: 0, host: '127.0.0.1' });

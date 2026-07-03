@@ -1,7 +1,6 @@
 import { test, expect, beforeEach } from 'vitest';
 import { useLoja, estadoInicial } from './loja';
 
-// A loja é um singleton de módulo; zera antes de cada teste.
 beforeEach(() => {
   useLoja.setState(estadoInicial());
 });
@@ -27,8 +26,8 @@ test('cada janela recebe um id único', () => {
 
 test('focar traz a janela para a frente e atualiza idFocada', () => {
   const loja = useLoja.getState();
-  loja.abrirJanela('consulta'); // zIndex 1
-  loja.abrirJanela('grade'); // zIndex 2 (focada)
+  loja.abrirJanela('consulta');
+  loja.abrirJanela('grade');
   const janelas2 = useLoja.getState().janelas;
   const primeira = janelas2[0]!;
   const segunda = janelas2[1]!;
@@ -66,7 +65,6 @@ test('mover e redimensionar atualizam só a janela alvo', () => {
   const da = depois.janelas.find((j) => j.id === a.id)!;
   const db = depois.janelas.find((j) => j.id === b.id)!;
   expect(da.retangulo).toEqual({ x: 120, y: 80, largura: 300, altura: 200 });
-  // a janela B mantém a MESMA referência (re-render isolado, spec §2.3)
   expect(db).toBe(b);
 });
 
@@ -89,7 +87,7 @@ test('minimizar lembra o estado anterior e restaurar volta para ele', () => {
   loja.maximizar(id);
   loja.minimizar(id);
   expect(useLoja.getState().janelas[0]!.estado).toBe('minimizada');
-  expect(useLoja.getState().idFocada).toBeNull(); // minimizar tira o foco
+  expect(useLoja.getState().idFocada).toBeNull();
 
   loja.restaurar(id);
   expect(useLoja.getState().janelas[0]!.estado).toBe('maximizada');

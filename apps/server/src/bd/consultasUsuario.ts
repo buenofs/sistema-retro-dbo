@@ -1,32 +1,28 @@
 import type { ConnectionPool } from 'mssql';
 import type { ResultadoConsulta } from '@dbos/shared';
+import { somar } from './banco';
 
-// Roda o SQL do usuário VERBATIM (pass-through, spec §2.2). A fronteira de
-// segurança é a permissão do login + o requestTimeout do pool + o teto aqui.
+/** Console SQL: roda o SQL do usuário verbatim; exceção sancionada ao handle banco (precisa do resultado bruto). Fronteira de segurança: permissão do login + timeout + maxLinhas. */
 export async function executarConsulta(
   pool: ConnectionPool,
   sqlTexto: string,
   maxLinhas: number,
 ): Promise<ResultadoConsulta> {
   const resultado = await pool.request().query(sqlTexto);
+  const linhasAfetadas = somar(resultado.rowsAffected);
 
-  // rowsAffected: um número por statement; somamos para o total.
-  const linhasAfetadas = (resultado.rowsAffected ?? []).reduce((a, b) => a + b, 0);
-
-  // Sem recordset (INSERT/UPDATE/DELETE): só linhas afetadas.
   const recordset = resultado.recordset;
   if (!recordset) {
     return { colunas: [], linhas: [], linhasAfetadas, truncado: false, totalLinhas: 0 };
   }
 
-  // columns preserva a ordem de declaração das colunas.
   const colunas = recordset.columns ? Object.keys(recordset.columns) : [];
   const totalLinhas = recordset.length;
   const truncado = totalLinhas > maxLinhas;
   const cortadas = truncado ? recordset.slice(0, maxLinhas) : recordset;
   const linhas = cortadas.map((linha) =>
-    colunas.map((c) => {
-      const valor = (linha as Record<string, unknown>)[c];
+    colunas.map((coluna) => {
+      const valor = (linha as Record<string, unknown>)[coluna];
       return valor === undefined ? null : valor;
     }),
   );

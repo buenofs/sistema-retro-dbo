@@ -4,7 +4,7 @@ import { useLoja, estadoInicial } from './loja';
 
 vi.mock('./sons', () => ({ tocarSom: vi.fn() }));
 import { tocarSom } from './sons';
-import { usarSonsJanelas } from './usarSonsJanelas';
+import { useSonsJanelas } from './useSonsJanelas';
 
 beforeEach(() => {
   useLoja.setState(estadoInicial());
@@ -12,7 +12,7 @@ beforeEach(() => {
 });
 
 function Harness() {
-  usarSonsJanelas();
+  useSonsJanelas();
   return null;
 }
 

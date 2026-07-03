@@ -1,4 +1,3 @@
-// Contrato de resposta padronizado entre web e server.
 export interface ErroApi {
   tipo:
     | 'autenticacao'
@@ -7,9 +6,9 @@ export interface ErroApi {
     | 'tempoEsgotado'
     | 'rede'
     | 'interno';
-  mensagem: string; // legível, em pt-BR
-  detalhe?: string; // mensagem crua do SQL Server
-  codigoSql?: number; // número do erro do SQL Server (ex.: 208)
+  mensagem: string;
+  detalhe?: string;
+  codigoSql?: number;
   severidade?: number;
 }
 

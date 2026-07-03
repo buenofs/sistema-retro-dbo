@@ -11,11 +11,10 @@ import { registrarRotasPropriedades } from './rotas/propriedades';
 import { registrarRotasArquivos } from './rotas/arquivos';
 
 export interface OpcoesApp {
-  // Permite injetar um gerenciador nos testes; em produção vem do ambiente.
   gerenciador?: GerenciadorPools;
 }
 
-// Constrói a instância do Fastify com plugins e rotas registrados.
+/** Constrói a instância do Fastify com plugins e rotas registrados. */
 export function construirApp(opcoes: OpcoesApp = {}): FastifyInstance {
   const app = Fastify({ logger: false });
 
@@ -28,7 +27,6 @@ export function construirApp(opcoes: OpcoesApp = {}): FastifyInstance {
 
   registrarTratadorErros(app);
 
-  // Cookie + rotas autenticadas num contexto que enxerga os helpers de cookie.
   app.register(async (instancia) => {
     await registrarSessao(instancia);
     registrarRotasAutenticacao(instancia, gerenciador);
@@ -43,7 +41,6 @@ export function construirApp(opcoes: OpcoesApp = {}): FastifyInstance {
     return { ok: true, dados: { status: 'ok' } };
   });
 
-  // Expõe o gerenciador para o index orquestrar a limpeza por TTL.
   app.decorate('pools', gerenciador);
 
   return app;

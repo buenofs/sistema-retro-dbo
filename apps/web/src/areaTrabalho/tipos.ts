@@ -29,17 +29,14 @@ export interface EstadoJanela {
   retangulo: Retangulo;
   zIndex: number;
   estado: EstadoVisual;
-  // Para onde 'restaurar' deve voltar quando a janela está minimizada.
   anterior: 'normal' | 'maximizada';
-  dados: unknown; // payload específico do app (null nos placeholders)
+  dados: unknown;
 }
 
-// Props que todo componente de app recebe do WM.
 export interface PropsApp {
   janela: EstadoJanela;
 }
 
-// Entrada do registro: metadados + o componente React do app.
 export interface DefinicaoApp {
   titulo: string;
   icone: NomeIcone;
@@ -55,7 +52,7 @@ export interface LojaAreaTrabalho {
   abrirJanela: (tipoApp: TipoApp, dados?: unknown) => void;
   fecharJanela: (id: IdJanela) => void;
   focar: (id: IdJanela) => void;
-  mover: (id: IdJanela, x: number, y: number) => void;
+  mover: (id: IdJanela, eixoX: number, eixoY: number) => void;
   redimensionar: (id: IdJanela, largura: number, altura: number) => void;
   minimizar: (id: IdJanela) => void;
   maximizar: (id: IdJanela) => void;

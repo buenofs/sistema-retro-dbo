@@ -16,7 +16,6 @@ export function registrarRotasAutenticacao(
 ): void {
   const autenticar = criarAutenticar(gerenciador);
 
-  // Login = abrir um ConnectionPool com as credenciais. Sucesso = login válido.
   app.post('/api/autenticacao/login', async (req, reply) => {
     const analise = esquemaCredenciais.safeParse(req.body);
     if (!analise.success) {
@@ -45,18 +44,17 @@ export function registrarRotasAutenticacao(
           },
         });
       }
-      throw erro; // rede/interno tratados pelo tratadorErros
+      throw erro;
     }
 
     const idSessao = crypto.randomUUID();
     try {
       gerenciador.criar(idSessao, pool, credenciais.login, Date.now());
     } catch (erro) {
-      await pool.close(); // não conseguimos guardar o pool → não vaza conexão
+      await pool.close();
       throw erro;
     }
 
-    // A senha sai de escopo aqui — nunca é armazenada nem devolvida (spec §5.2).
     definirCookieSessao(reply, idSessao);
     const resposta: RespostaSessao = {
       ok: true,
@@ -65,7 +63,6 @@ export function registrarRotasAutenticacao(
     return resposta;
   });
 
-  // Sessão atual: protegida; devolve o login guardado no registro.
   app.get(
     '/api/autenticacao/sessao',
     { preHandler: autenticar },
@@ -74,7 +71,6 @@ export function registrarRotasAutenticacao(
     },
   );
 
-  // Logout: fecha o pool, remove a sessão e limpa o cookie.
   app.post('/api/autenticacao/logout', async (req, reply) => {
     const id = lerIdSessao(req);
     if (id) await gerenciador.remover(id);

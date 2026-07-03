@@ -25,7 +25,7 @@ export function Alternador({
 }: {
   rotulo: string;
   valor: boolean;
-  aoMudar: (v: boolean) => void;
+  aoMudar: (valor: boolean) => void;
 }) {
   return (
     <LinhaTweak rotulo={rotulo}>
@@ -58,7 +58,7 @@ export function Deslizador({
   max: number;
   passo?: number;
   unidade?: string;
-  aoMudar: (v: number) => void;
+  aoMudar: (valor: number) => void;
 }) {
   return (
     <LinhaTweak rotulo={`${rotulo} (${valor}${unidade})`}>
@@ -68,7 +68,7 @@ export function Deslizador({
         max={max}
         step={passo}
         value={valor}
-        onChange={(e) => aoMudar(Number(e.target.value))}
+        onChange={(evento) => aoMudar(Number(evento.target.value))}
       />
     </LinhaTweak>
   );
@@ -83,20 +83,20 @@ export function RadioSegmentado<T extends string>({
   rotulo: string;
   valor: T;
   opcoes: ReadonlyArray<{ valor: T; rotulo: string }>;
-  aoMudar: (v: T) => void;
+  aoMudar: (valor: T) => void;
 }) {
   return (
     <LinhaTweak rotulo={rotulo}>
       <span className="tw-seg" role="group">
-        {opcoes.map((o) => (
+        {opcoes.map((opcao) => (
           <button
-            key={o.valor}
+            key={opcao.valor}
             type="button"
-            className={`tw-seg-btn ${valor === o.valor ? 'ativo' : ''}`}
-            aria-pressed={valor === o.valor}
-            onClick={() => aoMudar(o.valor)}
+            className={`tw-seg-btn ${valor === opcao.valor ? 'ativo' : ''}`}
+            aria-pressed={valor === opcao.valor}
+            onClick={() => aoMudar(opcao.valor)}
           >
-            {o.rotulo}
+            {opcao.rotulo}
           </button>
         ))}
       </span>
@@ -113,14 +113,14 @@ export function Selecao<T extends string>({
   rotulo: string;
   valor: T;
   opcoes: ReadonlyArray<{ valor: T; rotulo: string }>;
-  aoMudar: (v: T) => void;
+  aoMudar: (valor: T) => void;
 }) {
   return (
     <LinhaTweak rotulo={rotulo}>
-      <select value={valor} onChange={(e) => aoMudar(e.target.value as T)}>
-        {opcoes.map((o) => (
-          <option key={o.valor} value={o.valor}>
-            {o.rotulo}
+      <select value={valor} onChange={(evento) => aoMudar(evento.target.value as T)}>
+        {opcoes.map((opcao) => (
+          <option key={opcao.valor} value={opcao.valor}>
+            {opcao.rotulo}
           </option>
         ))}
       </select>
@@ -137,7 +137,7 @@ export function ChipsCor({
   rotulo: string;
   valor: string;
   opcoes: readonly string[];
-  aoMudar: (v: string) => void;
+  aoMudar: (valor: string) => void;
 }) {
   return (
     <LinhaTweak rotulo={rotulo}>

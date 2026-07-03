@@ -32,7 +32,6 @@ test('mostra as colunas com tipo, marca de PK e nulabilidade', async () => {
     ),
   );
   renderizar();
-  // nome e metadados (tipo · nulabilidade) agora vivem em spans separados
   expect(await screen.findByText('id')).toBeInTheDocument();
   expect(screen.getByText('int')).toBeInTheDocument();
   expect(screen.getByText('nome')).toBeInTheDocument();

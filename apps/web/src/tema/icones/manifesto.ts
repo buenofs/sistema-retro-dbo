@@ -12,10 +12,10 @@ const valido = new Set<string>(NOMES_ICONES);
 function montar98(): Partial<Record<NomeIcone, TiersIcone>> {
   const out: Partial<Record<NomeIcone, TiersIcone>> = {};
   for (const [caminho, url] of Object.entries(url98)) {
-    const m = caminho.match(/\/([a-zA-Z]+)-(16|32)\.png$/);
-    if (!m) continue;
-    const nome = m[1];
-    const tier = m[2];
+    const achado = caminho.match(/\/([a-zA-Z]+)-(16|32)\.png$/);
+    if (!achado) continue;
+    const nome = achado[1];
+    const tier = achado[2];
     if (!nome || !tier || !valido.has(nome)) continue;
     (out[nome as NomeIcone] ??= {})[tier as '16' | '32'] = url;
   }
@@ -25,9 +25,9 @@ function montar98(): Partial<Record<NomeIcone, TiersIcone>> {
 function montarAero(): Partial<Record<NomeIcone, TiersIcone>> {
   const out: Partial<Record<NomeIcone, TiersIcone>> = {};
   for (const [caminho, url] of Object.entries(urlAero)) {
-    const m = caminho.match(/\/([a-zA-Z]+)\.png$/);
-    if (!m) continue;
-    const nome = m[1];
+    const achado = caminho.match(/\/([a-zA-Z]+)\.png$/);
+    if (!achado) continue;
+    const nome = achado[1];
     if (!nome || !valido.has(nome)) continue;
     (out[nome as NomeIcone] ??= {}).base = url;
   }

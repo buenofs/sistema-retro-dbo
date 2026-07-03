@@ -2,7 +2,6 @@ import { test, expect } from 'bun:test';
 import { criarGerenciadorPools, ErroLimiteSessoes } from './gerenciadorPools';
 import type { ConnectionPool } from 'mssql';
 
-// Pool falso: o gerenciador só usa close(); o resto não importa para estes testes.
 function poolFalso() {
   const estado = { fechado: false };
   const pool = { close: async () => { estado.fechado = true; } };
@@ -43,8 +42,8 @@ test('limpa expiradas e mantém as ativas (TTL deslizante)', async () => {
   const nova = poolFalso();
   g.criar('velha', velha.pool, 'sa', 0);
   g.criar('nova', nova.pool, 'sa', 0);
-  g.obter('nova', 90); // renova o último acesso da 'nova'
-  const removidas = await g.limparExpiradas(150); // velha: 150-0>100; nova: 150-90<100
+  g.obter('nova', 90);
+  const removidas = await g.limparExpiradas(150);
   expect(removidas).toBe(1);
   expect(g.tamanho()).toBe(1);
   expect(velha.estado.fechado).toBe(true);

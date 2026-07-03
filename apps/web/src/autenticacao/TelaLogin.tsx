@@ -3,7 +3,6 @@ import { useLogin } from './ganchos';
 import { Icone } from '../tema/icones/Icone';
 import './telaLogin.css';
 
-// Diálogo de logon estilo Win9x "Log On to DBOS", sobre o wallpaper.
 export function TelaLogin() {
   const [login, setLogin] = useState('');
   const [senha, setSenha] = useState('');
@@ -40,7 +39,7 @@ export function TelaLogin() {
               <label htmlFor="login" style={{ width: 64 }}>
                 Login
               </label>
-              <input id="login" value={login} onChange={(e) => setLogin(e.target.value)} />
+              <input id="login" value={login} onChange={(evento) => setLogin(evento.target.value)} />
             </div>
             <div className="field-row" style={{ marginTop: 8 }}>
               <label htmlFor="senha" style={{ width: 64 }}>
@@ -50,7 +49,7 @@ export function TelaLogin() {
                 id="senha"
                 type="password"
                 value={senha}
-                onChange={(e) => setSenha(e.target.value)}
+                onChange={(evento) => setSenha(evento.target.value)}
               />
             </div>
             <div className="field-row" style={{ justifyContent: 'flex-end', marginTop: 14, gap: 6 }}>

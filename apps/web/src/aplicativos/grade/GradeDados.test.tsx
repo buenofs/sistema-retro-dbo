@@ -28,7 +28,7 @@ test('sem tabela pré-selecionada, mostra o seletor com as tabelas', async () =>
           ok: true,
           dados: [
             { esquema: 'dbo', nome: 'Clientes', tipo: 'tabela' },
-            { esquema: 'dbo', nome: 'vw_FolhaResumo', tipo: 'view' },
+            { esquema: 'dbo', nome: 'vw_UsoPorUsuario', tipo: 'view' },
           ],
         }),
       ),
@@ -36,7 +36,7 @@ test('sem tabela pré-selecionada, mostra o seletor com as tabelas', async () =>
   );
   renderizar(janelaFake(null));
   expect(await screen.findByText(/dbo\.Clientes/)).toBeInTheDocument();
-  expect(await screen.findByText(/vw_FolhaResumo/)).toBeInTheDocument();
+  expect(await screen.findByText(/vw_UsoPorUsuario/)).toBeInTheDocument();
 });
 
 test('com tabela em dados, abre a grade direto', async () => {

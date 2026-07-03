@@ -2,15 +2,14 @@ import { z } from 'zod';
 import type { Resposta } from './respostas';
 import type { ColunaBanco } from './explorador';
 
-// Valor de uma célula trafegado entre web e server.
 export type ValorCelula = string | number | boolean | null;
 
 export interface ResultadoGrade {
   colunas: ColunaBanco[];
-  chavePrimaria: string[]; // nomes das colunas PK
-  linhas: Record<string, unknown>[]; // cada linha é um objeto coluna->valor
-  total: number; // total de linhas na tabela (COUNT)
-  pagina: number; // base 0
+  chavePrimaria: string[];
+  linhas: Record<string, unknown>[];
+  total: number;
+  pagina: number;
   tamanho: number;
 }
 

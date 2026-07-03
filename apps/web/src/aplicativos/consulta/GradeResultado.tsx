@@ -1,13 +1,14 @@
 import { useRef } from 'react';
 import { useVirtualizer } from '@tanstack/react-virtual';
 import type { ResultadoConsulta } from '@dbos/shared';
+import { Estado } from '../comuns/Estado';
 
 const ALTURA_LINHA = 22;
 
-function formatarValor(v: unknown): string {
-  if (v === null || v === undefined) return 'NULL';
-  if (typeof v === 'object') return JSON.stringify(v);
-  return String(v);
+function formatarValor(valor: unknown): string {
+  if (valor === null || valor === undefined) return 'NULL';
+  if (typeof valor === 'object') return JSON.stringify(valor);
+  return String(valor);
 }
 
 export function GradeResultado({ resultado }: { resultado: ResultadoConsulta }) {
@@ -19,10 +20,9 @@ export function GradeResultado({ resultado }: { resultado: ResultadoConsulta }) 
     overscan: 12,
   });
 
-  // Comando sem recordset (INSERT/UPDATE/DELETE).
   if (resultado.colunas.length === 0) {
     return (
-      <p style={{ padding: 8 }}>Comando executado. Linhas afetadas: {resultado.linhasAfetadas}.</p>
+      <Estado>Comando executado. Linhas afetadas: {resultado.linhasAfetadas}.</Estado>
     );
   }
 
@@ -31,9 +31,9 @@ export function GradeResultado({ resultado }: { resultado: ResultadoConsulta }) 
   return (
     <div className="grade-resultado">
       <div className="grade-cabecalho" style={{ gridTemplateColumns: colunas }}>
-        {resultado.colunas.map((c) => (
-          <div key={c} className="grade-celula grade-th">
-            {c}
+        {resultado.colunas.map((coluna) => (
+          <div key={coluna} className="grade-celula grade-th">
+            {coluna}
           </div>
         ))}
       </div>

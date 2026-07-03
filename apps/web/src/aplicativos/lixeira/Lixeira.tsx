@@ -1,5 +1,6 @@
 import { Icone } from '../../tema/icones/Icone';
 import { useLixeira, useRestaurar, useEsvaziarLixeira } from '../arquivos/ganchos';
+import { Estado } from '../comuns/Estado';
 
 export function Lixeira() {
   const lix = useLixeira();
@@ -14,7 +15,7 @@ export function Lixeira() {
         </button>
       </div>
       <div style={{ flex: 1, overflow: 'auto' }}>
-        {lix.isLoading && <div style={{ padding: 8 }}>Carregando…</div>}
+        {lix.isLoading && <Estado>Carregando…</Estado>}
         {lix.data?.map((item) => (
           <div key={item.id} style={{ display: 'flex', gap: 6, alignItems: 'center', padding: '3px 6px' }}>
             <Icone nome={item.tipo === 'pasta' ? 'folder' : 'newdoc'} tamanho={16} />
@@ -22,7 +23,7 @@ export function Lixeira() {
             <button onClick={() => restaurar.mutate(item.id)} disabled={restaurar.isPending}>Restaurar</button>
           </div>
         ))}
-        {lix.data?.length === 0 && <div style={{ padding: 8, opacity: 0.7 }}>(lixeira vazia)</div>}
+        {lix.data?.length === 0 && <Estado variante="vazio">(lixeira vazia)</Estado>}
       </div>
     </div>
   );

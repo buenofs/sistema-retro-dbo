@@ -62,7 +62,6 @@ test('CRUD completo paginado', async () => {
     await comServidor(async (base) => {
       const cookie = await entrar(base);
 
-      // READ
       let r = await req(base, 'GET', `/api/grade/linhas?esquema=dbo&tabela=${TABELA}&pagina=0&tamanho=100`, cookie);
       expect(r.status).toBe(200);
       let dados = (await r.json()).dados;
@@ -70,24 +69,20 @@ test('CRUD completo paginado', async () => {
       expect(dados.total).toBe(2);
       expect(dados.linhas.length).toBe(2);
 
-      // INSERT
       r = await req(base, 'POST', '/api/grade/linha', cookie, { esquema: 'dbo', tabela: TABELA, valores: { nome: 'Caio', valor: 30 } });
       expect(r.status).toBe(200);
       expect((await r.json()).dados.linhasAfetadas).toBe(1);
 
-      // confirma e pega o id do Caio
       r = await req(base, 'GET', `/api/grade/linhas?esquema=dbo&tabela=${TABELA}`, cookie);
       dados = (await r.json()).dados;
       expect(dados.total).toBe(3);
       const caio = dados.linhas.find((l: { nome: string }) => l.nome === 'Caio');
       expect(caio).toBeDefined();
 
-      // UPDATE
       r = await req(base, 'PUT', '/api/grade/linha', cookie, { esquema: 'dbo', tabela: TABELA, chave: { id: caio.id }, valores: { nome: 'Caio Editado' } });
       expect(r.status).toBe(200);
       expect((await r.json()).dados.linhasAfetadas).toBe(1);
 
-      // DELETE
       r = await req(base, 'DELETE', '/api/grade/linha', cookie, { esquema: 'dbo', tabela: TABELA, chave: { id: caio.id } });
       expect(r.status).toBe(200);
       expect((await r.json()).dados.linhasAfetadas).toBe(1);

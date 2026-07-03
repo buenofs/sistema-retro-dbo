@@ -3,6 +3,7 @@ import type { EstadoJanela, PropsApp } from '../../areaTrabalho/tipos';
 import { useObjetos } from '../explorador/ganchos';
 import { Icone } from '../../tema/icones/Icone';
 import { TabelaGrade } from './TabelaGrade';
+import { Estado } from '../comuns/Estado';
 import './grade.css';
 
 interface RefTabela {
@@ -11,9 +12,9 @@ interface RefTabela {
 }
 
 function refInicial(janela: EstadoJanela): RefTabela | null {
-  const d = janela.dados as { esquema?: unknown; tabela?: unknown } | null | undefined;
-  if (d && typeof d.esquema === 'string' && typeof d.tabela === 'string') {
-    return { esquema: d.esquema, tabela: d.tabela };
+  const dados = janela.dados as { esquema?: unknown; tabela?: unknown } | null | undefined;
+  if (dados && typeof dados.esquema === 'string' && typeof dados.tabela === 'string') {
+    return { esquema: dados.esquema, tabela: dados.tabela };
   }
   return null;
 }
@@ -36,20 +37,20 @@ export function GradeDados({ janela }: PropsApp) {
   );
 }
 
-function SeletorTabela({ aoEscolher }: { aoEscolher: (r: RefTabela) => void }) {
+function SeletorTabela({ aoEscolher }: { aoEscolher: (ref: RefTabela) => void }) {
   const consulta = useObjetos();
-  if (consulta.isPending) return <p style={{ padding: 8 }}>Carregando tabelas…</p>;
-  if (consulta.isError) return <p style={{ padding: 8, color: 'red' }}>{consulta.error.message}</p>;
+  if (consulta.isPending) return <Estado>Carregando tabelas…</Estado>;
+  if (consulta.isError) return <Estado variante="erro">{consulta.error.message}</Estado>;
   const objetos = consulta.data ?? [];
   return (
-    <div style={{ padding: 8 }}>
+    <div className="painel">
       <p>Escolha uma tabela ou view:</p>
       <ul className="tree-view">
-        {objetos.map((o) => (
-          <li key={`${o.esquema}.${o.nome}`}>
-            <button onClick={() => aoEscolher({ esquema: o.esquema, tabela: o.nome })}>
-              <Icone nome={o.tipo === 'view' ? 'view' : 'grid'} tamanho={16} alt="" style={{ marginRight: 4 }} />
-              {o.esquema}.{o.nome}
+        {objetos.map((objeto) => (
+          <li key={`${objeto.esquema}.${objeto.nome}`}>
+            <button onClick={() => aoEscolher({ esquema: objeto.esquema, tabela: objeto.nome })}>
+              <Icone nome={objeto.tipo === 'view' ? 'view' : 'grid'} tamanho={16} alt="" style={{ marginRight: 4 }} />
+              {objeto.esquema}.{objeto.nome}
             </button>
           </li>
         ))}

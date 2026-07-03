@@ -17,12 +17,12 @@ test('mostra a ação e a prévia resolvida', () => {
   expect(screen.getByText(/VALUES \('Docs'\)/)).toBeInTheDocument();
 });
 
-test('filtro por tipo esconde os demais', () => {
+test('desmarcar um tipo esconde aquele tipo', () => {
   useLojaLogSQL.getState().registrar([cmd('Criar pasta', 'INSERT'), cmd('Apagar', 'DELETE')]);
   render(<MonitorSQL />);
   fireEvent.click(screen.getByLabelText('Filtrar DELETE'));
-  expect(screen.queryByText('Criar pasta')).not.toBeInTheDocument();
-  expect(screen.getByText('Apagar')).toBeInTheDocument();
+  expect(screen.getByText('Criar pasta')).toBeInTheDocument();
+  expect(screen.queryByText('Apagar')).not.toBeInTheDocument();
 });
 
 test('limpar zera a lista', () => {

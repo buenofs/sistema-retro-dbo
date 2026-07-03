@@ -3,9 +3,10 @@ import type { IdJanela, Retangulo } from './tipos';
 import { useLoja } from './loja';
 import { registroApps } from './registroApps';
 import { LimiteErroJanela } from './LimiteErroJanela';
-import { usarArrasto } from './usarArrasto';
+import { useArrasto } from './useArrasto';
 import { ALTURA_BARRA, limitarRetangulo } from './limites';
 import { Icone } from '../tema/icones/Icone';
+import { Estado } from '../aplicativos/comuns/Estado';
 
 const LARGURA_MIN = 200;
 const ALTURA_MIN = 120;
@@ -15,21 +16,19 @@ function viewport() {
 }
 
 export const Janela = memo(function Janela({ id }: { id: IdJanela }) {
-  const janela = useLoja(useCallback((s) => s.janelas.find((j) => j.id === id), [id]));
-  const idFocada = useLoja((s) => s.idFocada);
-  // Ações do Zustand têm referência estável entre renders.
-  const focar = useLoja((s) => s.focar);
-  const mover = useLoja((s) => s.mover);
-  const redimensionar = useLoja((s) => s.redimensionar);
-  const minimizar = useLoja((s) => s.minimizar);
-  const maximizar = useLoja((s) => s.maximizar);
-  const restaurar = useLoja((s) => s.restaurar);
-  const fechar = useLoja((s) => s.fecharJanela);
+  const janela = useLoja(useCallback((loja) => loja.janelas.find((janelaAtual) => janelaAtual.id === id), [id]));
+  const idFocada = useLoja((loja) => loja.idFocada);
+  const focar = useLoja((loja) => loja.focar);
+  const mover = useLoja((loja) => loja.mover);
+  const redimensionar = useLoja((loja) => loja.redimensionar);
+  const minimizar = useLoja((loja) => loja.minimizar);
+  const maximizar = useLoja((loja) => loja.maximizar);
+  const restaurar = useLoja((loja) => loja.restaurar);
+  const fechar = useLoja((loja) => loja.fecharJanela);
 
-  // Retângulo no início do arrasto (lido via getState p/ manter os callbacks estáveis).
   const inicio = useRef<Retangulo>({ x: 0, y: 0, largura: 0, altura: 0 });
   const aoIniciar = useCallback(() => {
-    const atual = useLoja.getState().janelas.find((j) => j.id === id);
+    const atual = useLoja.getState().janelas.find((janelaAtual) => janelaAtual.id === id);
     if (atual) inicio.current = atual.retangulo;
     focar(id);
   }, [id, focar]);
@@ -56,8 +55,8 @@ export const Janela = memo(function Janela({ id }: { id: IdJanela }) {
     [id, redimensionar],
   );
 
-  const arrastarTitulo = usarArrasto({ aoIniciar, aoMover: aoMoverTitulo });
-  const arrastarAlca = usarArrasto({ aoIniciar, aoMover: aoMoverAlca });
+  const arrastarTitulo = useArrasto({ aoIniciar, aoMover: aoMoverTitulo });
+  const arrastarAlca = useArrasto({ aoIniciar, aoMover: aoMoverAlca });
 
   if (!janela) return null;
 
@@ -108,7 +107,7 @@ export const Janela = memo(function Janela({ id }: { id: IdJanela }) {
         style={{ height: 'calc(100% - 2.2rem)', margin: 0, overflow: 'auto' }}
       >
         <LimiteErroJanela titulo={janela.titulo}>
-          <Suspense fallback={<p style={{ padding: 8 }}>Carregando…</p>}>
+          <Suspense fallback={<Estado>Carregando…</Estado>}>
             <Componente janela={janela} />
           </Suspense>
         </LimiteErroJanela>

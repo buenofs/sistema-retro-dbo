@@ -1,8 +1,6 @@
-import sql from 'mssql';
-import type { ConnectionPool } from 'mssql';
 import type { ColunaBanco, ObjetoBanco, RefObjeto } from '@dbos/shared';
+import type { Banco } from './banco';
 
-// Tabelas e views do banco atual (spec §5.5 — SQL cru no INFORMATION_SCHEMA).
 const SQL_OBJETOS = `
   SELECT TABLE_SCHEMA AS esquema,
          TABLE_NAME   AS nome,
@@ -12,14 +10,10 @@ const SQL_OBJETOS = `
   ORDER BY TABLE_SCHEMA, TABLE_NAME
 `;
 
-export async function listarObjetos(pool: ConnectionPool): Promise<ObjetoBanco[]> {
-  const resultado = await pool.request().query<ObjetoBanco>(SQL_OBJETOS);
-  return resultado.recordset;
+export async function listarObjetos(banco: Banco): Promise<ObjetoBanco[]> {
+  return banco.consultar<ObjetoBanco>(SQL_OBJETOS);
 }
 
-// Colunas de um objeto. Parametrizado (@esquema, @tabela) — cru mas seguro (spec §2.2).
-// O bit do SQL Server volta como boolean no driver mssql, então anulavel/ehChavePrimaria
-// já chegam como true/false ao cliente.
 const SQL_COLUNAS = `
   SELECT
     c.COLUMN_NAME AS nome,
@@ -50,14 +44,6 @@ const SQL_COLUNAS = `
   ORDER BY c.ORDINAL_POSITION
 `;
 
-export async function listarColunas(
-  pool: ConnectionPool,
-  ref: RefObjeto,
-): Promise<ColunaBanco[]> {
-  const resultado = await pool
-    .request()
-    .input('esquema', sql.NVarChar, ref.esquema)
-    .input('tabela', sql.NVarChar, ref.tabela)
-    .query<ColunaBanco>(SQL_COLUNAS);
-  return resultado.recordset;
+export async function listarColunas(banco: Banco, ref: RefObjeto): Promise<ColunaBanco[]> {
+  return banco.consultar<ColunaBanco>(SQL_COLUNAS, { esquema: ref.esquema, tabela: ref.tabela });
 }

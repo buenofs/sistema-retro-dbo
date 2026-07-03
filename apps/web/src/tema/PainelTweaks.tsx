@@ -16,31 +16,30 @@ import './PainelTweaks.css';
 
 export function PainelTweaks() {
   const { tema, definirPele, definirAero, definir98, definirMotion, definirSound } = useTweaks();
-  const aberto = usePainelTweaks((s) => s.aberto);
-  const fechar = usePainelTweaks((s) => s.fechar);
-  const reiniciarBoot = useBoot((s) => s.reiniciar);
+  const aberto = usePainelTweaks((loja) => loja.aberto);
+  const fechar = usePainelTweaks((loja) => loja.fechar);
+  const reiniciarBoot = useBoot((loja) => loja.reiniciar);
 
-  // arrasto simples pelo cabeçalho
   const [pos, setPos] = useState<{ x: number; y: number } | null>(null);
   const arrasto = useRef<{ dx: number; dy: number } | null>(null);
 
   if (!aberto) return null;
 
-  function aoPressionarCabecalho(e: React.PointerEvent) {
-    const alvo = e.currentTarget as HTMLElement;
+  function aoPressionarCabecalho(evento: React.PointerEvent) {
+    const alvo = evento.currentTarget as HTMLElement;
     const cx = pos?.x ?? alvo.parentElement!.getBoundingClientRect().left;
     const cy = pos?.y ?? alvo.parentElement!.getBoundingClientRect().top;
-    arrasto.current = { dx: e.clientX - cx, dy: e.clientY - cy };
-    if (typeof alvo.setPointerCapture === 'function') alvo.setPointerCapture(e.pointerId);
+    arrasto.current = { dx: evento.clientX - cx, dy: evento.clientY - cy };
+    if (typeof alvo.setPointerCapture === 'function') alvo.setPointerCapture(evento.pointerId);
   }
-  function aoMover(e: React.PointerEvent) {
+  function aoMover(evento: React.PointerEvent) {
     if (!arrasto.current) return;
-    setPos({ x: e.clientX - arrasto.current.dx, y: e.clientY - arrasto.current.dy });
+    setPos({ x: evento.clientX - arrasto.current.dx, y: evento.clientY - arrasto.current.dy });
   }
-  function aoSoltar(e: React.PointerEvent) {
+  function aoSoltar(evento: React.PointerEvent) {
     arrasto.current = null;
-    const alvo = e.currentTarget as HTMLElement;
-    if (typeof alvo.releasePointerCapture === 'function') alvo.releasePointerCapture(e.pointerId);
+    const alvo = evento.currentTarget as HTMLElement;
+    if (typeof alvo.releasePointerCapture === 'function') alvo.releasePointerCapture(evento.pointerId);
   }
 
   const estilo = pos ? { left: pos.x, top: pos.y, right: 'auto', bottom: 'auto' } : undefined;
@@ -54,7 +53,7 @@ export function PainelTweaks() {
         onPointerUp={aoSoltar}
       >
         <span>Tweaks</span>
-        <button type="button" className="painel-tweaks-fechar" aria-label="Fechar" onPointerDown={(e) => e.stopPropagation()} onClick={fechar}>
+        <button type="button" className="painel-tweaks-fechar" aria-label="Fechar" onPointerDown={(evento) => evento.stopPropagation()} onClick={fechar}>
           ×
         </button>
       </div>
@@ -83,12 +82,12 @@ export function PainelTweaks() {
               max={320}
               passo={2}
               unidade="°"
-              aoMudar={(v) => definirAero({ accentHue: v })}
+              aoMudar={(valor) => definirAero({ accentHue: valor })}
             />
             <Alternador
               rotulo="Vidro fosco"
               valor={tema.aero.glass}
-              aoMudar={(v) => definirAero({ glass: v })}
+              aoMudar={(valor) => definirAero({ glass: valor })}
             />
             <RadioSegmentado
               rotulo="Cantos"
@@ -97,13 +96,13 @@ export function PainelTweaks() {
                 { valor: 'aero', rotulo: 'Aero' },
                 { valor: 'reto', rotulo: 'Reto (98)' },
               ]}
-              aoMudar={(v) => definirAero({ corners: v })}
+              aoMudar={(valor) => definirAero({ corners: valor })}
             />
             <Selecao
               rotulo="Wallpaper"
               valor={tema.aero.wallpaper}
               opcoes={WALLPAPERS}
-              aoMudar={(v) => definirAero({ wallpaper: v })}
+              aoMudar={(valor) => definirAero({ wallpaper: valor })}
             />
           </SecaoTweaks>
         ) : (
@@ -112,13 +111,13 @@ export function PainelTweaks() {
               rotulo="Acento"
               valor={tema.n98.accent}
               opcoes={ACENTOS_98}
-              aoMudar={(v) => definir98({ accent: v })}
+              aoMudar={(valor) => definir98({ accent: valor })}
             />
             <Selecao
               rotulo="Padrão da área"
               valor={tema.n98.pattern}
               opcoes={PADROES}
-              aoMudar={(v) => definir98({ pattern: v })}
+              aoMudar={(valor) => definir98({ pattern: valor })}
             />
             <RadioSegmentado
               rotulo="Densidade"
@@ -127,12 +126,12 @@ export function PainelTweaks() {
                 { valor: 'compacto', rotulo: 'Compacto' },
                 { valor: 'normal', rotulo: 'Normal' },
               ]}
-              aoMudar={(v) => definir98({ density: v })}
+              aoMudar={(valor) => definir98({ density: valor })}
             />
             <Alternador
               rotulo="Monitor CRT (scanlines)"
               valor={tema.n98.crt}
-              aoMudar={(v) => definir98({ crt: v })}
+              aoMudar={(valor) => definir98({ crt: valor })}
             />
           </SecaoTweaks>
         )}

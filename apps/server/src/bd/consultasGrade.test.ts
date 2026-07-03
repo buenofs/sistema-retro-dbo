@@ -1,5 +1,5 @@
 import { test, expect } from 'bun:test';
-import { citarId } from './consultasGrade';
+import { citarId } from './clausulas';
 
 test('cita identificador com colchetes', () => {
   expect(citarId('Clientes')).toBe('[Clientes]');

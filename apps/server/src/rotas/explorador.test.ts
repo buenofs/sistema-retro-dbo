@@ -3,7 +3,6 @@ import sql from 'mssql';
 import { construirApp } from '../app';
 import { configParaLogin } from '../bd/conexao';
 
-// Sobe o app numa porta efêmera e testa pela rota HTTP real.
 async function comServidor(fn: (base: string) => Promise<void>) {
   const app = construirApp();
   await app.listen({ port: 0, host: '127.0.0.1' });
@@ -28,7 +27,6 @@ async function entrar(base: string): Promise<string> {
   return r.headers.get('set-cookie')!.split(';')[0]!;
 }
 
-// Cria uma tabela de teste conhecida, roda o corpo e remove no fim (via conexão direta).
 async function comTabelaDeTeste(fn: () => Promise<void>) {
   const pool = await new sql.ConnectionPool(configParaLogin(SA)).connect();
   await pool.request().query(DROP);

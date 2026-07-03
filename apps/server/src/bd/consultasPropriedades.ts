@@ -1,72 +1,52 @@
-import sql from 'mssql';
-import type { ConnectionPool } from 'mssql';
 import type { IndiceBanco, PropriedadesObjeto, RefObjeto, TipoObjeto } from '@dbos/shared';
+import type { Banco } from './banco';
 
-// Um Request roda uma query só; cada consulta recebe um request novo já com os
-// parâmetros @esquema/@tabela (cru, mas parametrizado — spec §2.2).
-function comParams(pool: ConnectionPool, ref: RefObjeto) {
-  return pool
-    .request()
-    .input('esquema', sql.NVarChar, ref.esquema)
-    .input('tabela', sql.NVarChar, ref.tabela);
-}
+export async function obterPropriedades(banco: Banco, ref: RefObjeto): Promise<PropriedadesObjeto | null> {
+  const parametros = { esquema: ref.esquema, tabela: ref.tabela };
 
-export async function obterPropriedades(
-  pool: ConnectionPool,
-  ref: RefObjeto,
-): Promise<PropriedadesObjeto | null> {
-  const info = (
-    await comParams(pool, ref).query<{ tipo: string; criadoEm: Date; modificadoEm: Date }>(`
+  const infos = await banco.consultar<{ tipo: string; criadoEm: Date; modificadoEm: Date }>(`
       SELECT o.type_desc AS tipo, o.create_date AS criadoEm, o.modify_date AS modificadoEm
       FROM sys.objects o
       JOIN sys.schemas s ON s.schema_id = o.schema_id
       WHERE s.name = @esquema AND o.name = @tabela AND o.type IN ('U', 'V')
-    `)
-  ).recordset[0];
+    `, parametros);
+  const info = infos[0];
   if (!info) return null;
   const tipo: TipoObjeto = info.tipo === 'VIEW' ? 'view' : 'tabela';
 
-  const totalColunas =
-    (
-      await comParams(pool, ref).query<{ total: number }>(`
+  const totaisColuna = await banco.consultar<{ total: number }>(`
         SELECT COUNT(*) AS total FROM INFORMATION_SCHEMA.COLUMNS
         WHERE TABLE_SCHEMA = @esquema AND TABLE_NAME = @tabela
-      `)
-    ).recordset[0]?.total ?? 0;
+      `, parametros);
+  const totalColunas = totaisColuna[0]?.total ?? 0;
 
   let totalLinhas = 0;
   if (tipo === 'tabela') {
-    const linhas =
-      (
-        await comParams(pool, ref).query<{ linhas: number }>(`
+    const totaisLinha = await banco.consultar<{ linhas: number }>(`
           SELECT CAST(ISNULL(SUM(p.rows), 0) AS BIGINT) AS linhas
           FROM sys.partitions p
           JOIN sys.objects o ON o.object_id = p.object_id
           JOIN sys.schemas s ON s.schema_id = o.schema_id
           WHERE s.name = @esquema AND o.name = @tabela AND p.index_id IN (0, 1)
-        `)
-      ).recordset[0]?.linhas ?? 0;
-    totalLinhas = Number(linhas);
+        `, parametros);
+    totalLinhas = Number(totaisLinha[0]?.linhas ?? 0);
   }
 
-  const indicesRaw = (
-    await comParams(pool, ref).query<{
-      nome: string | null;
-      tipo: string;
-      unico: boolean;
-      chavePrimaria: boolean;
-    }>(`
+  const indicesBrutos = await banco.consultar<{
+    nome: string | null;
+    tipo: string;
+    unico: boolean;
+    chavePrimaria: boolean;
+  }>(`
       SELECT i.name AS nome, i.type_desc AS tipo, i.is_unique AS unico, i.is_primary_key AS chavePrimaria
       FROM sys.indexes i
       JOIN sys.objects o ON o.object_id = i.object_id
       JOIN sys.schemas s ON s.schema_id = o.schema_id
       WHERE s.name = @esquema AND o.name = @tabela AND i.type > 0
       ORDER BY i.is_primary_key DESC, i.name
-    `)
-  ).recordset;
+    `, parametros);
 
-  const colunasRaw = (
-    await comParams(pool, ref).query<{ indice: string; coluna: string }>(`
+  const colunasBrutas = await banco.consultar<{ indice: string; coluna: string }>(`
       SELECT i.name AS indice, c.name AS coluna
       FROM sys.index_columns ic
       JOIN sys.indexes i ON i.object_id = ic.object_id AND i.index_id = ic.index_id
@@ -75,22 +55,21 @@ export async function obterPropriedades(
       JOIN sys.schemas s ON s.schema_id = o.schema_id
       WHERE s.name = @esquema AND o.name = @tabela AND ic.is_included_column = 0 AND i.type > 0
       ORDER BY i.name, ic.key_ordinal
-    `)
-  ).recordset;
+    `, parametros);
 
   const colunasPorIndice = new Map<string, string[]>();
-  for (const linha of colunasRaw) {
+  for (const linha of colunasBrutas) {
     const lista = colunasPorIndice.get(linha.indice) ?? [];
     lista.push(linha.coluna);
     colunasPorIndice.set(linha.indice, lista);
   }
 
-  const indices: IndiceBanco[] = indicesRaw.map((i) => ({
-    nome: i.nome ?? '(sem nome)',
-    tipo: i.tipo,
-    unico: i.unico,
-    chavePrimaria: i.chavePrimaria,
-    colunas: i.nome ? colunasPorIndice.get(i.nome) ?? [] : [],
+  const indices: IndiceBanco[] = indicesBrutos.map((indice) => ({
+    nome: indice.nome ?? '(sem nome)',
+    tipo: indice.tipo,
+    unico: indice.unico,
+    chavePrimaria: indice.chavePrimaria,
+    colunas: indice.nome ? colunasPorIndice.get(indice.nome) ?? [] : [],
   }));
 
   return {

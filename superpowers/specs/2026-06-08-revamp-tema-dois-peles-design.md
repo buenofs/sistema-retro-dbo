@@ -27,6 +27,11 @@ aplicamos aos componentes reais, **sem reescrever a lógica testada**.
 > **Aero** adiciona o visual de vidro como alternativa trocável. A dependência
 > `98.css` é **removida** (seus relevos viram tokens próprios).
 
+> **Nota (2026-06-13):** o domínio RH mencionado neste documento (Relacionamentos,
+> Busca, Relatório/Folha) foi removido no pivô para o simulador de SO de arquivos —
+> ver `docs/superpowers/specs/2026-06-13-so-arquivos-design.md`. As seções sobre
+> motor de tema, ícones e painel de Tweaks permanecem válidas.
+
 ### Decisões travadas (do brainstorming)
 
 | Área | Decisão |

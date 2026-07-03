@@ -11,16 +11,14 @@ const ICONE: Record<Dialogo['tipo'], NomeIcone> = {
   info: 'props',
 };
 
-// Portal único de diálogos modais 98.css (spec §6.4). Montado uma vez no desktop.
 export function GerenciadorDialogos() {
-  const dialogos = useDialogos(useShallow((s) => s.dialogos));
-  const fechar = useDialogos((s) => s.fechar);
+  const dialogos = useDialogos(useShallow((loja) => loja.dialogos));
+  const fechar = useDialogos((loja) => loja.fechar);
 
-  // a11y: Esc fecha o diálogo do topo.
   useEffect(() => {
     if (dialogos.length === 0) return;
-    function aoTecla(e: KeyboardEvent) {
-      if (e.key === 'Escape') {
+    function aoTecla(evento: KeyboardEvent) {
+      if (evento.key === 'Escape') {
         const topo = dialogos[dialogos.length - 1];
         if (topo) fechar(topo.id);
       }
@@ -32,8 +30,8 @@ export function GerenciadorDialogos() {
   if (dialogos.length === 0) return null;
   return (
     <div className="camada-dialogos">
-      {dialogos.map((d) => (
-        <CaixaDialogo key={d.id} dialogo={d} aoFechar={() => fechar(d.id)} />
+      {dialogos.map((dialogo) => (
+        <CaixaDialogo key={dialogo.id} dialogo={dialogo} aoFechar={() => fechar(dialogo.id)} />
       ))}
     </div>
   );
@@ -42,7 +40,6 @@ export function GerenciadorDialogos() {
 function CaixaDialogo({ dialogo, aoFechar }: { dialogo: Dialogo; aoFechar: () => void }) {
   const okRef = useRef<HTMLButtonElement>(null);
 
-  // Bipe ao abrir (spec §6.4) + foco no OK (a11y).
   useEffect(() => {
     tocarSom('erro');
     okRef.current?.focus();
