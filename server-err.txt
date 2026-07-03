@@ -1,2 +1,0 @@
-$ bun --filter @dbos/server dev
-error: script "dev:server" exited with code 255

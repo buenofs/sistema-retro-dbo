@@ -5,9 +5,3 @@ dist/
 .env.local
 bun.lockb
 .DS_Store
-
-# Arquivos locais de ferramentas de desenvolvimento
-.claude/
-.agents/
-.superpowers/
-skills-lock.json
