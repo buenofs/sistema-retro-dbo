@@ -5,12 +5,18 @@ export async function requisitar<T>(
   caminho: string,
   opcoes: RequestInit = {},
 ): Promise<Resposta<T>> {
+  // Só anuncia JSON quando há corpo: o Fastify rejeita `content-type: application/json`
+  // com corpo vazio (FST_ERR_CTP_EMPTY_JSON_BODY), o que quebraria DELETE/PUT sem body.
+  const temCorpo = opcoes.body !== undefined && opcoes.body !== null;
   let resposta: Response;
   try {
     resposta = await fetch(caminho, {
       credentials: 'include',
       ...opcoes,
-      headers: { 'content-type': 'application/json', ...opcoes.headers },
+      headers: {
+        ...(temCorpo ? { 'content-type': 'application/json' } : {}),
+        ...opcoes.headers,
+      },
     });
   } catch {
     return {
